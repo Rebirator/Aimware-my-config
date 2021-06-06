@@ -803,7 +803,7 @@ misc.fakelag.condition.moving "On"
 misc.fakelag.condition.peek "Off"
 misc.fakelag.condition.standing "Off"
 misc.fakelag.enable "On"
-misc.fakelag.factor 14.0
+misc.fakelag.factor 16.0
 misc.fakelag.key 0
 misc.fakelag.type "Normal"
 misc.fakelatency 
@@ -888,7 +888,7 @@ rbot.accuracy.weapon.asniper.doublefireind "On"
 rbot.accuracy.weapon.asniper.hitchance 95.0
 rbot.accuracy.weapon.asniper.mindmg 34.0
 rbot.accuracy.weapon.dt_checkbox "On"
-rbot.accuracy.weapon.dt_combobox "Delayed (for ping in tab 60+)"
+rbot.accuracy.weapon.dt_combobox "Accelerated (for ping in tab 11 - 29)"
 rbot.accuracy.weapon.dt_slider 16.0
 rbot.accuracy.weapon.fd_checkbox "On"
 rbot.accuracy.weapon.hpistol 
@@ -1104,7 +1104,7 @@ rbot.antiaim.advanced.exposetype "1s"
 rbot.antiaim.advanced.pitch "89°"
 rbot.antiaim.advanced.rbot.ebind 6
 rbot.antiaim.base 180.0 "Desync"
-rbot.antiaim.base.lby 125.0
+rbot.antiaim.base.lby -110.0
 rbot.antiaim.base.rotation 1.0
 rbot.antiaim.base.spinspeed 60.0
 rbot.antiaim.condition 
@@ -1135,7 +1135,7 @@ rbot.hitscan.hpistol.predictive "Off"
 rbot.hitscan.lmg 
 rbot.hitscan.lmg.precisehitscan "Off"
 rbot.hitscan.lmg.predictive "Off"
-rbot.hitscan.maxprocessingtime 50.0
+rbot.hitscan.maxprocessingtime 70.0
 rbot.hitscan.mode "Auto Sniper"
 rbot.hitscan.mode.asniper 
 rbot.hitscan.mode.asniper.autowall "On"
