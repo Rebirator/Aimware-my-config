@@ -1,5 +1,5 @@
 ------------------------------------------Credits-------------------------------------------
---								Minicord made by GLadiator
+--				Minicord made by GLadiator
 --it was originally a script "DT Changer" by Intranets, but it has almost completely changed
 ------------------------------------------Credits-------------------------------------------
 
@@ -31,10 +31,10 @@ local doublefire_combo = gui.Combobox(MinicordGroupboxRagebot, 'minicord.rbot.do
 						'[VALVE] Slightly delayed (for ping in tab 80+)', '[VALVE] Standard (stable, for ping in tab 21 - 79)', 
 						'[VALVE] Accelerated (unstable, for ping 1 - 20)', 'Use the "Maximum process ticks" value');
 
-local fakeduck_combo = gui.Combobox(MinicordGroupboxRagebot, 'minicord.rbot.fakeduck.speed', 'Fakeduck speed', 'Off',
+local fakeduck_combo = gui.Combobox(MinicordGroupboxRagebot, 'minicord.rbot.fakeduck.speed', 'Fakeduck type', 'Off',
 						'Elevated (14 ticks)', 'Variable-elevated (15 ticks)', 
-						'Standard (16 ticks)', 'Visually unchanged (17 ticks)', 
-						'Variable-reduced (unstable, 18 ticks)', 'Reduced (unstable, 19 ticks)', '[VALVE] Standard(p)');
+						'Standard (16 ticks)', 'Variable-reduced (maybe unstable, 18 ticks)', 
+						'Reduced (unstable, 19 ticks)', '[VALVE] Standard(p)', 'Use the "Maximum process ticks" value');
 																								
 local revolver_check = gui.Checkbox(MinicordGroupboxRagebot, 'minicord.rbot.revolver', 'Disable fakelags on Revolver R8', false);
 
@@ -83,6 +83,10 @@ local function handlemain()
 		ref_maxprocessticks_slider:SetDisabled(false)
 	end
 	
+	if fakeduck_combo:GetValue() == 7 then
+		ref_maxprocessticks_slider:SetDisabled(false)
+	end
+	
 	if not nonescopehc_check:GetValue() then
 		ref_nonescopehc_scope:SetDisabled(true)
 		ref_nonescopehc_dt_scope:SetDisabled(true)
@@ -111,13 +115,19 @@ local function handlemain()
 		ref_ticks_draw_y:SetDisabled(false)
 	end
 end
-callbacks.Register('CreateMove', handlemain)
+callbacks.Register('Draw', handlemain)
 
 --------------------------------
 
 --Double Fire speed
 local function handledt()
 	if doublefire_combo:GetValue() == 0 then
+		return
+	end
+	if not engine.GetServerIP() then
+		return
+	end
+	if not entities.GetLocalPlayer():IsAlive() then
 		return
 	end
 	
@@ -131,7 +141,7 @@ local function handledt()
 		return
 	end
 end
-callbacks.Register('CreateMove', handledt)
+callbacks.Register('Draw', handledt)
 
 --------------------------------
 
@@ -140,24 +150,36 @@ local function fakeduck_speed()
 	if fakeduck_combo:GetValue() == 0 then
 		return
 	end
+	if not engine.GetServerIP() then
+		return
+	end
+	if not entities.GetLocalPlayer():IsAlive() then
+		return
+	end
 	
-	local fd_speed = {14, 15, 16, 17, 18, 19, 7}
+	local fd_speed = {14, 15, 16, 18, 19, 7, maxprocessticks_slider:GetValue()}
 	
 	if input.IsButtonDown(fakeduck:GetValue()) then 
-		if fakeduck_combo:GetValue() <= 6 then
+		if fakeduck_combo:GetValue() >= 1 then
 			sv_maxusrcmdprocessticks:SetValue(fd_speed[fakeduck_combo:GetValue()])
 		end
 	else
 		return
 	end
 end
-callbacks.Register('CreateMove', fakeduck_speed)
+callbacks.Register('Draw', fakeduck_speed)
 
 --------------------------------
 
 --Limiting fakelag ticks on Revolver
 local function revolver()
 	if not revolver_check:GetValue() then
+		return
+	end
+	if not engine.GetServerIP() then
+		return
+	end
+	if not entities.GetLocalPlayer():IsAlive() then
 		return
 	end
 	
@@ -167,13 +189,19 @@ local function revolver()
 		gui.SetValue('misc.fakelag.enable', true)
 	end
 end
-callbacks.Register('CreateMove', revolver)
+callbacks.Register('Draw', revolver)
 
 --------------------------------
 
 --Nonscope hitchance
 local function nonescopehc()
 	if not nonescopehc_check:GetValue() then
+		return
+	end
+	if not engine.GetServerIP() then
+		return
+	end
+	if not entities.GetLocalPlayer():IsAlive() then
 		return
 	end
 
@@ -192,7 +220,7 @@ local function nonescopehc()
 		gui.SetValue('rbot.aim.automation.scope', 2)
 	end
 end
-callbacks.Register('CreateMove', nonescopehc)
+callbacks.Register('Draw', nonescopehc)
 
 --------------------------------
 
@@ -266,6 +294,9 @@ callbacks.Register('Draw', "Night Mode", Night_Mode)
 --Drawing ticks
 local font = draw.CreateFont('Andre V', 17)
 local function draw_ticks()
+	if not engine.GetServerIP() then
+		return
+	end
 	if not entities.GetLocalPlayer():IsAlive() then
 		return
 	end
