@@ -38,11 +38,11 @@ local fakeduck_combo = gui.Combobox(MinicordGroupboxRagebot, 'minicord.rbot.fake
 																								
 local revolver_check = gui.Checkbox(MinicordGroupboxRagebot, 'minicord.rbot.revolver', 'Disable fakelags on Revolver R8', false);
 
-local nonescopehc_check = gui.Checkbox(MinicordGroupboxRagebot, 'minicord.rbot.nonscopehc.check', 'Enable autosniper noscope/scope hitchance', false);
-local nonescopehc_scope = gui.Slider(MinicordGroupboxRagebot, 'minicord.rbot.nonscopehc.regularvalue', 'Scope hitchance', 50, 0, 100);
-local nonescopehc_dt_scope = gui.Slider(MinicordGroupboxRagebot, 'minicord.rbot.nonscopehc.regularvalue', 'Scope DF hitchance', 0, 0, 100);
-local nonescopehc_regular = gui.Slider(MinicordGroupboxRagebot, 'minicord.rbot.nonscopehc.regularvalue', 'Noscope hitchance', 50, 0, 100);
-local nonescopehc_dt_regular = gui.Slider(MinicordGroupboxRagebot, 'minicord.rbot.nonscopehc.regularvalue', 'Noscope DF hitchance', 0, 0, 100);
+local nonescopehc_check = gui.Checkbox(MinicordGroupboxRagebot, 'minicord.rbot.noscopehc.check', 'Enable autosniper noscope/scope hitchance', false);
+local nonescopehc_scope = gui.Slider(MinicordGroupboxRagebot, 'minicord.rbot.noscopehc.scopevalue', 'Scope hitchance', 50, 0, 100);
+local nonescopehc_dt_scope = gui.Slider(MinicordGroupboxRagebot, 'minicord.rbot.noscopehc.scopefdvalue', 'Scope DF hitchance', 0, 0, 100);
+local nonescopehc_regular = gui.Slider(MinicordGroupboxRagebot, 'minicord.rbot.noscopehc.noscopevalue', 'Noscope hitchance', 50, 0, 100);
+local nonescopehc_dt_regular = gui.Slider(MinicordGroupboxRagebot, 'minicord.rbot.noscopehc.noscopefdvalue', 'Noscope DF hitchance', 0, 0, 100);
 
 local legshaking_check = gui.Checkbox(MinicordGroupboxMisc, 'minicord.other.legbreaker.checkbox', 'Legshaking', false);
 local legshaking_combo = gui.Combobox(MinicordGroupboxMisc, 'minicord.other.legbreaker.combo', 'Legshaking speed', 'Maximum speed', 'Fast', 'Normal', 'Slow', 'Very slow');
