@@ -5,21 +5,21 @@
 
 ------------------------------------------------------------------------------------------------------
 local sv_maxusrcmdprocessticks = gui.Reference('Misc', 'General', 'Server', 'sv_maxusrcmdprocessticks')
-local fakeduck = gui.Reference('Ragebot', 'Anti-Aim', 'Extra', 'Fake Duck')
+local Fakeduck = gui.Reference('Ragebot', 'Anti-Aim', 'Extra', 'Fake Duck')
 local AutosniperHitchance = 'rbot.accuracy.weapon.asniper.hitchance'
 local AutosniperDTHitchance = 'rbot.accuracy.weapon.asniper.doublefirehc'
+local AutoPeek = gui.Reference('Ragebot', 'Accuracy', 'Movement', 'Auto Peek Key')
+------------------------------------------------------------------------------------------------------
 local x, y = draw.GetScreenSize()
 local DrawingOverRapidfireX = x / 2.072
 local DrawingOverRapidfireY = y / 1.078
-local curtime = globals.CurTime()
-local state = true
+local Curtime = globals.CurTime()
+local State = true
 ------------------------------------------------------------------------------------------------------
-
 local MinicordTab = gui.Tab(gui.Reference('Ragebot'), 'minicord.tab', 'Minicord')
 local MinicordGroupboxRagebot = gui.Groupbox(MinicordTab, 'Ragebot', 16, 16, 296, 200)
 local MinicordGroupboxMisc = gui.Groupbox(MinicordTab, 'Misc', 328, 16, 296, 200)
-local MinicordGroupboxVisuals = gui.Groupbox(MinicordTab, 'Visuals', 328, 172, 296, 200)
-
+local MinicordGroupboxVisuals = gui.Groupbox(MinicordTab, 'Visuals', 328, 264, 296, 200)
 ------------------------------------------------------------------------------------------------------
 local maxprocessticks_combo = gui.Combobox(MinicordGroupboxRagebot, 'minicord.rbot.sv_maxusrcmdprocessticks_combo', 'sv_maxusrcmdprocessticks', 'Standard', 'Valve servers', 'Custom');
 local maxprocessticks_slider = gui.Slider(MinicordGroupboxRagebot, 'minicord.rbot.sv_maxusrcmdprocessticks_slider', 'Maximum process ticks adjuster', 16, 3, 61);
@@ -39,13 +39,18 @@ local fakeduck_combo = gui.Combobox(MinicordGroupboxRagebot, 'minicord.rbot.fake
 local revolver_check = gui.Checkbox(MinicordGroupboxRagebot, 'minicord.rbot.revolver', 'Disable fakelags on Revolver R8', false);
 
 local nonescopehc_check = gui.Checkbox(MinicordGroupboxRagebot, 'minicord.rbot.noscopehc.check', 'Enable autosniper noscope/scope hitchance', false);
-local nonescopehc_scope = gui.Slider(MinicordGroupboxRagebot, 'minicord.rbot.noscopehc.scopevalue', 'Scope hitchance', 50, 0, 100);
-local nonescopehc_dt_scope = gui.Slider(MinicordGroupboxRagebot, 'minicord.rbot.noscopehc.scopefdvalue', 'Scope DF hitchance', 0, 0, 100);
-local nonescopehc_regular = gui.Slider(MinicordGroupboxRagebot, 'minicord.rbot.noscopehc.noscopevalue', 'Noscope hitchance', 50, 0, 100);
-local nonescopehc_dt_regular = gui.Slider(MinicordGroupboxRagebot, 'minicord.rbot.noscopehc.noscopefdvalue', 'Noscope DF hitchance', 0, 0, 100);
+local nonescopehc_scope = gui.Slider(MinicordGroupboxRagebot, 'minicord.rbot.noscopehc.scopevalue', 'Scope hitchance', gui.GetValue(AutosniperHitchance), 0, 100);
+local nonescopehc_dt_scope = gui.Slider(MinicordGroupboxRagebot, 'minicord.rbot.noscopehc.scopefdvalue', 'Scope double fire hitchance', gui.GetValue(AutosniperDTHitchance), 0, 100);
+local nonescopehc_regular = gui.Slider(MinicordGroupboxRagebot, 'minicord.rbot.noscopehc.noscopevalue', 'Noscope hitchance', gui.GetValue(AutosniperHitchance) / 2.5, 0, 100);
+local nonescopehc_dt_regular = gui.Slider(MinicordGroupboxRagebot, 'minicord.rbot.noscopehc.noscopefdvalue', 'Noscope double fire hitchance', gui.GetValue(AutosniperDTHitchance) / 5, 0, 100);
 
 local legshaking_check = gui.Checkbox(MinicordGroupboxMisc, 'minicord.other.legbreaker.checkbox', 'Legshaking', false);
 local legshaking_combo = gui.Combobox(MinicordGroupboxMisc, 'minicord.other.legbreaker.combo', 'Legshaking speed', 'Maximum speed', 'Fast', 'Normal', 'Slow', 'Very slow');
+
+local dt_on_autopeek = gui.Checkbox(MinicordGroupboxMisc, 'minicord.other.dtautopeek', 'Always use double fire with autopeek', false);
+local DtOnPeekSettings = gui.Multibox(MinicordGroupboxMisc, 'Autopeek settings');
+local dt_on_autopeek_pingspike = gui.Checkbox(DtOnPeekSettings, 'minicord.other.dtautopeek.pingspike', 'Use fakelatency (200)', false);
+local dt_on_autopeek_freestanding = gui.Checkbox(DtOnPeekSettings, 'minicord.other.dtautopeek.freestanding', 'Use freestanding', false);
 
 local ticks_draw_check = gui.Checkbox(MinicordGroupboxVisuals, 'minicord.draw.draw', 'Draw ticks on screen', false);
 local ticks_draw_color = gui.ColorPicker(MinicordGroupboxVisuals, 'minicord.draw.color', 'Draw color', 0, 220, 83, 255);
@@ -57,9 +62,9 @@ local night_mode = gui.Slider(MinicordGroupboxVisuals, 'minicord.other.exposure.
 
 local ref_maxprocessticks_slider = gui.Reference( "Ragebot", "Minicord", "Ragebot", "Maximum process ticks adjuster")
 local ref_nonescopehc_scope = gui.Reference( "Ragebot", "Minicord", "Ragebot", "Scope hitchance")
-local ref_nonescopehc_dt_scope = gui.Reference( "Ragebot", "Minicord", "Ragebot", "Scope DF hitchance")
+local ref_nonescopehc_dt_scope = gui.Reference( "Ragebot", "Minicord", "Ragebot", "Scope double fire hitchance")
 local ref_nonescopehc_regular = gui.Reference( "Ragebot", "Minicord", "Ragebot", "Noscope hitchance")
-local ref_nonescopehc_dt_regular = gui.Reference( "Ragebot", "Minicord", "Ragebot", "Noscope DF hitchance")
+local ref_nonescopehc_dt_regular = gui.Reference( "Ragebot", "Minicord", "Ragebot", "Noscope double fire hitchance")
 local ref_legshaking_combo = gui.Reference( "Ragebot", "Minicord", "Misc", "Legshaking speed")
 local ref_ticks_draw_color = gui.Reference( "Ragebot", "Minicord", "Visuals", "Draw color")
 local ref_ticks_draw_x = gui.Reference( "Ragebot", "Minicord", "Visuals", "Draw width")
@@ -105,6 +110,12 @@ local function handlemain()
 		ref_legshaking_combo:SetDisabled(false)
 	end
 	
+	if not dt_on_autopeek:GetValue() then
+		DtOnPeekSettings:SetDisabled(true)
+	else
+		DtOnPeekSettings:SetDisabled(false)
+	end
+	
 	if not ticks_draw_check:GetValue() then
 		ref_ticks_draw_color:SetDisabled(true)
 		ref_ticks_draw_x:SetDisabled(true)
@@ -133,7 +144,10 @@ local function handledt()
 	
 	local df_speed = {13, 14, 15, 16, 17, 18, 5, 6, 7, maxprocessticks_slider:GetValue()}
 	
-	if gui.GetValue('rbot.accuracy.weapon.asniper.doublefire') == 2 then
+	if gui.GetValue('rbot.accuracy.weapon.asniper.doublefire') == 2 and entities.GetLocalPlayer():GetWeaponID() == 38 
+	or gui.GetValue('rbot.accuracy.weapon.scout.doublefire') == 2 and entities.GetLocalPlayer():GetWeaponID() == 40
+	or gui.GetValue('rbot.accuracy.weapon.sniper.doublefire') == 2 and entities.GetLocalPlayer():GetWeaponID() == 9
+	or gui.GetValue('rbot.accuracy.weapon.hpistol.doublefire') == 2 and entities.GetLocalPlayer():GetWeaponID() == 1 then
 		if doublefire_combo:GetValue() >= 1 then
 			sv_maxusrcmdprocessticks:SetValue(df_speed[doublefire_combo:GetValue()])
 		end
@@ -159,7 +173,7 @@ local function fakeduck_speed()
 	
 	local fd_speed = {14, 15, 16, 18, 19, 7, maxprocessticks_slider:GetValue()}
 	
-	if input.IsButtonDown(fakeduck:GetValue()) then 
+	if input.IsButtonDown(Fakeduck:GetValue()) then 
 		if fakeduck_combo:GetValue() >= 1 then
 			sv_maxusrcmdprocessticks:SetValue(fd_speed[fakeduck_combo:GetValue()])
 		end
@@ -229,18 +243,95 @@ local function legshaking()
 	if legshaking_check:GetValue() then
 		if entities.GetLocalPlayer() then
 			entities.GetLocalPlayer():SetPropInt(0, "m_flPoseParameter")
-			if globals.CurTime() > curtime then
-				state = not state
+			if globals.CurTime() > Curtime then
+				State = not State
 				if legshaking_combo:GetValue() <= 5 then
-					curtime = globals.CurTime() + 0.03 + legshaking_combo:GetValue() / 100
+					Curtime = globals.CurTime() + 0.03 + legshaking_combo:GetValue() / 100
 				end
 				entities.GetLocalPlayer():SetPropInt(1, "m_flPoseParameter")
 			end
-			gui.SetValue("misc.slidewalk", state)
+			gui.SetValue("misc.slidewalk", State)
 		end
 	end
 end
-callbacks.Register('Draw', 'legshaking', legshaking);		
+callbacks.Register('Draw', 'legshaking', legshaking);	
+
+--------------------------------	
+
+--Always DT on AutoPeek
+local function SavedValues()
+	ScarDtValue 				= gui.GetValue('rbot.accuracy.weapon.asniper.doublefire')
+	ScoutDtValue 				= gui.GetValue('rbot.accuracy.weapon.scout.doublefire')
+	AwpDtValue 					= gui.GetValue('rbot.accuracy.weapon.sniper.doublefire')
+	DeagleDtValue 				= gui.GetValue('rbot.accuracy.weapon.hpistol.doublefire')
+	
+	FakelatencyEnableValue 		= gui.GetValue('misc.fakelatency.enable')
+	FakelatencyAmountValue 		= gui.GetValue('misc.fakelatency.amount')
+	FakelatencyKeyValue			= gui.GetValue('misc.fakelatency.key')
+	
+	FreestandingLeftValue  		= gui.GetValue('rbot.antiaim.left')
+	FreestandingRightValue		= gui.GetValue('rbot.antiaim.right')
+	FreestandingAtedgesValue 	= gui.GetValue('rbot.antiaim.advanced.autodir.edges')
+	FreestandingAttargetsValue 	= gui.GetValue('rbot.antiaim.advanced.autodir.targets')
+end
+local dt_autopeek_state = false
+local function dt_autopeek()
+	if not dt_on_autopeek:GetValue() then
+		return
+	end
+	if not engine.GetServerIP() then
+		return
+	end
+	if not entities.GetLocalPlayer():IsAlive() then
+		return
+	end
+	
+	if input.IsButtonDown(AutoPeek:GetValue()) then 
+		gui.SetValue('rbot.accuracy.weapon.asniper.doublefire', 2)
+		gui.SetValue('rbot.accuracy.weapon.scout.doublefire', 2)
+		gui.SetValue('rbot.accuracy.weapon.sniper.doublefire', 2)
+		gui.SetValue('rbot.accuracy.weapon.hpistol.doublefire', 2)
+		
+		if dt_on_autopeek_pingspike:GetValue() then
+			gui.SetValue('misc.fakelatency.enable', 1)
+			gui.SetValue('misc.fakelatency.amount', 200)
+			gui.SetValue('misc.fakelatency.key', 'None')
+		end
+		if dt_on_autopeek_freestanding:GetValue() then
+			gui.SetValue('rbot.antiaim.left', 150)
+			gui.SetValue('rbot.antiaim.right', -150)
+			gui.SetValue('rbot.antiaim.advanced.autodir.edges', 1)
+			gui.SetValue('rbot.antiaim.advanced.autodir.targets', 0)
+		end
+		
+		dt_autopeek_state = true
+	end
+	if input.IsButtonReleased(AutoPeek:GetValue()) then 
+		gui.SetValue('rbot.accuracy.weapon.asniper.doublefire', ScarDtValue)
+		gui.SetValue('rbot.accuracy.weapon.scout.doublefire', ScoutDtValue)
+		gui.SetValue('rbot.accuracy.weapon.sniper.doublefire', AwpDtValue)
+		gui.SetValue('rbot.accuracy.weapon.hpistol.doublefire', DeagleDtValue)
+		
+		if dt_on_autopeek_pingspike:GetValue() then
+			gui.SetValue('misc.fakelatency.enable', FakelatencyEnableValue)
+			gui.SetValue('misc.fakelatency.amount', FakelatencyAmountValue)
+			gui.SetValue('misc.fakelatency.key', FakelatencyKeyValue)
+		end
+		if dt_on_autopeek_freestanding:GetValue() then
+			gui.SetValue('rbot.antiaim.left', FreestandingLeftValue)
+			gui.SetValue('rbot.antiaim.right', FreestandingRightValue)
+			gui.SetValue('rbot.antiaim.advanced.autodir.edges', FreestandingAtedgesValue)
+			gui.SetValue('rbot.antiaim.advanced.autodir.targets', FreestandingAttargetsValue)
+		end
+		
+		dt_autopeek_state = false
+	end
+	
+	if not dt_autopeek_state then
+		SavedValues()
+	end
+end
+callbacks.Register('Draw', 'dt_autopeek', dt_autopeek);	
 	
 --------------------------------
 
@@ -294,6 +385,9 @@ callbacks.Register('Draw', "Night Mode", Night_Mode)
 --Drawing ticks
 local font = draw.CreateFont('Andre V', 17)
 local function draw_ticks()
+	if not ticks_draw_check:GetValue() then
+		return
+	end
 	if not engine.GetServerIP() then
 		return
 	end
@@ -301,15 +395,15 @@ local function draw_ticks()
 		return
 	end
 	
-	if ticks_draw_check:GetValue() then
-		if gui.GetValue('rbot.accuracy.weapon.asniper.doublefire') == 2 then
-			draw.Color(ticks_draw_color:GetValue())
-			draw.SetFont(font)
-			draw.TextShadow(ticks_draw_x:GetValue(), ticks_draw_y:GetValue(), sv_maxusrcmdprocessticks:GetValue() .. ' TICKS', ticks_draw_color)
-		end
-		if not gui.GetValue('rbot.accuracy.weapon.asniper.doublefire') == 2 then
-			return
-		end
+	if gui.GetValue('rbot.accuracy.weapon.asniper.doublefire') == 2 and entities.GetLocalPlayer():GetWeaponID() == 38 
+	or gui.GetValue('rbot.accuracy.weapon.scout.doublefire') == 2 and entities.GetLocalPlayer():GetWeaponID() == 40
+	or gui.GetValue('rbot.accuracy.weapon.sniper.doublefire') == 2 and entities.GetLocalPlayer():GetWeaponID() == 9
+	or gui.GetValue('rbot.accuracy.weapon.hpistol.doublefire') == 2 and entities.GetLocalPlayer():GetWeaponID() == 1 then
+		draw.Color(ticks_draw_color:GetValue())
+		draw.SetFont(font)
+		draw.TextShadow(ticks_draw_x:GetValue(), ticks_draw_y:GetValue(), sv_maxusrcmdprocessticks:GetValue() .. ' TICKS', ticks_draw_color)
+	else
+		return
 	end
 end
 callbacks.Register('Draw', 'draw_ticks', draw_ticks)
