@@ -259,6 +259,7 @@ callbacks.Register('Draw', 'legshaking', legshaking);
 --------------------------------	
 
 --Always DT on AutoPeek
+--Semi-pasted from sestain's script.
 local function SavedValues()
 	ScarDtValue 				= gui.GetValue('rbot.accuracy.weapon.asniper.doublefire')
 	ScoutDtValue 				= gui.GetValue('rbot.accuracy.weapon.scout.doublefire')
