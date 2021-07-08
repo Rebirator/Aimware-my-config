@@ -275,11 +275,13 @@ local function dtbind()
 			gui.SetValue('rbot.accuracy.weapon.scout.doublefire', 2)
 			gui.SetValue('rbot.accuracy.weapon.sniper.doublefire', 2)
 			gui.SetValue('rbot.accuracy.weapon.hpistol.doublefire', 2)
+			gui.SetValue('rbot.accuracy.weapon.pistol.doublefire', 2)
 		else
 			gui.SetValue('rbot.accuracy.weapon.asniper.doublefire', 0)
 			gui.SetValue('rbot.accuracy.weapon.scout.doublefire', 0)
 			gui.SetValue('rbot.accuracy.weapon.sniper.doublefire', 0)
 			gui.SetValue('rbot.accuracy.weapon.hpistol.doublefire', 0)
+			gui.SetValue('rbot.accuracy.weapon.pistol.doublefire', 0)
 			gui.SetValue('misc.speedburst.enable', false)
 		end
 	else
@@ -287,6 +289,7 @@ local function dtbind()
 		gui.SetValue('rbot.accuracy.weapon.scout.doublefire', 0)
 		gui.SetValue('rbot.accuracy.weapon.sniper.doublefire', 0)
 		gui.SetValue('rbot.accuracy.weapon.hpistol.doublefire', 0)
+		gui.SetValue('rbot.accuracy.weapon.pistol.doublefire', 0)
 	end
 end
 callbacks.Register('Draw', dtbind)
@@ -313,7 +316,8 @@ local function handledt()
 		if gui.GetValue('rbot.accuracy.weapon.asniper.doublefire') == 2 or gui.GetValue('rbot.accuracy.weapon.asniper.doublefire') == 1
 		or gui.GetValue('rbot.accuracy.weapon.scout.doublefire') == 2 or gui.GetValue('rbot.accuracy.weapon.asniper.doublefire') == 1
 		or gui.GetValue('rbot.accuracy.weapon.sniper.doublefire') == 2 or gui.GetValue('rbot.accuracy.weapon.asniper.doublefire') == 1
-		or gui.GetValue('rbot.accuracy.weapon.hpistol.doublefire') == 2 or gui.GetValue('rbot.accuracy.weapon.asniper.doublefire') == 1 then
+		or gui.GetValue('rbot.accuracy.weapon.hpistol.doublefire') == 2 or gui.GetValue('rbot.accuracy.weapon.asniper.doublefire') == 1
+		or gui.SetValue('rbot.accuracy.weapon.pistol.doublefire') == 2 or gui.SetValue('rbot.accuracy.weapon.pistol.doublefire') == 1 then
 			if doublefire_speed:GetValue() == 0 then
 				gui.SetValue('misc.fakelatency.enable', 0)
 				if ping <= 5 then
@@ -571,11 +575,13 @@ local function doublefire_modes()
 					gui.SetValue('rbot.accuracy.weapon.scout.doublefire', 0)
 					gui.SetValue('rbot.accuracy.weapon.sniper.doublefire', 0)
 					gui.SetValue('rbot.accuracy.weapon.hpistol.doublefire', 0)
+					gui.SetValue('rbot.accuracy.weapon.pistol.doublefire', 0)
 				else
 					gui.SetValue('rbot.accuracy.weapon.asniper.doublefire', 2)
 					gui.SetValue('rbot.accuracy.weapon.scout.doublefire', 2)
 					gui.SetValue('rbot.accuracy.weapon.sniper.doublefire', 2)
 					gui.SetValue('rbot.accuracy.weapon.hpistol.doublefire', 2)
+					gui.SetValue('rbot.accuracy.weapon.pistol.doublefire', 2)
 				end
 			end
 			if LocalPlayer then
@@ -607,6 +613,7 @@ local function doublefire_modes()
 					gui.SetValue('rbot.accuracy.weapon.scout.doublefire', 2)
 					gui.SetValue('rbot.accuracy.weapon.sniper.doublefire', 2)
 					gui.SetValue('rbot.accuracy.weapon.hpistol.doublefire', 2)
+					gui.SetValue('rbot.accuracy.weapon.pistol.doublefire', 2)
 				else
 					return
 				end
@@ -699,6 +706,7 @@ local function SavedValues()
 	ScoutDtValue 				= gui.GetValue('rbot.accuracy.weapon.scout.doublefire')
 	AwpDtValue 					= gui.GetValue('rbot.accuracy.weapon.sniper.doublefire')
 	DeagleDtValue 				= gui.GetValue('rbot.accuracy.weapon.hpistol.doublefire')
+	PistolDtValue 				= gui.GetValue('rbot.accuracy.weapon.pistol.doublefire')
 	
 	FakelatencyEnableValue 		= gui.GetValue('misc.fakelatency.enable')
 	FakelatencyAmountValue 		= gui.GetValue('misc.fakelatency.amount')
@@ -731,6 +739,7 @@ local function dt_autopeek()
 				gui.SetValue('rbot.accuracy.weapon.scout.doublefire', 2)
 				gui.SetValue('rbot.accuracy.weapon.sniper.doublefire', 2)
 				gui.SetValue('rbot.accuracy.weapon.hpistol.doublefire', 2)
+				gui.SetValue('rbot.accuracy.weapon.pistol.doublefire', 2)
 			end
 			if dt_on_autopeek_pingspike:GetValue() then
 				gui.SetValue('misc.fakelatency.enable', 1)
@@ -755,6 +764,7 @@ local function dt_autopeek()
 				gui.SetValue('rbot.accuracy.weapon.scout.doublefire', ScoutDtValue)
 				gui.SetValue('rbot.accuracy.weapon.sniper.doublefire', AwpDtValue)
 				gui.SetValue('rbot.accuracy.weapon.hpistol.doublefire', DeagleDtValue)
+				gui.SetValue('rbot.accuracy.weapon.pistol.doublefire', PistolDtValue)
 			end
 			if dt_on_autopeek_pingspike:GetValue() then
 				gui.SetValue('misc.fakelatency.enable', FakelatencyEnableValue)
