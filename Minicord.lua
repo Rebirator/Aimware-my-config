@@ -107,7 +107,8 @@ local AutosniperDTHitchance = 'rbot.accuracy.weapon.asniper.doublefirehc'
 local AutoPeek = gui.Reference('Ragebot', 'Accuracy', 'Movement', 'Auto Peek Key')
 ------------------------------------------------------------------------------------------------------
 local Curtime = globals.CurTime()
-local State = true
+local State = 0
+local firstX, firstY = draw.GetScreenSize()
 ------------------------------------------------------------------------------------------------------
 local MinicordTab = gui.Tab(gui.Reference('Ragebot'), 'minicord.tab', 'Minicord')
 local MinicordGroupboxRagebotPTICKS = gui.Groupbox(MinicordTab, 'Ragebot | Maximum process ticks', 16, 16, 296, 200)
@@ -148,10 +149,22 @@ local nonescopehc_regular = gui.Slider(MinicordGroupboxRagebotAutoNoscope, 'mini
 local nonescopehc_dt_regular = gui.Slider(MinicordGroupboxRagebotAutoNoscope, 'minicord.rbot.noscopehc.noscopefdvalue', 'Noscope double fire hit chance', gui.GetValue(AutosniperDTHitchance) / 5, 0, 100);
 
 local autopeek_settings = gui.Multibox(MinicordGroupboxMisc, 'Autopeek settings');
-local autopeek_pingspike = gui.Checkbox(autopeek_settings, 'minicord.other.dtautopeek.pingspike', 'Use fakelatency', false);
-local autopeek_freestanding = gui.Checkbox(autopeek_settings, 'minicord.other.dtautopeek.freestanding', 'Use freestanding', false);
-local autopeek_optimalticks = gui.Checkbox(autopeek_settings, 'minicord.other.dtautopeek.optimalticks', 'Force shifting optimal ticks', false);
-local autopeek_dt = gui.Checkbox(MinicordGroupboxMisc, 'minicord.other.dtautopeek', 'Double fire with autopeek', false);
+local autopeek_pingspike = gui.Checkbox(autopeek_settings, 'minicord.other.autopeek.pingspike', 'Use fakelatency', false);
+local autopeek_freestanding = gui.Checkbox(autopeek_settings, 'minicord.other.autopeek.freestanding', 'Use freestanding', false);
+local autopeek_optimalticks = gui.Checkbox(autopeek_settings, 'minicord.other.autopeek.optimalticks', 'Force shifting optimal ticks', false);
+local autopeek_mindamage = gui.Checkbox(autopeek_settings, 'minicord.other.autopeek.mindamage', 'Force minimum damage', false);
+local autopeek_hidemindamage = gui.Checkbox(autopeek_settings, 'minicord.other.autopeek.hidemindamage', 'Hide window', false);
+local autopeek_damagesettings = gui.Window('minicord.other.autopeek.damagewindow', 'Autopeek minimum damage settings', 0, firstY / 2, 225, 480)
+local autopeek_damagepistols = gui.Slider(autopeek_damagesettings, 'minicord.other.autopeek.damagewindow.pistols', 'Pistols minimum damage', 50, 1, 130);
+local autopeek_damageheavypistols = gui.Slider(autopeek_damagesettings, 'minicord.other.autopeek.damagewindow.heavypistols', 'Heavy pistols minimum damage', 50, 1, 130);
+local autopeek_damagesubmachineguns = gui.Slider(autopeek_damagesettings, 'minicord.other.autopeek.damagewindow.submachineguns', 'Submachine guns minimum damage', 50, 1, 130);
+local autopeek_damagerifles = gui.Slider(autopeek_damagesettings, 'minicord.other.autopeek.damagewindow.rifles', 'Rifles minimum damage', 50, 1, 130);
+local autopeek_damageshotguns = gui.Slider(autopeek_damagesettings, 'minicord.other.autopeek.damagewindow.shotguns', 'Shotguns minimum damage', 50, 1, 130);
+local autopeek_damagescout = gui.Slider(autopeek_damagesettings, 'minicord.other.autopeek.damagewindow.scout', 'Scout minimum damage', 50, 1, 130);
+local autopeek_damageautosnipers = gui.Slider(autopeek_damagesettings, 'minicord.other.autopeek.damagewindow.autosnipers', 'Autosnipers minimum damage', 50, 1, 130);
+local autopeek_damagesniper = gui.Slider(autopeek_damagesettings, 'minicord.other.autopeek.damagewindow.sniper', 'Sniper minimum damage', 50, 1, 130);
+local autopeek_damagelightmachineguns = gui.Slider(autopeek_damagesettings, 'minicord.other.autopeek.damagewindow.lightmachineguns', 'Light machine guns minimum damage', 50, 1, 130);
+local autopeek_dt = gui.Checkbox(MinicordGroupboxMisc, 'minicord.other.autopeek.dt', 'Double fire with autopeek', false);
 
 local draw_ticks = gui.Checkbox(MinicordGroupboxVisuals, 'minicord.draw.ticks', 'Display shifting ticks', false);
 local draw_circle = gui.Checkbox(MinicordGroupboxVisuals, 'minicord.draw.circle', 'Display choke indicator', false);
@@ -187,6 +200,7 @@ autopeek_settings:SetDescription("Settings for autopeek.")
 autopeek_pingspike:SetDescription("Fakelatency during autopeek for a longer backtrack.")
 autopeek_freestanding:SetDescription("Freestanding for a safer peek with autopeek.")
 autopeek_optimalticks:SetDescription("Shifting optimal value for double fire during autopeek.")
+autopeek_mindamage:SetDescription('Sets your min. damage value when autopeek is active.')
 autopeek_dt:SetDescription("Always use double fire when autopeek is active.")
 draw_ticks:SetDescription("Displaying shifting ticks above the rapid fire indicator.")
 draw_circle:SetDescription("Displaying choke circle indicator on crosshair.")
@@ -221,7 +235,7 @@ local function handlemain()
 		fakeduck_speed_inaccuracy:SetInvisible(false)
 		fakeduck_speed_accuracy:SetDisabled(true)
 		fakeduck_speed_accuracy:SetInvisible(true)
-		if fakeduck_speed_inaccuracy:GetValue() == 4 then
+		if fakeduck_speed_inaccuracy:GetValue() == 3 then
 			maxprocessticks_slider:SetDisabled(false)
 		end
 	end
@@ -245,7 +259,7 @@ local function handlemain()
 		autopeek_pingspike:SetDisabled(false)
 	end
 	
-	if doublefire_speed:GetValue() == 6 then
+	if doublefire_speed:GetValue() == 5 then
 		maxprocessticks_slider:SetDisabled(false)
 	end
 	
@@ -265,6 +279,17 @@ local function handlemain()
 		nonescopehc_dt_scope:SetDisabled(false)
 		nonescopehc_regular:SetDisabled(false)
 		nonescopehc_dt_regular:SetDisabled(false)
+	end
+
+	if autopeek_mindamage:GetValue() then
+		autopeek_hidemindamage:SetDisabled(false)
+	else
+		autopeek_hidemindamage:SetDisabled(true)
+	end
+	if autopeek_mindamage:GetValue() and not autopeek_hidemindamage:GetValue() and gui.Reference("Menu"):IsActive() then
+		autopeek_damagesettings:SetInvisible(false)
+	else
+		autopeek_damagesettings:SetInvisible(true)
 	end
 	
 	if not autopeek_dt:GetValue() then
@@ -314,7 +339,7 @@ local function handledt()
 	if not entities.GetLocalPlayer():IsAlive() then
 		return
 	end
-	if gui.GetValue('rbot.accuracy.movement.autopeek') then
+	if gui.GetValue('rbot.accuracy.movement.autopeek') and not gui.GetValue('rbot.accuracy.movement.autopeekkey') == 0 then
  		if input.IsButtonDown(AutoPeek:GetValue()) and autopeek_optimalticks:GetValue() then 
 			return
 		end
@@ -371,6 +396,9 @@ local function fakeduck_speed()
 	if not entities.GetLocalPlayer():IsAlive() then
 		return
 	end
+	if gui.GetValue('rbot.antiaim.extra.fakecrouchkey') == 0 then
+		return
+	end
 	
 	local getmaxprocessticks = client.GetConVar('sv_maxusrcmdprocessticks')
 	
@@ -387,7 +415,11 @@ local function fakeduck_speed()
 	
 	if input.IsButtonDown(Fakeduck:GetValue()) then 
 		if fakeduck_type:GetValue() == 0 then
-			sv_maxusrcmdprocessticks:SetValue(getmaxprocessticks - 1)
+			if getmaxprocessticks == '6' or getmaxprocessticks == '8' then
+				sv_maxusrcmdprocessticks:SetValue(7)
+			else
+				sv_maxusrcmdprocessticks:SetValue(getmaxprocessticks - 1)
+			end
 		elseif fakeduck_type:GetValue() == 1 then
 			sv_maxusrcmdprocessticks:SetValue(fakeduck_accuracy[fakeduck_speed_accuracy:GetValue() + 1])
 		elseif fakeduck_type:GetValue() == 2 then
@@ -659,6 +691,9 @@ local function revolver()
 	if not entities.GetLocalPlayer():IsAlive() then
 		return
 	end
+	if gui.GetValue('rbot.antiaim.extra.fakecrouchkey') == 0 then
+		return
+	end
 	
 	if entities.GetLocalPlayer():GetWeaponID() == 64 then
 		if input.IsButtonDown(Fakeduck:GetValue()) then
@@ -716,8 +751,18 @@ local function SavedValues()
 	
 	FreestandingLeftValue  		= gui.GetValue('rbot.antiaim.left')
 	FreestandingRightValue		= gui.GetValue('rbot.antiaim.right')
-	FreestandingAtedgesValue 	= gui.GetValue('rbot.antiaim.advanced.autodir.edges')
+	--FreestandingAtedgesValue 	= gui.GetValue('rbot.antiaim.advanced.autodir.edges')
 	FreestandingAttargetsValue 	= gui.GetValue('rbot.antiaim.advanced.autodir.targets')
+
+	PistolsDamage 				= gui.GetValue('rbot.accuracy.weapon.pistol.mindmg')
+	HeavyPistolsDamage			= gui.GetValue('rbot.accuracy.weapon.hpistol.mindmg')
+	SubmachineGunsDamage		= gui.GetValue('rbot.accuracy.weapon.smg.mindmg')
+	RiflesDamage				= gui.GetValue('rbot.accuracy.weapon.rifle.mindmg')
+	ShotgunsDamage				= gui.GetValue('rbot.accuracy.weapon.shotgun.mindmg')
+	ScoutDamage					= gui.GetValue('rbot.accuracy.weapon.scout.mindmg')
+	AutosnipersDamage			= gui.GetValue('rbot.accuracy.weapon.asniper.mindmg')
+	SniperDamage				= gui.GetValue('rbot.accuracy.weapon.sniper.mindmg')
+	LightMachineGunsDamage		= gui.GetValue('rbot.accuracy.weapon.lmg.mindmg')
 end
 local autopeek_state = false
 local function autopeek()
@@ -728,6 +773,9 @@ local function autopeek()
 		return
 	end
 	if not gui.GetValue('rbot.accuracy.movement.autopeek') then
+		return
+	end
+	if gui.GetValue('rbot.accuracy.movement.autopeekkey') == 0 then
 		return
 	end
 	
@@ -752,8 +800,19 @@ local function autopeek()
 			gui.SetValue('rbot.antiaim.advanced.autodir.edges', 1)
 			gui.SetValue('rbot.antiaim.advanced.autodir.targets', 0)
 		end
-		if autopeek_optimalticks:GetValue() and dt_on_autopeek:GetValue() then
+		if autopeek_optimalticks:GetValue() and autopeek_dt:GetValue() then
 			sv_maxusrcmdprocessticks:SetValue(getmaxprocessticks)
+		end
+		if autopeek_mindamage:GetValue() then
+			gui.SetValue('rbot.accuracy.weapon.pistol.mindmg', autopeek_damagepistols:GetValue())
+			gui.SetValue('rbot.accuracy.weapon.hpistol.mindmg', autopeek_damageheavypistols:GetValue())
+			gui.SetValue('rbot.accuracy.weapon.smg.mindmg', autopeek_damagesubmachineguns:GetValue())
+			gui.SetValue('rbot.accuracy.weapon.rifle.mindmg', autopeek_damagerifles:GetValue())
+			gui.SetValue('rbot.accuracy.weapon.shotgun.mindmg', autopeek_damageshotguns:GetValue())
+			gui.SetValue('rbot.accuracy.weapon.scout.mindmg', autopeek_damagescout:GetValue())
+			gui.SetValue('rbot.accuracy.weapon.asniper.mindmg', autopeek_damageautosnipers:GetValue())
+			gui.SetValue('rbot.accuracy.weapon.sniper.mindmg', autopeek_damagesniper:GetValue())
+			gui.SetValue('rbot.accuracy.weapon.lmg.mindmg', autopeek_damagelightmachineguns:GetValue())
 		end
 		
 		autopeek_state = true
@@ -770,11 +829,19 @@ local function autopeek()
 		if autopeek_freestanding:GetValue() then
 			gui.SetValue('rbot.antiaim.left', FreestandingLeftValue)
 			gui.SetValue('rbot.antiaim.right', FreestandingRightValue)
-			gui.SetValue('rbot.antiaim.advanced.autodir.edges', FreestandingAtedgesValue)
+			gui.SetValue('rbot.antiaim.advanced.autodir.edges', 0)
 			gui.SetValue('rbot.antiaim.advanced.autodir.targets', FreestandingAttargetsValue)
 		end
-		if autopeek_optimalticks:GetValue() and autopeek:GetValue() then
-			return
+		if autopeek_mindamage:GetValue() then
+			gui.SetValue('rbot.accuracy.weapon.pistol.mindmg', PistolsDamage)
+			gui.SetValue('rbot.accuracy.weapon.hpistol.mindmg', HeavyPistolsDamage)
+			gui.SetValue('rbot.accuracy.weapon.smg.mindmg', SubmachineGunsDamage)
+			gui.SetValue('rbot.accuracy.weapon.rifle.mindmg', RiflesDamage)
+			gui.SetValue('rbot.accuracy.weapon.shotgun.mindmg', ShotgunsDamage)
+			gui.SetValue('rbot.accuracy.weapon.scout.mindmg', ScoutDamage)
+			gui.SetValue('rbot.accuracy.weapon.asniper.mindmg', AutosnipersDamage)
+			gui.SetValue('rbot.accuracy.weapon.sniper.mindmg', SniperDamage)
+			gui.SetValue('rbot.accuracy.weapon.lmg.mindmg', LightMachineGunsDamage)
 		end
 			
 		autopeek_state = false
@@ -873,7 +940,7 @@ local function draw_ticks_and_circle()
 	if draw_circle:GetValue() then
 		local choke = time_to_ticks(globals.CurTime() - entities.GetLocalPlayer():GetPropFloat( "m_flSimulationTime")) + 2
 		draw.Color(draw_circle_color:GetValue())
-		draw.OutlinedCircle(toint(x / 2), toint(y / 2), choke)
+		draw.OutlinedCircle(toint(x / 2), toint(y / 2), toint(choke))
 	end
 end
 callbacks.Register('Draw', 'draw_ticks_and_circle', draw_ticks_and_circle)
