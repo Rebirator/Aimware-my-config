@@ -1,3 +1,5 @@
+--https://trello.com/b/f3u4ZSE4/settings-for-each-weapon
+
 local MINICORD_TAB = gui.Tab(gui.Reference('Ragebot'), 'minicord', '#project_unknown_2_0_0')
 local MINICORD_SUBTAB_WEAPSELECTION = gui.Groupbox(MINICORD_TAB, 'Weapon selection', 16, 16, 248, 200)
 
