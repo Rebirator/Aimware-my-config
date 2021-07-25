@@ -9,59 +9,15 @@ local WEAPONID_SCOUT            = { 40 }
 local WEAPONID_AUTOSNIPERS      = { 11, 38 }
 local WEAPONID_SNIPER           = { 9 }
 local WEAPONID_LIGHTMACHINEGUNS = { 14, 28 }
+local WEAPONID_ALLWEAPONS       = { WEAPONID_PISTOLS, WEAPONID_HEAVYPISTOLS, WEAPONID_SUBMACHINEGUNS, WEAPONID_RIFLES, WEAPONID_SHOTGUNS, WEAPONID_SCOUT, WEAPONID_AUTOSNIPERS, WEAPONID_SNIPER, WEAPONID_LIGHTMACHINEGUNS }
 local WEAPON_GROUPS_NAME        = { 'PISTOL', 'HPISTOL', 'SMG', 'RIFLE', 'SHOTGUN', 'SCOUT', 'ASNIPER', 'SNIPER', 'LMG' }
 local WEAPON_CURRENT_GROUP      = ''
-local WEAPON_ELEMENT            = {}
+local PERGROUP_ELEMENTS         = {}
 
 local function lp_weapon_id(WEAPONID)
     for k, v in pairs(WEAPONID) do
         if entities.GetLocalPlayer():GetWeaponID() == WEAPONID[k] then
             return true
-        end
-    end
-end
-local function perWeapon_Checkbox(varname, PARENT, VARNAME, NAME, VALUE)
-    for k, v in pairs(WEAPON_GROUPS_NAME) do
-        WEAPON_ELEMENT[v..'_'..varname] = gui.Checkbox(PARENT, string.lower(v)..'.'..VARNAME, NAME, VALUE)
-    end
-end
-local function perWeapon_Combobox(varname, PARENT, VARNAME, NAME, ...)
-    for k, v in pairs(WEAPON_GROUPS_NAME) do
-        WEAPON_ELEMENT[v..'_'..varname] = gui.Combobox(PARENT, string.lower(v)..'.'..VARNAME, NAME, ...)
-    end
-end
-local function perWeapon_SetValues(PARENTS, VALUES)
-    --[[ local WEAPON_GROUPS_ID = {}
-    local WEAPON_CURRENT_GROUP_ID
-    for k, v in pairs(WEAPON_GROUPS_NAME) do
-        WEAPON_GROUPS_ID[k] = k
-        if WEAPON_CURRENT_GROUP == WEAPON_GROUPS_NAME[k] then
-            WEAPON_CURRENT_GROUP_ID = k
-        end
-    end
-    for k, v in pairs(WEAPON_GROUPS_ID) do
-        if WEAPON_CURRENT_GROUP_ID == WEAPON_GROUPS_ID[k] then
-            gui.SetValue(PARENT, VALUES[k]:GetValue())
-        end
-    end ]]
-    for k, v in pairs(PARENTS) do
-        gui.SetValue(PARENTS[k], VALUES[k]:GetValue())
-    end
-end
-local function perGroup_SetInvisible(PARENTS)
-    local WEAPON_GROUPS_ID = {}
-    local WEAPON_CURRENT_GROUP_ID
-    for k, v in pairs(WEAPON_GROUPS_NAME) do
-        WEAPON_GROUPS_ID[k] = k
-        if WEAPON_CURRENT_GROUP == WEAPON_GROUPS_NAME[k] then
-            WEAPON_CURRENT_GROUP_ID = k
-        end
-        PARENTS[k]:SetInvisible(true)
-    end
-    
-    for k, v in pairs(WEAPON_GROUPS_ID) do
-        if WEAPON_CURRENT_GROUP_ID == WEAPON_GROUPS_ID[k] then
-            PARENTS[k]:SetInvisible(false)
         end
     end
 end
@@ -71,50 +27,97 @@ local function set_weapon_group(PARENT, VARNAME, NAME, WEAPONID)
         WEAPON_CURRENT_GROUP = VARNAME
     end
 end
+local function perGroup_Checkbox(PARENT, VARNAME, NAME, VALUE, DESCRIPTION)
+    local ID = #PERGROUP_ELEMENTS + 1
+    PERGROUP_ELEMENTS[ID] = {}
+
+    for k, v in pairs(WEAPON_GROUPS_NAME) do
+        local WEAPON = string.lower(WEAPON_GROUPS_NAME[k])
+        local temp
+
+        if type(PARENT) == 'userdata' then
+            temp = gui.Checkbox(PARENT, WEAPON..'.'..VARNAME, NAME, VALUE)
+            PERGROUP_ELEMENTS[ID][WEAPON_GROUPS_NAME[k]] = {temp, PARENT}
+        else
+            temp = gui.Checkbox(PARENT[WEAPON_GROUPS_NAME[i]][1], WEAPON..'.'..VARNAME, NAME, VALUE)
+            PERGROUP_ELEMENTS[ID][WEAPON_GROUPS_NAME[k]] = {temp, PARENT[WEAPON_GROUPS_NAME[k]][2]}
+        end
+
+        if DESCRIPTION ~= 0 then temp:SetDescription(DESCRIPTION); end
+    end
+    return PERGROUP_ELEMENTS[ID]
+end
+
+local sv_maxusrcmdprocessticks = gui.Reference('Misc', 'General', 'Server', 'sv_maxusrcmdprocessticks')
+
+local weapon_ref = gui.Reference("Ragebot", "Accuracy", "Weapon")
 
 local MINICORD_TAB                          = gui.Tab(gui.Reference('Ragebot'), 'minicord', '#project_unknown_2_0_0')
-local MINICORD_SUBTAB_WEAPONSELECTION       = gui.Groupbox(MINICORD_TAB, 'Weapon selection', 16, 16, 248, 200)
-local MINICORD_SUBTAB_DOUBLEFIRE            = gui.Groupbox(MINICORD_TAB, 'Double fire', 280, 16, 340, 200)
+local MINICORD_SUBTAB_WEAPONSELECTION       = gui.Groupbox(MINICORD_TAB, 'Weapon selection', 16, 16, 296, 200)
+local MINICORD_SUBTAB_DOUBLEFIRE            = gui.Groupbox(MINICORD_TAB, 'Double fire', 328, 16, 296, 200)
 
 local MINICORD_CURRENT_WEAPON               = gui.Text(MINICORD_SUBTAB_WEAPONSELECTION, 'Current weapon group: global')
 
-perWeapon_Combobox('DOUBLEFIREMODE', MINICORD_SUBTAB_DOUBLEFIRE, 'doublefire.mode', 'Double fire mode', 'Off', 'Shift', 'Rapid')
+local MINICORD_DOUBLEFIRE_ENABLE = perGroup_Checkbox(MINICORD_SUBTAB_DOUBLEFIRE, 'doublefire.enable', 'Double fire enable', false, '')
+local MINICORD_DOUBLEFIRE_MODE = perGroup_Checkbox(MINICORD_SUBTAB_DOUBLEFIRE, 'doublefire.mode', 'Double fire mode', false, '')
+
+callbacks.Register("Draw", 'guiEndSetup', function(guiEndSetup)
+    --Set to 0 if you don't want to display the current weapon group. 
+    local PARENT = MINICORD_CURRENT_WEAPON
+    local TEXT = 'Current weapon group: '
+
+    --Iterate through all weapon groups.
+    for k, v in pairs(WEAPON_GROUPS_NAME) do
+        --If the ID of the current weapon is not equal to one of the ID table, then set the 'global' group in the menu.
+        if not lp_weapon_id(WEAPONID_ALLWEAPONS) then
+            if PARENT ~= 0 then PARENT:SetText(TEXT .. 'global'); end
+        end
+        --Iterate through all weapons id
+        for k, v in pairs(WEAPONID_ALLWEAPONS) do
+            --If the current weapon ID matches the key from all weapon IDs, then save the current weapon group from the key of all group names.
+            if lp_weapon_id(WEAPONID_ALLWEAPONS[k]) then
+                WEAPON_CURRENT_GROUP = WEAPON_GROUPS_NAME[k]
+                if PARENT ~= 0 and TEXT ~= 0 then PARENT:SetText(TEXT .. string.lower(WEAPON_GROUPS_NAME[k])); end
+            end
+        end
+    end
+    
+    if gui.Reference("Menu"):IsActive() then
+        --Iterate through groups of installed elements.
+        for ID, group in pairs(PERGROUP_ELEMENTS) do
+            --Iterate through the element group table.
+            for key, element in pairs(group) do
+                --If the key(name of the weapon element) matches the current group of weapons, then set the display of the element, otherwise invisible.
+                if key == WEAPON_CURRENT_GROUP then
+                    element[1]:SetInvisible(false)
+                else 
+                    element[1]:SetInvisible(true)
+                end
+            end
+        end
+    end
+end)
+callbacks.Register("Unload", function(guiEndScene)
+    callbacks.Unregister(guiEndSetup)
+    for ID, group in pairs(PERGROUP_ELEMENTS) do 
+        for key, element in pairs(group) do
+           element[1]:Remove()
+        end
+    end
+end)
 
 local function doublefire()
-    perGroup_SetInvisible({ WEAPON_ELEMENT.PISTOL_DOUBLEFIREMODE, WEAPON_ELEMENT.HPISTOL_DOUBLEFIREMODE, WEAPON_ELEMENT.SMG_DOUBLEFIREMODE, 
-                            WEAPON_ELEMENT.RIFLE_DOUBLEFIREMODE, WEAPON_ELEMENT.SHOTGUN_DOUBLEFIREMODE, WEAPON_ELEMENT.SCOUT_DOUBLEFIREMODE,
-                            WEAPON_ELEMENT.ASNIPER_DOUBLEFIREMODE, WEAPON_ELEMENT.SNIPER_DOUBLEFIREMODE, WEAPON_ELEMENT.LMG_DOUBLEFIREMODE })
+    if MINICORD_DOUBLEFIRE_ENABLE[WEAPON_CURRENT_GROUP][1]:GetValue() then
+        MINICORD_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:SetDisabled(true)
+    end
 
-
-    perWeapon_SetValues({   'rbot.accuracy.weapon.pistol.doublefire', 'rbot.accuracy.weapon.hpistol.doublefire', 'rbot.accuracy.weapon.smg.doublefire',
-                            'rbot.accuracy.weapon.rifle.doublefire', 'rbot.accuracy.weapon.shotgun.doublefire', 'rbot.accuracy.weapon.scout.doublefire',
-                            'rbot.accuracy.weapon.asniper.doublefire', 'rbot.accuracy.weapon.sniper.doublefire', 'rbot.accuracy.weapon.lmg.doublefire' },
-                        {   WEAPON_ELEMENT.PISTOL_DOUBLEFIREMODE, WEAPON_ELEMENT.HPISTOL_DOUBLEFIREMODE, WEAPON_ELEMENT.SMG_DOUBLEFIREMODE,
-                            WEAPON_ELEMENT.RIFLE_DOUBLEFIREMODE, WEAPON_ELEMENT.SHOTGUN_DOUBLEFIREMODE, WEAPON_ELEMENT.SCOUT_DOUBLEFIREMODE,
-                            WEAPON_ELEMENT.ASNIPER_DOUBLEFIREMODE, WEAPON_ELEMENT.SNIPER_DOUBLEFIREMODE, WEAPON_ELEMENT.LMG_DOUBLEFIREMODE })
-    --[[ perWeapon_SetValues(    'rbot.accuracy.weapon.'..string.lower(WEAPON_CURRENT_GROUP)..'.doublefire',
-                        {   WEAPON_ELEMENT.PISTOL_DOUBLEFIREMODE, WEAPON_ELEMENT.HPISTOL_DOUBLEFIREMODE, WEAPON_ELEMENT.SMG_DOUBLEFIREMODE,
-                            WEAPON_ELEMENT.RIFLE_DOUBLEFIREMODE, WEAPON_ELEMENT.SHOTGUN_DOUBLEFIREMODE, WEAPON_ELEMENT.SCOUT_DOUBLEFIREMODE,
-                            WEAPON_ELEMENT.ASNIPER_DOUBLEFIREMODE, WEAPON_ELEMENT.SNIPER_DOUBLEFIREMODE, WEAPON_ELEMENT.LMG_DOUBLEFIREMODE }) ]]
+    return
 end
 
 local function main()
     if not entities.GetLocalPlayer():IsAlive() then
         return
     end
-
-    if not lp_weapon_id(WEAPONID_PISTOLS, WEAPONID_HEAVYPISTOLS, WEAPONID_SUBMACHINEGUNS, WEAPONID_RIFLES, WEAPONID_SHOTGUNS, WEAPONID_SCOUT, WEAPONID_AUTOSNIPERS, WEAPONID_SNIPER, WEAPONID_LIGHTMACHINEGUNS) then
-                      MINICORD_CURRENT_WEAPON:SetText(       'Current weapon group: global');
-    end
-    set_weapon_group( MINICORD_CURRENT_WEAPON, 'PISTOL',     'pistols',            WEAPONID_PISTOLS          )
-    set_weapon_group( MINICORD_CURRENT_WEAPON, 'HPISTOL',    'heavy pistols',      WEAPONID_HEAVYPISTOLS     )
-    set_weapon_group( MINICORD_CURRENT_WEAPON, 'SMG',        'submachine guns',    WEAPONID_SUBMACHINEGUNS   )
-    set_weapon_group( MINICORD_CURRENT_WEAPON, 'RIFLE',      'rifles',             WEAPONID_RIFLES           )
-    set_weapon_group( MINICORD_CURRENT_WEAPON, 'SHOTGUN',    'shotguns',           WEAPONID_SHOTGUNS         )
-    set_weapon_group( MINICORD_CURRENT_WEAPON, 'SCOUT',      'scout',              WEAPONID_SCOUT            )
-    set_weapon_group( MINICORD_CURRENT_WEAPON, 'ASNIPER',    'auto snipers',       WEAPONID_AUTOSNIPERS      )
-    set_weapon_group( MINICORD_CURRENT_WEAPON, 'SNIPER',     'sniper',             WEAPONID_SNIPER           )
-    set_weapon_group( MINICORD_CURRENT_WEAPON, 'LMG',        'light machine guns', WEAPONID_LIGHTMACHINEGUNS )
 
     doublefire()
 end
