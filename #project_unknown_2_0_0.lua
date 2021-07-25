@@ -21,12 +21,6 @@ local function lp_weapon_id(WEAPONID)
         end
     end
 end
-local function set_weapon_group(PARENT, VARNAME, NAME, WEAPONID)
-    if lp_weapon_id(WEAPONID) then
-        PARENT:SetText('Current weapon group: ' ..NAME)
-        WEAPON_CURRENT_GROUP = VARNAME
-    end
-end
 local function perGroup_Checkbox(PARENT, VARNAME, NAME, VALUE, DESCRIPTION)
     local ID = #PERGROUP_ELEMENTS + 1
     PERGROUP_ELEMENTS[ID] = {}
