@@ -33,11 +33,39 @@ local function perGroup_Checkbox(PARENT, VARNAME, NAME, VALUE, DESCRIPTION)
             temp = gui.Checkbox(PARENT, WEAPON..'.'..VARNAME, NAME, VALUE)
             PERGROUP_ELEMENTS[ID][WEAPON_GROUPS_NAME[k]] = {temp, PARENT}
         else
-            temp = gui.Checkbox(PARENT[WEAPON_GROUPS_NAME[i]][1], WEAPON..'.'..VARNAME, NAME, VALUE)
+            temp = gui.Checkbox(PARENT[WEAPON_GROUPS_NAME[k]][1], WEAPON..'.'..VARNAME, NAME, VALUE)
             PERGROUP_ELEMENTS[ID][WEAPON_GROUPS_NAME[k]] = {temp, PARENT[WEAPON_GROUPS_NAME[k]][2]}
         end
 
-        if DESCRIPTION ~= 0 then temp:SetDescription(DESCRIPTION); end
+        temp:SetDescription(DESCRIPTION)
+    end
+    return PERGROUP_ELEMENTS[ID]
+end
+local function perGroup_Combobox(PARENT, VARNAME, NAME, DESCRIPTION, ...)
+    local ID = #PERGROUP_ELEMENTS + 1
+    PERGROUP_ELEMENTS[ID] = {}
+
+    for k, v in pairs(WEAPON_GROUPS_NAME) do
+        local WEAPON = string.lower(WEAPON_GROUPS_NAME[k])
+
+        local temp = gui.Combobox(PARENT, WEAPON..'.'..VARNAME, NAME, ...)
+        PERGROUP_ELEMENTS[ID][WEAPON_GROUPS_NAME[k]] = {temp, PARENT}
+
+        temp:SetDescription(DESCRIPTION)
+    end
+    return PERGROUP_ELEMENTS[ID]
+end
+local function perGroup_Multibox(PARENT, NAME)
+    local ID = #PERGROUP_ELEMENTS + 1
+    PERGROUP_ELEMENTS[ID] = {}
+
+    for k, v in pairs(WEAPON_GROUPS_NAME) do
+        local WEAPON = string.lower(WEAPON_GROUPS_NAME[k])
+
+        local temp = gui.Multibox(PARENT, NAME)
+        PERGROUP_ELEMENTS[ID][WEAPON_GROUPS_NAME[k]] = {temp, PARENT}
+
+        temp:SetDescription(DESCRIPTION)
     end
     return PERGROUP_ELEMENTS[ID]
 end
@@ -52,8 +80,7 @@ local MINICORD_SUBTAB_DOUBLEFIRE            = gui.Groupbox(MINICORD_TAB, 'Double
 
 local MINICORD_CURRENT_WEAPON               = gui.Text(MINICORD_SUBTAB_WEAPONSELECTION, 'Current weapon group: global')
 
-local MINICORD_DOUBLEFIRE_ENABLE = perGroup_Checkbox(MINICORD_SUBTAB_DOUBLEFIRE, 'doublefire.enable', 'Double fire enable', false, '')
-local MINICORD_DOUBLEFIRE_MODE = perGroup_Checkbox(MINICORD_SUBTAB_DOUBLEFIRE, 'doublefire.mode', 'Double fire mode', false, '')
+local MINICORD_DOUBLEFIRE_MODE = perGroup_Combobox(MINICORD_SUBTAB_DOUBLEFIRE, 'doublefire.mode', 'Double fire mode', '', 'Off', '1', '2')
 
 callbacks.Register("Draw", 'guiEndSetup', function(guiEndSetup)
     --Set to 0 if you don't want to display the current weapon group. 
@@ -100,10 +127,20 @@ callbacks.Register("Unload", function(guiEndScene)
     end
 end)
 
+local function dtsetup(N)
+	gui.SetValue('rbot.accuracy.weapon.pistol.doublefire', N)
+	gui.SetValue('rbot.accuracy.weapon.hpistol.doublefire', N)
+	gui.SetValue('rbot.accuracy.weapon.smg.doublefire', N)
+	gui.SetValue('rbot.accuracy.weapon.rifle.doublefire', N)
+	gui.SetValue('rbot.accuracy.weapon.shotgun.doublefire', N)
+	gui.SetValue('rbot.accuracy.weapon.scout.doublefire', N)
+	gui.SetValue('rbot.accuracy.weapon.asniper.doublefire', N)
+	gui.SetValue('rbot.accuracy.weapon.sniper.doublefire', N)
+	gui.SetValue('rbot.accuracy.weapon.lmg.doublefire', N)
+end
+
 local function doublefire()
-    if MINICORD_DOUBLEFIRE_ENABLE[WEAPON_CURRENT_GROUP][1]:GetValue() then
-        MINICORD_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:SetDisabled(true)
-    end
+    dtsetup(MINICORD_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:GetValue())
 
     return
 end
