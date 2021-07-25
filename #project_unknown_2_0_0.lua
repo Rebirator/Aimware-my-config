@@ -72,8 +72,6 @@ end
 
 local sv_maxusrcmdprocessticks = gui.Reference('Misc', 'General', 'Server', 'sv_maxusrcmdprocessticks')
 
-local weapon_ref = gui.Reference("Ragebot", "Accuracy", "Weapon")
-
 local MINICORD_TAB                          = gui.Tab(gui.Reference('Ragebot'), 'minicord', '#project_unknown_2_0_0')
 local MINICORD_SUBTAB_WEAPONSELECTION       = gui.Groupbox(MINICORD_TAB, 'Weapon selection', 16, 16, 296, 200)
 local MINICORD_SUBTAB_DOUBLEFIRE            = gui.Groupbox(MINICORD_TAB, 'Double fire', 328, 16, 296, 200)
