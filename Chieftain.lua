@@ -92,7 +92,7 @@ end
 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-if not engine.GetServerIP() then
+if not engine.GetServerIP() or not entities.GetLocalPlayer():IsAlive() then
     print('Load the script on the map!')
     return
 end
