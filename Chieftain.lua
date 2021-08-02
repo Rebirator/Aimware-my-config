@@ -3,6 +3,8 @@
 --	          Lag peek DT based on Vis/Invis Damage by Chicken4676 and John.k				
 ------------------------------------------Credits-------------------------------------------
  
+
+
 -- Per Group Elements API made by GLadiator with help from "lennonc1atwit - Per Weapon Gui API" --
 local WEAPONID_PISTOLS          = { 2, 3, 4, 30, 32, 36, 61, 63 }
 local WEAPONID_HEAVYPISTOLS     = { 1, 64 }
@@ -19,6 +21,10 @@ local WEAPON_CURRENT_GROUP      = ''
 local PERGROUP_ELEMENTS         = {}
 
 local function lp_weapon_id(WEAPONID)
+    if not engine.GetServerIP() or not entities.GetLocalPlayer():IsAlive() then
+        return false
+    end
+
     for k, v in pairs(WEAPONID) do
         if entities.GetLocalPlayer():GetWeaponID() == WEAPONID[k] then
             return true
@@ -91,12 +97,8 @@ end
 -- Per Group Elements API made by GLadiator with help from "lennonc1atwit - Per Weapon Gui API" --
 
 
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-if not engine.GetServerIP() or not entities.GetLocalPlayer():IsAlive() then
-    print('Load the script on the map when you\'re alive!')
-    return
-end
 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local CHIEFTAIN_TAB                                   = gui.Tab(gui.Reference('Ragebot'), 'chieftain', 'Chieftain ➤')
 
 local CHIEFTAIN_SUBTAB_WEAPONSELECTION                = gui.Groupbox(CHIEFTAIN_TAB, 'Selected weapon group', 16, 16, 296, 200)
@@ -140,11 +142,22 @@ CHIEFTAIN_MISC_FAKEDUCK_SPEED_ADJUSTER:SetDescription('Set a custom value for th
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
+
 -- Per Group Elements API made by GLadiator with help from "lennonc1atwit - Per Weapon Gui API" --
 callbacks.Register("Draw", 'guiEndSetup', function(guiEndSetup)
     --Set to 0 if you don't want to display the current weapon group. 
     local PARENT = CHIEFTAIN_CURRENT_WEAPON
     local TEXT = 'Current weapon group: '
+
+    --If we are not on the server, and not alive, then we cannot access the local player, therefore, it remains only to hide all the elements until we have gained access to the local player.
+    if not engine.GetServerIP() or engine.GetServerIP() and not entities.GetLocalPlayer():IsAlive() then --aimware memes
+        for ID, group in pairs(PERGROUP_ELEMENTS) do
+            for key, element in pairs(group) do
+                element[1]:SetInvisible(true)
+            end
+        end
+        return
+    end
 
     --Iterate through all weapon groups.
     for k, v in pairs(WEAPON_GROUPS_NAME) do
@@ -189,7 +202,6 @@ end)
 
 
 local sv_maxusrcmdprocessticks = gui.Reference('Misc', 'General', 'Server', 'sv_maxusrcmdprocessticks')
-
 local function to_int(n)
     local s = tostring(n)
     local i, j = s:find('%.')
@@ -212,6 +224,7 @@ local function dt_setup(N)
 end
 
 local function menuсontroler()
+    --STATIC ELEMENTS
     if CHIEFTAIN_MISC_FAKELAGS_TYPE:GetValue() == 2 then
         CHIEFTAIN_MISC_FAKELAGS_JITTER:SetInvisible(true)
         CHIEFTAIN_MISC_FAKELAGS_CUSTOM_TYPE:SetInvisible(false)
@@ -234,6 +247,12 @@ local function menuсontroler()
         CHIEFTAIN_MISC_FAKELATENCY_ADJUSTER:SetInvisible(false)
     else
         CHIEFTAIN_MISC_FAKELATENCY_ADJUSTER:SetInvisible(true)
+    end
+
+    --DYNAMIC ELEMENTS
+    --If we are not on the server, and not alive, then we cannot access the elements, therefore we need "return" in this block until access appears.
+    if not engine.GetServerIP() or engine.GetServerIP() and not entities.GetLocalPlayer():IsAlive() then --aimware memes
+        return
     end
 
     if CHIEFTAIN_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:GetValue() ~= 0 then
@@ -555,8 +574,8 @@ end
 
 local function main()
     menuсontroler()
-
-    if not entities.GetLocalPlayer():IsAlive() then
+    
+    if not engine.GetServerIP() or engine.GetServerIP() and not entities.GetLocalPlayer():IsAlive() then --aimware memes
         return
     end
 
