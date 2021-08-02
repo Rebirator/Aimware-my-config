@@ -21,10 +21,6 @@ local WEAPON_CURRENT_GROUP      = ''
 local PERGROUP_ELEMENTS         = {}
 
 local function lp_weapon_id(WEAPONID)
-    if not engine.GetServerIP() or not entities.GetLocalPlayer():IsAlive() then
-        return false
-    end
-
     for k, v in pairs(WEAPONID) do
         if entities.GetLocalPlayer():GetWeaponID() == WEAPONID[k] then
             return true
