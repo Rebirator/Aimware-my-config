@@ -1,5 +1,5 @@
 ------------------------------------------Credits-------------------------------------------
---				                Chieftain made by GLadiator
+--				Chieftain made by GLadiator
 --	          Lag peek DT based on Vis/Invis Damage by Chicken4676 and John.k				
 ------------------------------------------Credits-------------------------------------------
  
@@ -93,7 +93,7 @@ end
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 if not engine.GetServerIP() or not entities.GetLocalPlayer():IsAlive() then
-    print('Load the script on the map!')
+    print('Load the script on the map when you\'re alive!')
     return
 end
 
