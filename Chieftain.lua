@@ -92,7 +92,12 @@ end
 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-local CHIEFTAIN_TAB                                   = gui.Tab(gui.Reference('Ragebot'), 'Chieftain', 'Chieftain ➤')
+if not engine.GetServerIP() then
+    print('Load the script on the map!')
+    return
+end
+
+local CHIEFTAIN_TAB                                   = gui.Tab(gui.Reference('Ragebot'), 'chieftain', 'Chieftain ➤')
 
 local CHIEFTAIN_SUBTAB_WEAPONSELECTION                = gui.Groupbox(CHIEFTAIN_TAB, 'Selected weapon group', 16, 16, 296, 200)
 local CHIEFTAIN_CURRENT_WEAPON                        = gui.Text(CHIEFTAIN_SUBTAB_WEAPONSELECTION, 'Current weapon group: global')
