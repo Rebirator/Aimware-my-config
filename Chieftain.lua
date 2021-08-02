@@ -495,6 +495,10 @@ end
 local function lag_on_peek()
 	local Player, LocalPlayer = entities_check()
 
+
+	if CHIEFTAIN_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:GetValue() == 0 then
+        return
+    end
     if not CHIEFTAIN_DOUBLEFIRE_PERF_LAGPEEK[WEAPON_CURRENT_GROUP][1]:GetValue() then
         return
     end
