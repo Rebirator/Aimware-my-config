@@ -1,6 +1,6 @@
 ------------------------------------------Credits-------------------------------------------
 --				Chieftain made by GLadiator
---	          Lag peek DT based on Vis/Invis Damage by Chicken4676 and John.k				
+--	       Lag peek DT based on Vis/Invis Damage by Chicken4676 and John.k				
 ------------------------------------------Credits-------------------------------------------
  
 
@@ -97,10 +97,13 @@ end
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 local CHIEFTAIN_TAB                                   = gui.Tab(gui.Reference('Ragebot'), 'chieftain', 'Chieftain ➤')
 
-local CHIEFTAIN_SUBTAB_WEAPONSELECTION                = gui.Groupbox(CHIEFTAIN_TAB, 'Selected weapon group', 16, 16, 296, 200)
+local CHIEFTAIN_SUBTAB_WEAPONSELECTION                = gui.Groupbox(CHIEFTAIN_TAB, 'Selected weapon group', 16, 16, 296, 1)
 local CHIEFTAIN_CURRENT_WEAPON                        = gui.Text(CHIEFTAIN_SUBTAB_WEAPONSELECTION, 'Current weapon group: global')
+local CHIEFTAIN_NOT_SUPPORT_GROUP                     = gui.Text(CHIEFTAIN_TAB, 'This weapon group is not supported!')
+CHIEFTAIN_NOT_SUPPORT_GROUP:SetPosX(382)
+CHIEFTAIN_NOT_SUPPORT_GROUP:SetPosY(50)
 
-local CHIEFTAIN_SUBTAB_MISC                           = gui.Groupbox(CHIEFTAIN_TAB, 'Misc', 16, 109, 296, 200)
+local CHIEFTAIN_SUBTAB_MISC                           = gui.Groupbox(CHIEFTAIN_TAB, 'Misc', 16, 109, 296, 1)
 local CHIEFTAIN_MISC_FAKELAGS_TYPE                    = gui.Combobox(CHIEFTAIN_SUBTAB_MISC, 'misc.fakelags.type', 'Fakelags type', 'Normal', 'Adaptive', 'Custom')
 local CHIEFTAIN_MISC_FAKELAGS_JITTER                  = gui.Slider(CHIEFTAIN_SUBTAB_MISC, 'misc.fakelags.jitter', 'Jitter factor', 0, 0, 3)
 local CHIEFTAIN_MISC_FAKELAGS_CUSTOM_TYPE             = gui.Combobox(CHIEFTAIN_SUBTAB_MISC, 'misc.fakelags.custom.type', 'Fakelags pattern', 'Normal', 'Adaptive', 'Switch')
@@ -112,8 +115,11 @@ local CHIEFTAIN_MISC_FAKEDUCK_SPEED_ADJUSTER          = gui.Slider(CHIEFTAIN_SUB
 local CHIEFTAIN_MISC_FAKELATENCY                      = gui.Combobox(CHIEFTAIN_SUBTAB_MISC, 'misc.fakelatency', 'Fakelatency', 'Off', 'Low', 'Medium', 'High', 'Maximum', 'Custom')
 local CHIEFTAIN_MISC_FAKELATENCY_ADJUSTER             = gui.Slider(CHIEFTAIN_SUBTAB_MISC, 'misc.fakelatency.adjuster', 'Fakelatency adjuster', 200, 0, 1000, 5)
 
-local CHIEFTAIN_SUBTAB_DOUBLEFIRE                     = gui.Groupbox(CHIEFTAIN_TAB, 'Double fire', 328, 16, 296, 200)
-local CHIEFTAIN_DOUBLEFIRE_MODE                       = gui_Combobox(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'doublefire.mode', 'Double fire mode', 'Select the desired double fire mode. Don\'t forget to bind.', 'Off', 'Chargeable without recharge', 'Rechargeable')
+local CHIEFTAIN_SUBTAB_DOUBLEFIRE                     = gui.Groupbox(CHIEFTAIN_TAB, 'Double fire', 328, 16, 296, 1)
+local CHIEFTAIN_DOUBLEFIRE_ENABLE                     = gui.Checkbox(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'doublefire.enable', 'Enable double fire', false)
+local CHIEFTAIN_DOUBLEFIRE_MODE                       = gui_Combobox(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'doublefire.mode', 'Double fire mode', 'Select the desired double fire mode.', 'Chargeable without recharge', 'Rechargeable')
+local CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM            = gui_Combobox(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'doublefire.chargingtype', 'Gradual charging system', 'This is not a fast charge, but it makes it more measured.', 'Off', 'Minimal', 'Under development.', 'Under development.')
+local CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM_DELAY      = gui_Slider(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'doublefire.charging.delay', 'Delay before the control charge', 'The delay before the main charge (in milliseconds).', 500, 100, 3000, 50)
 local CHIEFTAIN_DOUBLEFIRE_SPEED                      = gui_Combobox(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'doublefire.speed', 'Double fire speed', 'Select double fire speed, or leave automatic.', 'Automatic', 'Slow', 'Slower', 'Standard', 'Accelerated', 'Custom')
 local CHIEFTAIN_DOUBLEFIRE_SPEED_ADJUSTER             = gui_Slider(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'doublefire.speed.adjuster', 'Double fire speed adjuster', 'How much to shift tickbase for double fire.', 16, 3, 24, 1)
 local CHIEFTAIN_DOUBLEFIRE_PERF                       = gui_Multibox(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'Double fire performance options', 'Using performance options increase double fire efficiency.')
@@ -124,6 +130,13 @@ local CHIEFTAIN_DOUBLEFIRE_LAGPEEK_PINGSPIKE_ADJUSTER = gui_Slider(CHIEFTAIN_SUB
 local CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN               = gui_Combobox(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'doublefire.perf.lagpeek.hitboxscan', 'Prediction velocity hitboxes scanning', 'The number and scale of hitboxes to scan. Affects FPS.', 'Medium', 'High', 'Maximum')
 local CHIEFTAIN_DOUBLEFIRE_LAGPEEK_VALUE              = gui_Slider(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'dobulefire.perf.lagpeek.value', 'Prediction velocity amount', 'A high value activates lag earlier.', 0.140, 0.100, 0.180, 0.005)
 local CHIEFTAIN_DOUBLEFIRE_LAGPEEK_DEBUG              = gui_Checkbox(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'doublefire.perf.lagpeek.debugmode', 'Debug mode', '', false)
+
+local CHIEFTAIN_SUBTAB_NOSCOPEHC                      = gui.Groupbox(CHIEFTAIN_TAB, 'Noscope/Scope Hitchance', 328, 600, 296, 1)
+local CHIEFTAIN_NOSCOPEHC_ENABLE                      = gui_Checkbox(CHIEFTAIN_SUBTAB_NOSCOPEHC, 'noscopehc.enable', 'Enable', 'Use if you want to shoot without scoping.', false)
+local CHIEFTAIN_NOSCOPEHC_REGULAR_SCOPE               = gui_Slider(CHIEFTAIN_SUBTAB_NOSCOPEHC, 'noscopehc.regularhc.scoped', 'Scope hit chance', 'Minimum chance to hit while scoping.', 50, 1, 100, 1)
+local CHIEFTAIN_NOSCOPEHC_DF_SCOPE                    = gui_Slider(CHIEFTAIN_SUBTAB_NOSCOPEHC, 'noscopehc.dfhc.scoped', 'Scope double fire hit chance', 'Minimum double fire chance to hit while scoping.', 50, 1, 100, 1)
+local CHIEFTAIN_NOSCOPEHC_REGULAR_NOSCOPE             = gui_Slider(CHIEFTAIN_SUBTAB_NOSCOPEHC, 'noscopehc.regularhc.noscoped', 'Noscope hit chance', 'Minimum chance to hit whitout scoping.', 50, 1, 100, 1)
+local CHIEFTAIN_NOSCOPEHC_DF_NOSCOPE                  = gui_Slider(CHIEFTAIN_SUBTAB_NOSCOPEHC, 'noscopehc.dfhc.noscoped', 'Noscope double fire hit chance', 'Minimum double fire chance to hit whithout scoping.', 50, 1, 100, 1)
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 CHIEFTAIN_MISC_FAKELAGS_TYPE:SetDescription('Factor of fakelags is automatic, except for custom mode.')
 CHIEFTAIN_MISC_FAKELAGS_JITTER:SetDescription('You can add jitter to the fakelags as desired.')
@@ -135,6 +148,7 @@ CHIEFTAIN_MISC_FAKELATENCY_ADJUSTER:SetDescription('By default, servers only sup
 CHIEFTAIN_MISC_FAKEDUCK_TYPE:SetDescription('Choose your preferred fakeduck type.')
 CHIEFTAIN_MISC_FAKEDUCK_SPEED:SetDescription('Affects height, speed, and shooting accuracy.')
 CHIEFTAIN_MISC_FAKEDUCK_SPEED_ADJUSTER:SetDescription('Set a custom value for the fakeduck speed.')
+CHIEFTAIN_DOUBLEFIRE_ENABLE:SetDescription('Bind this to turn double fire on and off by key.')
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -145,28 +159,50 @@ callbacks.Register("Draw", 'guiEndSetup', function(guiEndSetup)
     local PARENT = CHIEFTAIN_CURRENT_WEAPON
     local TEXT = 'Current weapon group: '
 
-    --If we are not on the server, and not alive, then we cannot access the local player, therefore, it remains only to hide all the elements until we have gained access to the local player.
-    if not engine.GetServerIP() or engine.GetServerIP() and not entities.GetLocalPlayer():IsAlive() then --aimware memes
-        for ID, group in pairs(PERGROUP_ELEMENTS) do
-            for key, element in pairs(group) do
-                element[1]:SetInvisible(true)
+    --If we are not on the server or not alive, then we cannot access the local player, therefore, it remains only to hide all the elements until we have gained access to the local player.
+    if not engine.GetServerIP() or engine.GetServerIP() then
+        if entities.GetLocalPlayer() then
+            if not entities.GetLocalPlayer():IsAlive() then
+                for ID, group in pairs(PERGROUP_ELEMENTS) do
+                    for key, element in pairs(group) do
+                        element[1]:SetInvisible(true)
+                        if PARENT ~= 0 then 
+                            PARENT:SetText(TEXT .. 'global')
+                        end
+                    end
+                end
+                return
             end
-        end
-        return
+        else
+            for ID, group in pairs(PERGROUP_ELEMENTS) do
+                for key, element in pairs(group) do
+                    element[1]:SetInvisible(true)
+                    if PARENT ~= 0 then 
+                        PARENT:SetText(TEXT .. 'global')
+                    end
+                end
+            end
+            return
+        end 
     end
 
     --Iterate through all weapon groups.
     for k, v in pairs(WEAPON_GROUPS_NAME) do
         --If the ID of the current weapon is not equal to one of the ID table, then set the 'global' group in the menu.
         if not lp_weapon_id(WEAPONID_ALLWEAPONS) then
-            if PARENT ~= 0 then PARENT:SetText(TEXT .. 'global'); end
+            if PARENT ~= 0 then 
+                WEAPON_CURRENT_GROUP = 'GLOBAL'
+                PARENT:SetText(TEXT .. 'global')
+            end
         end
         --Iterate through all weapons id
         for k, v in pairs(WEAPONID_ALLWEAPONS) do
             --If the current weapon ID matches the key from all weapon IDs, then save the current weapon group from the key of all group names.
             if lp_weapon_id(WEAPONID_ALLWEAPONS[k]) then
                 WEAPON_CURRENT_GROUP = WEAPON_GROUPS_NAME[k]
-                if PARENT ~= 0 and TEXT ~= 0 then PARENT:SetText(TEXT .. string.lower(WEAPON_GROUPS_NAME[k])); end
+                if PARENT ~= 0 and TEXT ~= 0 then 
+                    PARENT:SetText(TEXT .. string.lower(WEAPON_GROUPS_NAME[k]))
+                end
             end
         end
     end
@@ -186,6 +222,7 @@ callbacks.Register("Draw", 'guiEndSetup', function(guiEndSetup)
         end
     end
 end)
+        
 callbacks.Register("Unload", function(guiEndScene)
     for ID, group in pairs(PERGROUP_ELEMENTS) do 
         for key, element in pairs(group) do
@@ -208,6 +245,7 @@ local function to_int(n)
     end
 end
 local function dt_setup(N)
+    gui.SetValue('rbot.accuracy.weapon.shared.doublefire', 0)
 	gui.SetValue('rbot.accuracy.weapon.pistol.doublefire', N)
 	gui.SetValue('rbot.accuracy.weapon.hpistol.doublefire', N)
 	gui.SetValue('rbot.accuracy.weapon.smg.doublefire', N)
@@ -246,14 +284,48 @@ local function menuсontroler()
     end
 
     --DYNAMIC ELEMENTS
-    --If we are not on the server, and not alive, then we cannot access the elements, therefore we need "return" in this block until access appears.
-    if not engine.GetServerIP() or engine.GetServerIP() and not entities.GetLocalPlayer():IsAlive() then --aimware memes
-        return
+    --If we are not on the server or not alive, then we cannot access the elements, therefore we need "return" in this block until access appears.
+    if not engine.GetServerIP() or engine.GetServerIP() then
+        if entities.GetLocalPlayer() then
+            if not entities.GetLocalPlayer():IsAlive() then
+                CHIEFTAIN_NOT_SUPPORT_GROUP:SetInvisible(false)
+                CHIEFTAIN_SUBTAB_DOUBLEFIRE:SetInvisible(true)
+                CHIEFTAIN_SUBTAB_NOSCOPEHC:SetInvisible(true)
+                return
+            end
+        else
+            CHIEFTAIN_NOT_SUPPORT_GROUP:SetInvisible(false)
+            CHIEFTAIN_SUBTAB_DOUBLEFIRE:SetInvisible(true)
+            CHIEFTAIN_SUBTAB_NOSCOPEHC:SetInvisible(true)
+            return
+        end
     end
 
-    if CHIEFTAIN_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:GetValue() ~= 0 then
+    --We cannot access the elements, therefore we stop the function.
+    if WEAPON_CURRENT_GROUP == 'GLOBAL' then
+        CHIEFTAIN_NOT_SUPPORT_GROUP:SetInvisible(false)
+        CHIEFTAIN_SUBTAB_DOUBLEFIRE:SetInvisible(true)
+        CHIEFTAIN_SUBTAB_NOSCOPEHC:SetInvisible(true)
+        return
+    else
+        CHIEFTAIN_NOT_SUPPORT_GROUP:SetInvisible(true)
+        CHIEFTAIN_SUBTAB_DOUBLEFIRE:SetInvisible(false)
+        CHIEFTAIN_SUBTAB_NOSCOPEHC:SetInvisible(false)
+    end
+
+    if CHIEFTAIN_DOUBLEFIRE_ENABLE:GetValue() then
+        CHIEFTAIN_SUBTAB_NOSCOPEHC:SetPosY(414)
+
+        CHIEFTAIN_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:SetDisabled(false)
+        CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM[WEAPON_CURRENT_GROUP][1]:SetInvisible(false)
         CHIEFTAIN_DOUBLEFIRE_SPEED[WEAPON_CURRENT_GROUP][1]:SetInvisible(false)
         CHIEFTAIN_DOUBLEFIRE_PERF[WEAPON_CURRENT_GROUP][1]:SetInvisible(false)
+
+        if CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM[WEAPON_CURRENT_GROUP][1]:GetValue() ~= 0 then
+            CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM_DELAY[WEAPON_CURRENT_GROUP][1]:SetInvisible(false)
+        else
+            CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM_DELAY[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
+        end
 
         if CHIEFTAIN_DOUBLEFIRE_SPEED[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 then
             CHIEFTAIN_DOUBLEFIRE_SPEED_ADJUSTER[WEAPON_CURRENT_GROUP][1]:SetInvisible(false)
@@ -262,21 +334,53 @@ local function menuсontroler()
         end
 
         if CHIEFTAIN_DOUBLEFIRE_PERF_LAGPEEK[WEAPON_CURRENT_GROUP][1]:GetValue() then
-            CHIEFTAIN_DOUBLEFIRE_LAGPEEK_PINGSPIKE[WEAPON_CURRENT_GROUP][1]:SetInvisible(false)
-            if CHIEFTAIN_DOUBLEFIRE_LAGPEEK_PINGSPIKE[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 then
+            CHIEFTAIN_SUBTAB_NOSCOPEHC:SetPosY(652)
+
+            if CHIEFTAIN_DOUBLEFIRE_LAGPEEK_PINGSPIKE[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 and CHIEFTAIN_DOUBLEFIRE_SPEED[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 and CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM[WEAPON_CURRENT_GROUP][1]:GetValue() ~= 0 then
+                CHIEFTAIN_SUBTAB_NOSCOPEHC:SetPosY(838)
+
                 CHIEFTAIN_DOUBLEFIRE_LAGPEEK_PINGSPIKE_ADJUSTER[WEAPON_CURRENT_GROUP][1]:SetInvisible(false)
+            elseif CHIEFTAIN_DOUBLEFIRE_SPEED[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 and CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM[WEAPON_CURRENT_GROUP][1]:GetValue() ~= 0 then
+                CHIEFTAIN_SUBTAB_NOSCOPEHC:SetPosY(776)
+
+                CHIEFTAIN_DOUBLEFIRE_LAGPEEK_PINGSPIKE_ADJUSTER[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
+            elseif CHIEFTAIN_DOUBLEFIRE_LAGPEEK_PINGSPIKE[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 and CHIEFTAIN_DOUBLEFIRE_SPEED[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 or CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM[WEAPON_CURRENT_GROUP][1]:GetValue() ~= 0 then
+                CHIEFTAIN_SUBTAB_NOSCOPEHC:SetPosY(776)
+
+                CHIEFTAIN_DOUBLEFIRE_LAGPEEK_PINGSPIKE_ADJUSTER[WEAPON_CURRENT_GROUP][1]:SetInvisible(false)
+            elseif CHIEFTAIN_DOUBLEFIRE_LAGPEEK_PINGSPIKE[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 or CHIEFTAIN_DOUBLEFIRE_SPEED[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 then
+                CHIEFTAIN_SUBTAB_NOSCOPEHC:SetPosY(714)
+
+                CHIEFTAIN_DOUBLEFIRE_LAGPEEK_PINGSPIKE_ADJUSTER[WEAPON_CURRENT_GROUP][1]:SetInvisible(false)
+            elseif CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM[WEAPON_CURRENT_GROUP][1]:GetValue() ~= 0 then
+                CHIEFTAIN_SUBTAB_NOSCOPEHC:SetPosY(714)
+
+                CHIEFTAIN_DOUBLEFIRE_LAGPEEK_PINGSPIKE_ADJUSTER[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
             else
+                CHIEFTAIN_SUBTAB_NOSCOPEHC:SetPosY(652)
+
                 CHIEFTAIN_DOUBLEFIRE_LAGPEEK_PINGSPIKE_ADJUSTER[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
             end
+
             CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:SetInvisible(false)
             CHIEFTAIN_DOUBLEFIRE_LAGPEEK_VALUE[WEAPON_CURRENT_GROUP][1]:SetInvisible(false)
             CHIEFTAIN_DOUBLEFIRE_LAGPEEK_DEBUG[WEAPON_CURRENT_GROUP][1]:SetInvisible(false)
         else
+            CHIEFTAIN_SUBTAB_NOSCOPEHC:SetPosY(414)
+
             CHIEFTAIN_DOUBLEFIRE_LAGPEEK_PINGSPIKE[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
             CHIEFTAIN_DOUBLEFIRE_LAGPEEK_PINGSPIKE_ADJUSTER[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
             CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
             CHIEFTAIN_DOUBLEFIRE_LAGPEEK_VALUE[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
             CHIEFTAIN_DOUBLEFIRE_LAGPEEK_DEBUG[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
+
+            if CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM[WEAPON_CURRENT_GROUP][1]:GetValue() ~= 0 and CHIEFTAIN_DOUBLEFIRE_SPEED[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 then
+                CHIEFTAIN_SUBTAB_NOSCOPEHC:SetPosY(538)
+            elseif CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM[WEAPON_CURRENT_GROUP][1]:GetValue() ~= 0 or CHIEFTAIN_DOUBLEFIRE_SPEED[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 then
+                CHIEFTAIN_SUBTAB_NOSCOPEHC:SetPosY(476)
+            else
+                CHIEFTAIN_SUBTAB_NOSCOPEHC:SetPosY(414)
+            end
         end
 
         if not CHIEFTAIN_DOUBLEFIRE_PERF_DISLBY[WEAPON_CURRENT_GROUP][1]:GetValue() and gui.GetValue('rbot.antiaim.advanced.antialign') == 1 then
@@ -286,6 +390,11 @@ local function menuсontroler()
             CHIEFTAIN_DOUBLEFIRE_PERF_DISLBY[WEAPON_CURRENT_GROUP][1]:SetDisabled(false)
         end
     else
+        CHIEFTAIN_SUBTAB_NOSCOPEHC:SetPosY(204)
+        
+        CHIEFTAIN_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:SetDisabled(true)
+        CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
+        CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM_DELAY[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
         CHIEFTAIN_DOUBLEFIRE_SPEED[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
         CHIEFTAIN_DOUBLEFIRE_SPEED_ADJUSTER[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
         CHIEFTAIN_DOUBLEFIRE_PERF[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
@@ -295,9 +404,30 @@ local function menuсontroler()
         CHIEFTAIN_DOUBLEFIRE_LAGPEEK_VALUE[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
         CHIEFTAIN_DOUBLEFIRE_LAGPEEK_DEBUG[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
     end
+
+    if lp_weapon_id(WEAPONID_SCOUT) or lp_weapon_id(WEAPONID_AUTOSNIPERS) or lp_weapon_id(WEAPONID_SNIPER) then
+        CHIEFTAIN_SUBTAB_NOSCOPEHC:SetInvisible(false)
+        if CHIEFTAIN_NOSCOPEHC_ENABLE[WEAPON_CURRENT_GROUP][1]:GetValue() then
+            CHIEFTAIN_NOSCOPEHC_REGULAR_SCOPE[WEAPON_CURRENT_GROUP][1]:SetDisabled(false)
+            CHIEFTAIN_NOSCOPEHC_DF_SCOPE[WEAPON_CURRENT_GROUP][1]:SetDisabled(false)
+            CHIEFTAIN_NOSCOPEHC_REGULAR_NOSCOPE[WEAPON_CURRENT_GROUP][1]:SetDisabled(false)
+            CHIEFTAIN_NOSCOPEHC_DF_NOSCOPE[WEAPON_CURRENT_GROUP][1]:SetDisabled(false)
+        else
+            CHIEFTAIN_NOSCOPEHC_REGULAR_SCOPE[WEAPON_CURRENT_GROUP][1]:SetDisabled(true)
+            CHIEFTAIN_NOSCOPEHC_DF_SCOPE[WEAPON_CURRENT_GROUP][1]:SetDisabled(true)
+            CHIEFTAIN_NOSCOPEHC_REGULAR_NOSCOPE[WEAPON_CURRENT_GROUP][1]:SetDisabled(true)
+            CHIEFTAIN_NOSCOPEHC_DF_NOSCOPE[WEAPON_CURRENT_GROUP][1]:SetDisabled(true)
+        end
+    else
+        CHIEFTAIN_SUBTAB_NOSCOPEHC:SetInvisible(true)
+    end
 end
 
 local function fakelags()
+    if CHIEFTAIN_DOUBLEFIRE_ENABLE:GetValue() then
+        return
+    end
+
     local getmaxprocessticks = client.GetConVar('sv_maxusrcmdprocessticks')
     local FL_TYPE = { 0, 1, 3 }
 
@@ -348,56 +478,166 @@ local function fakelatency()
     FL_DT_AMOUNT = { 80, 120, 160, 200, CHIEFTAIN_DOUBLEFIRE_LAGPEEK_PINGSPIKE_ADJUSTER[WEAPON_CURRENT_GROUP][1]:GetValue() }
 
     if CHIEFTAIN_DOUBLEFIRE_LAGPEEK_PINGSPIKE[WEAPON_CURRENT_GROUP][1]:GetValue() ~= 0 then
-        if CHIEFTAIN_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:GetValue() ~= 0 then
+        if CHIEFTAIN_DOUBLEFIRE_ENABLE:GetValue() then
             gui.SetValue('misc.fakelatency.enable', 1)
             gui.SetValue('misc.fakelatency.key', 'None')
             gui.SetValue('misc.fakelatency.amount', FL_DT_AMOUNT[CHIEFTAIN_DOUBLEFIRE_LAGPEEK_PINGSPIKE[WEAPON_CURRENT_GROUP][1]:GetValue()])
-        elseif CHIEFTAIN_MISC_FAKELATENCY:GetValue() == 0 then
+        else
+            if CHIEFTAIN_MISC_FAKELATENCY:GetValue() == 0 then
+                gui.SetValue('misc.fakelatency.enable', 0)
+            end
+        end
+    else
+        if CHIEFTAIN_DOUBLEFIRE_ENABLE:GetValue() then
             gui.SetValue('misc.fakelatency.enable', 0)
         end
     end
     
     if CHIEFTAIN_MISC_FAKELATENCY:GetValue() ~= 0 then
-        if CHIEFTAIN_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:GetValue() == 0 then
+        if not CHIEFTAIN_DOUBLEFIRE_ENABLE:GetValue() then
             gui.SetValue('misc.fakelatency.enable', 1)
             gui.SetValue('misc.fakelatency.key', 'None')
             gui.SetValue('misc.fakelatency.amount', FL_AMOUNT[CHIEFTAIN_MISC_FAKELATENCY:GetValue()])
-        elseif CHIEFTAIN_DOUBLEFIRE_LAGPEEK_PINGSPIKE[WEAPON_CURRENT_GROUP][1]:GetValue() == 0 then
+        else
+            if CHIEFTAIN_DOUBLEFIRE_LAGPEEK_PINGSPIKE[WEAPON_CURRENT_GROUP][1]:GetValue() == 0 then
+                gui.SetValue('misc.fakelatency.enable', 0)
+            end
+        end
+    else
+        if not CHIEFTAIN_DOUBLEFIRE_ENABLE:GetValue() then
             gui.SetValue('misc.fakelatency.enable', 0)
         end
     end
 end
 
+local old_curtime = globals.CurTime()
+local dt_ticks = 0
 local function doublefire()
-    dt_setup(CHIEFTAIN_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:GetValue())
-
     local getmaxprocessticks = client.GetConVar('sv_maxusrcmdprocessticks')
     local lp_ping = entities.GetPlayerResources():GetPropInt("m_iPing", entities.GetLocalPlayer():GetIndex())
-	local DT_SPEED = {getmaxprocessticks - 2, getmaxprocessticks - 1, getmaxprocessticks, getmaxprocessticks + 1, CHIEFTAIN_DOUBLEFIRE_SPEED_ADJUSTER[WEAPON_CURRENT_GROUP][1]:GetValue()}
+	local DT_SPEED_ARR = {getmaxprocessticks - 2, getmaxprocessticks - 1, getmaxprocessticks, getmaxprocessticks + 1, CHIEFTAIN_DOUBLEFIRE_SPEED_ADJUSTER[WEAPON_CURRENT_GROUP][1]:GetValue()}
+    --local DT_SPEED = 0
 
-    if CHIEFTAIN_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:GetValue() ~= 0 then
+    if CHIEFTAIN_DOUBLEFIRE_ENABLE:GetValue() then
         if CHIEFTAIN_DOUBLEFIRE_SPEED[WEAPON_CURRENT_GROUP][1]:GetValue() == 0 then
             if gui.GetValue('misc.fakelatency.enable') then
-                sv_maxusrcmdprocessticks:SetValue(getmaxprocessticks)
+                if CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM[WEAPON_CURRENT_GROUP][1]:GetValue() == 0 then
+                    sv_maxusrcmdprocessticks:SetValue(getmaxprocessticks)
+                else
+                    DT_SPEED = getmaxprocessticks
+                end
             else
                 if lp_ping <= 40 then
-                    sv_maxusrcmdprocessticks:SetValue(getmaxprocessticks)
+                    if CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM[WEAPON_CURRENT_GROUP][1]:GetValue() == 0 then
+                        sv_maxusrcmdprocessticks:SetValue(getmaxprocessticks)
+                    else
+                        DT_SPEED = getmaxprocessticks
+                    end
                 elseif lp_ping <= 80 then
-                    sv_maxusrcmdprocessticks:SetValue(getmaxprocessticks - 1)
+                    if CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM[WEAPON_CURRENT_GROUP][1]:GetValue() == 0 then
+                        sv_maxusrcmdprocessticks:SetValue(getmaxprocessticks - 1)
+                    else
+                        DT_SPEED = getmaxprocessticks - 1
+                    end
                 elseif lp_ping > 80 then
-                    sv_maxusrcmdprocessticks:SetValue(getmaxprocessticks - 2)
+                    if CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM[WEAPON_CURRENT_GROUP][1]:GetValue() == 0 then
+                        sv_maxusrcmdprocessticks:SetValue(getmaxprocessticks - 2)
+                    else
+                        DT_SPEED = getmaxprocessticks - 2
+                    end
                 end	
             end
         else
-            sv_maxusrcmdprocessticks:SetValue(DT_SPEED[CHIEFTAIN_DOUBLEFIRE_SPEED[WEAPON_CURRENT_GROUP][1]:GetValue()])
-        end
-
-        if CHIEFTAIN_DOUBLEFIRE_PERF_DISLBY[WEAPON_CURRENT_GROUP][1]:GetValue() then
-            if CHIEFTAIN_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:GetValue() ~= 0 then
-                gui.SetValue('rbot.antiaim.advanced.antialign', 1)
+            if CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM[WEAPON_CURRENT_GROUP][1]:GetValue() == 0 then
+                sv_maxusrcmdprocessticks:SetValue(DT_SPEED_ARR[CHIEFTAIN_DOUBLEFIRE_SPEED[WEAPON_CURRENT_GROUP][1]:GetValue()])
             else
-                gui.SetValue('rbot.antiaim.advanced.antialign', 0)
+                DT_SPEED = DT_SPEED_ARR[CHIEFTAIN_DOUBLEFIRE_SPEED[WEAPON_CURRENT_GROUP][1]:GetValue()]
             end
+        end
+    end
+
+    if CHIEFTAIN_DOUBLEFIRE_ENABLE:GetValue() then
+        if CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM[WEAPON_CURRENT_GROUP][1]:GetValue() ~= 0 then
+            sv_maxusrcmdprocessticks:SetValue(dt_ticks)
+        end
+        dt_setup(CHIEFTAIN_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:GetValue() + 1)
+        if CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM[WEAPON_CURRENT_GROUP][1]:GetValue() ~= 0 then
+            if CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM[WEAPON_CURRENT_GROUP][1]:GetValue() == 1 then
+                if dt_ticks == DT_SPEED - 7 then
+                    if globals.CurTime() > old_curtime then
+                        dt_ticks = dt_ticks + 2
+                        old_curtime = globals.CurTime() + 0.10
+                    end
+                elseif dt_ticks == DT_SPEED - 5 then
+                    if globals.CurTime() > old_curtime then
+                        dt_ticks = dt_ticks + 1
+                        old_curtime = globals.CurTime() + CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM_DELAY[WEAPON_CURRENT_GROUP][1]:GetValue() / 1000
+                    end
+                elseif dt_ticks == DT_SPEED - 4 then
+                    local entity = entities.FindByClass("CCSPlayer")
+                    local valid
+
+                    for i = 2, #entity do
+                        if entity[i] and not entity[i]:IsDormant() and entity[i]:GetTeamNumber() ~= entity[1]:GetTeamNumber() then
+                            valid = true
+                        end
+                    end
+
+                    if valid then
+                        if globals.CurTime() > old_curtime then
+                            dt_ticks = dt_ticks + 4
+                        end
+                    end
+                end
+            elseif CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM[WEAPON_CURRENT_GROUP][1]:GetValue() == 2 then
+                --[[ if dt_ticks == DT_SPEED - 11 then
+                    if globals.CurTime() > old_curtime then
+                        dt_ticks = dt_ticks + 4
+                        old_curtime = globals.CurTime() + 0.01
+                    end
+                elseif dt_ticks == DT_SPEED - 7 then
+                    if globals.CurTime() > old_curtime then
+                        dt_ticks = dt_ticks + 3
+                        old_curtime = globals.CurTime() + 0.50
+                    end
+                elseif dt_ticks == DT_SPEED - 4 then
+                    local entity = entities.FindByClass("CCSPlayer")
+                    local valid
+
+                    for i = 2, #entity do
+                        if entity[i] and not entity[i]:IsDormant() and entity[i]:GetTeamNumber() ~= entity[1]:GetTeamNumber() then
+                            valid = true
+                        end
+                    end
+
+                    if valid then
+                        if globals.CurTime() > old_curtime then
+                            dt_ticks = dt_ticks + 4
+                        end
+                    end
+                end ]]
+            end
+        elseif CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM[WEAPON_CURRENT_GROUP][1]:GetValue() == 3 then
+            
+        end
+    else
+        dt_setup(0)
+        if CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM[WEAPON_CURRENT_GROUP][1]:GetValue() == 1 then
+            dt_ticks = DT_SPEED - 7
+            old_curtime = globals.CurTime() + 0.30
+        elseif CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM[WEAPON_CURRENT_GROUP][1]:GetValue() == 2 then
+            --[[ dt_ticks = DT_SPEED - 11
+            old_curtime = globals.CurTime() + CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM_DELAY[WEAPON_CURRENT_GROUP][1]:GetValue() / 1000 ]]
+        elseif CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM[WEAPON_CURRENT_GROUP][1]:GetValue() == 3 then
+
+        end
+    end
+
+    if CHIEFTAIN_DOUBLEFIRE_PERF_DISLBY[WEAPON_CURRENT_GROUP][1]:GetValue() then
+        if CHIEFTAIN_DOUBLEFIRE_ENABLE:GetValue() then
+            gui.SetValue('rbot.antiaim.advanced.antialign', 1)
+        else
+            gui.SetValue('rbot.antiaim.advanced.antialign', 0)
         end
     end
 end
@@ -444,79 +684,75 @@ local function is_vis(LocalPlayerPos)
     for i, player in pairs(players) do
         if player:GetTeamNumber() ~= entities.GetLocalPlayer():GetTeamNumber() and player:IsPlayer() and entities_check() ~= nil and player:IsAlive() then			
             for hitbox = 0, 18 do
-				if 	hitbox == 0  and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 0 or
---					hitbox == 1  and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= N or
-					hitbox == 2  and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 0 or
-					hitbox == 3  and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 2 or
-					hitbox == 4  and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 2 or
-					hitbox == 5  and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 0 or
-					hitbox == 6  and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 2 or
-					hitbox == 7  and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 2 or
-					hitbox == 8  and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 2 or
-					hitbox == 9  and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 0 or
-					hitbox == 10 and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 0 or
-					hitbox == 11 and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 1 or
-					hitbox == 12 and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 1 or
---					hitbox == 13 and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= N or
---					hitbox == 14 and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= N or
-					hitbox == 15 and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 1 or
-					hitbox == 16 and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 1 or
-					hitbox == 17 and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 1 or
-					hitbox == 18 and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 1 then
-					for x = 0, hitboxes_scale do
-						local HitboxPos = player:GetHitboxPosition(hitbox)
+                if 	hitbox == 0  and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 0 or
+                  --hitbox == 1  and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= N or
+                    hitbox == 2  and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 0 or
+                    hitbox == 3  and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 2 or
+                    hitbox == 4  and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 2 or
+                    hitbox == 5  and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 0 or
+                    hitbox == 6  and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 2 or
+                    hitbox == 7  and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 2 or
+                    hitbox == 8  and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 2 or
+                    hitbox == 9  and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 0 or
+                    hitbox == 10 and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 0 or
+                    hitbox == 11 and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 1 or
+                    hitbox == 12 and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 1 or
+                  --hitbox == 13 and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= N or
+                  --hitbox == 14 and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= N or
+                    hitbox == 15 and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 1 or
+                    hitbox == 16 and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 1 or
+                    hitbox == 17 and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 1 or
+                    hitbox == 18 and CHIEFTAIN_DOUBLEFIRE_LAGPEEK_SCAN[WEAPON_CURRENT_GROUP][1]:GetValue() >= 1 then
+                    for x = 0, hitboxes_scale do
+                        local HitboxPos = player:GetHitboxPosition(hitbox)
 
-						if x == 0 then
-							HitboxPos.x = HitboxPos.x
-							HitboxPos.y = HitboxPos.y
-						elseif x == 1 then
-							HitboxPos.x = HitboxPos.x
-							HitboxPos.y = HitboxPos.y + 4
-						elseif x == 2 then
-							HitboxPos.x = HitboxPos.x
-							HitboxPos.y = HitboxPos.y - 4
-						elseif x == 3 then
-							HitboxPos.x = HitboxPos.x + 4
-							HitboxPos.y = HitboxPos.y
-						elseif x == 4 then
-							HitboxPos.x = HitboxPos.x - 4
-							HitboxPos.y = HitboxPos.y
-						end
+                        if x == 0 then
+                            HitboxPos.x = HitboxPos.x
+                            HitboxPos.y = HitboxPos.y
+                        elseif x == 1 then
+                            HitboxPos.x = HitboxPos.x
+                            HitboxPos.y = HitboxPos.y + 4
+                        elseif x == 2 then
+                            HitboxPos.x = HitboxPos.x
+                            HitboxPos.y = HitboxPos.y - 4
+                        elseif x == 3 then
+                            HitboxPos.x = HitboxPos.x + 4
+                            HitboxPos.y = HitboxPos.y
+                        elseif x == 4 then
+                            HitboxPos.x = HitboxPos.x - 4
+                            HitboxPos.y = HitboxPos.y
+                        end
 
-						local c = (engine.TraceLine(LocalPlayerPos, HitboxPos, 0x1)).contents
-							
-						local x,y = client.WorldToScreen(LocalPlayerPos)
-						local x2,y2 = client.WorldToScreen(HitboxPos)
-							
-						--Debug
-						--[[ if c == 0 then draw.Color(0,255,0) else draw.Color(225,0,0) end
-						if x and x2 then
-							draw.Line(x,y,x2,y2)
-						end ]]
-						--Debug
-							
-						if c == 0 then
-							is_vis = true
-								break
-						end
-					end
-				end
+                        local c = (engine.TraceLine(LocalPlayerPos, HitboxPos, 0x1)).contents
+                            
+                        local x,y = client.WorldToScreen(LocalPlayerPos)
+                        local x2,y2 = client.WorldToScreen(HitboxPos)
+                            
+                        --Debug
+                        --[[ if c == 0 then draw.Color(0,255,0) else draw.Color(225,0,0) end
+                        if x and x2 then
+                            draw.Line(x,y,x2,y2)
+                        end ]]
+                        --Debug
+                            
+                        if c == 0 then
+                            is_vis = true
+                                break
+                        end
+                    end
+                end
             end
         end
-	end
+    end
 
     return is_vis
 end
 local function lag_on_peek()
 	local Player, LocalPlayer = entities_check()
 
-    if CHIEFTAIN_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:GetValue() == 0 then
+    if not CHIEFTAIN_DOUBLEFIRE_ENABLE:GetValue() or CHIEFTAIN_DOUBLEFIRE_ENABLE:GetValue() and not CHIEFTAIN_DOUBLEFIRE_PERF_LAGPEEK[WEAPON_CURRENT_GROUP][1]:GetValue() then
         return
     end
-    if not CHIEFTAIN_DOUBLEFIRE_PERF_LAGPEEK[WEAPON_CURRENT_GROUP][1]:GetValue() then
-        return
-    end
-    
 	
     local velocity = math.sqrt(entities.GetLocalPlayer():GetPropFloat( "localdata", "m_vecVelocity[0]" ) ^ 2 + entities.GetLocalPlayer():GetPropFloat( "localdata", "m_vecVelocity[1]" ) ^ 2)
     
@@ -538,7 +774,7 @@ local function lag_on_peek()
             gui.SetValue("misc.speedburst.enable", 1)
             dt_setup(0)
         else
-            dt_setup(CHIEFTAIN_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:GetValue())
+            dt_setup(CHIEFTAIN_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:GetValue() + 1)
             gui.SetValue("misc.speedburst.enable", 0)
         end
     end
@@ -562,16 +798,43 @@ local function lag_on_peek()
         LocalPlayer_predicted_pos.z = LocalPlayer_predicted_pos.z + LocalPlayer:GetPropVector("localdata", "m_vecViewOffset[0]").z
     
         if is_vis(LocalPlayer_predicted_pos) then
-            dt_setup(CHIEFTAIN_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:GetValue())
+            dt_setup(CHIEFTAIN_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:GetValue() + 1)
             gui.SetValue("misc.speedburst.enable", 0)
         end
     end
 end
 
+local function no_scope_hc()
+	if not CHIEFTAIN_NOSCOPEHC_ENABLE[WEAPON_CURRENT_GROUP][1]:GetValue() then
+		return
+	end
+
+	Scoped = entities.GetLocalPlayer():GetPropBool("m_bIsScoped");
+	
+	gui.SetValue('rbot.aim.automation.scope', 0)
+	if Scoped then
+		gui.SetValue('rbot.accuracy.weapon.' .. string.lower(WEAPON_CURRENT_GROUP) .. '.hitchance', CHIEFTAIN_NOSCOPEHC_REGULAR_SCOPE[WEAPON_CURRENT_GROUP][1]:GetValue())
+		gui.SetValue('rbot.accuracy.weapon.' .. string.lower(WEAPON_CURRENT_GROUP) .. '.doublefirehc', CHIEFTAIN_NOSCOPEHC_DF_SCOPE[WEAPON_CURRENT_GROUP][1]:GetValue())
+	else
+		gui.SetValue('rbot.accuracy.weapon.' .. string.lower(WEAPON_CURRENT_GROUP) .. '.hitchance', CHIEFTAIN_NOSCOPEHC_REGULAR_NOSCOPE[WEAPON_CURRENT_GROUP][1]:GetValue())
+		gui.SetValue('rbot.accuracy.weapon.' .. string.lower(WEAPON_CURRENT_GROUP) .. '.doublefirehc', CHIEFTAIN_NOSCOPEHC_DF_NOSCOPE[WEAPON_CURRENT_GROUP][1]:GetValue())
+	end
+end
+
 local function main()
     menuсontroler()
     
-    if not engine.GetServerIP() or engine.GetServerIP() and not entities.GetLocalPlayer():IsAlive() then --aimware memes
+    if not engine.GetServerIP() or engine.GetServerIP() then
+        if entities.GetLocalPlayer() then
+            if not entities.GetLocalPlayer():IsAlive() then
+                return
+            end
+        else
+            return
+        end
+    end
+
+    if WEAPON_CURRENT_GROUP == 'GLOBAL' then
         return
     end
 
@@ -580,6 +843,7 @@ local function main()
     fakelatency()
     doublefire()
     lag_on_peek()
+    no_scope_hc()
 
     return true
 end
