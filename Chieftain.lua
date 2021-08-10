@@ -1,6 +1,6 @@
 ------------------------------------------Credits-------------------------------------------
---				Chieftain made by GLadiator
---	       Lag peek DT based on Vis/Invis Damage by Chicken4676 and John.k				
+--                              Chieftain made by GLadiator
+--	          Lag peek DT based on Vis/Invis Damage by Chicken4676 and John.k				
 ------------------------------------------Credits-------------------------------------------
  
 
@@ -409,14 +409,40 @@ local function menuсontroler()
         CHIEFTAIN_SUBTAB_NOSCOPEHC:SetInvisible(false)
         if CHIEFTAIN_NOSCOPEHC_ENABLE[WEAPON_CURRENT_GROUP][1]:GetValue() then
             CHIEFTAIN_NOSCOPEHC_REGULAR_SCOPE[WEAPON_CURRENT_GROUP][1]:SetDisabled(false)
-            CHIEFTAIN_NOSCOPEHC_DF_SCOPE[WEAPON_CURRENT_GROUP][1]:SetDisabled(false)
+            
+            if lp_weapon_id(WEAPONID_AUTOSNIPERS) then
+                CHIEFTAIN_NOSCOPEHC_DF_SCOPE[WEAPON_CURRENT_GROUP][1]:SetInvisible(false)
+                CHIEFTAIN_NOSCOPEHC_DF_SCOPE[WEAPON_CURRENT_GROUP][1]:SetDisabled(false)
+            else
+                CHIEFTAIN_NOSCOPEHC_DF_SCOPE[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
+            end
+
             CHIEFTAIN_NOSCOPEHC_REGULAR_NOSCOPE[WEAPON_CURRENT_GROUP][1]:SetDisabled(false)
-            CHIEFTAIN_NOSCOPEHC_DF_NOSCOPE[WEAPON_CURRENT_GROUP][1]:SetDisabled(false)
+
+            if lp_weapon_id(WEAPONID_AUTOSNIPERS) then
+                CHIEFTAIN_NOSCOPEHC_DF_NOSCOPE[WEAPON_CURRENT_GROUP][1]:SetInvisible(false)
+                CHIEFTAIN_NOSCOPEHC_DF_NOSCOPE[WEAPON_CURRENT_GROUP][1]:SetDisabled(false)
+            else
+                CHIEFTAIN_NOSCOPEHC_DF_NOSCOPE[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
+            end
         else
             CHIEFTAIN_NOSCOPEHC_REGULAR_SCOPE[WEAPON_CURRENT_GROUP][1]:SetDisabled(true)
-            CHIEFTAIN_NOSCOPEHC_DF_SCOPE[WEAPON_CURRENT_GROUP][1]:SetDisabled(true)
+
+            if lp_weapon_id(WEAPONID_AUTOSNIPERS) then
+                CHIEFTAIN_NOSCOPEHC_DF_SCOPE[WEAPON_CURRENT_GROUP][1]:SetInvisible(false)
+                CHIEFTAIN_NOSCOPEHC_DF_SCOPE[WEAPON_CURRENT_GROUP][1]:SetDisabled(true)
+            else
+                CHIEFTAIN_NOSCOPEHC_DF_SCOPE[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
+            end
+
             CHIEFTAIN_NOSCOPEHC_REGULAR_NOSCOPE[WEAPON_CURRENT_GROUP][1]:SetDisabled(true)
-            CHIEFTAIN_NOSCOPEHC_DF_NOSCOPE[WEAPON_CURRENT_GROUP][1]:SetDisabled(true)
+
+            if lp_weapon_id(WEAPONID_AUTOSNIPERS) then
+                CHIEFTAIN_NOSCOPEHC_DF_NOSCOPE[WEAPON_CURRENT_GROUP][1]:SetInvisible(false)
+                CHIEFTAIN_NOSCOPEHC_DF_NOSCOPE[WEAPON_CURRENT_GROUP][1]:SetDisabled(true)
+            else
+                CHIEFTAIN_NOSCOPEHC_DF_NOSCOPE[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
+            end
         end
     else
         CHIEFTAIN_SUBTAB_NOSCOPEHC:SetInvisible(true)
@@ -516,7 +542,6 @@ local function doublefire()
     local getmaxprocessticks = client.GetConVar('sv_maxusrcmdprocessticks')
     local lp_ping = entities.GetPlayerResources():GetPropInt("m_iPing", entities.GetLocalPlayer():GetIndex())
 	local DT_SPEED_ARR = {getmaxprocessticks - 2, getmaxprocessticks - 1, getmaxprocessticks, getmaxprocessticks + 1, CHIEFTAIN_DOUBLEFIRE_SPEED_ADJUSTER[WEAPON_CURRENT_GROUP][1]:GetValue()}
-    --local DT_SPEED = 0
 
     if CHIEFTAIN_DOUBLEFIRE_ENABLE:GetValue() then
         if CHIEFTAIN_DOUBLEFIRE_SPEED[WEAPON_CURRENT_GROUP][1]:GetValue() == 0 then
@@ -814,10 +839,14 @@ local function no_scope_hc()
 	gui.SetValue('rbot.aim.automation.scope', 0)
 	if Scoped then
 		gui.SetValue('rbot.accuracy.weapon.' .. string.lower(WEAPON_CURRENT_GROUP) .. '.hitchance', CHIEFTAIN_NOSCOPEHC_REGULAR_SCOPE[WEAPON_CURRENT_GROUP][1]:GetValue())
-		gui.SetValue('rbot.accuracy.weapon.' .. string.lower(WEAPON_CURRENT_GROUP) .. '.doublefirehc', CHIEFTAIN_NOSCOPEHC_DF_SCOPE[WEAPON_CURRENT_GROUP][1]:GetValue())
+        if lp_weapon_id(WEAPONID_AUTOSNIPERS) then
+		    gui.SetValue('rbot.accuracy.weapon.' .. string.lower(WEAPON_CURRENT_GROUP) .. '.doublefirehc', CHIEFTAIN_NOSCOPEHC_DF_SCOPE[WEAPON_CURRENT_GROUP][1]:GetValue())
+        end
 	else
 		gui.SetValue('rbot.accuracy.weapon.' .. string.lower(WEAPON_CURRENT_GROUP) .. '.hitchance', CHIEFTAIN_NOSCOPEHC_REGULAR_NOSCOPE[WEAPON_CURRENT_GROUP][1]:GetValue())
-		gui.SetValue('rbot.accuracy.weapon.' .. string.lower(WEAPON_CURRENT_GROUP) .. '.doublefirehc', CHIEFTAIN_NOSCOPEHC_DF_NOSCOPE[WEAPON_CURRENT_GROUP][1]:GetValue())
+        if lp_weapon_id(WEAPONID_AUTOSNIPERS) then
+		    gui.SetValue('rbot.accuracy.weapon.' .. string.lower(WEAPON_CURRENT_GROUP) .. '.doublefirehc', CHIEFTAIN_NOSCOPEHC_DF_NOSCOPE[WEAPON_CURRENT_GROUP][1]:GetValue())
+        end
 	end
 end
 
