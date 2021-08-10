@@ -1,16 +1,3 @@
-Chicken.dynamic_min_dmg.window 15 15 false
-Chicken.dynamic_min_dmg.window.Chicken.dynamic_min_dmg.debug.draw_min_damage "Off"
-Chicken.dynamic_min_dmg.window.Chicken.dynamic_min_dmg.debug.draw_tracers "Off"
-Chicken.dynamic_min_dmg.window.Chicken.dynamic_min_dmg.debug.draw_velocity_text "Off"
-Chicken.dynamic_min_dmg.window.Chicken.dynamic_min_dmg.debug.hitbox_Pelvis "On"
-Chicken.dynamic_min_dmg.window.Chicken.dynamic_min_dmg.debug.hitbox_chest "On"
-Chicken.dynamic_min_dmg.window.Chicken.dynamic_min_dmg.debug.hitbox_head "On"
-Chicken.dynamic_min_dmg.window.Chicken.dynamic_min_dmg.debug.hitbox_leftarm "Off"
-Chicken.dynamic_min_dmg.window.Chicken.dynamic_min_dmg.debug.hitbox_leftleg "Off"
-Chicken.dynamic_min_dmg.window.Chicken.dynamic_min_dmg.debug.hitbox_rightarm "Off"
-Chicken.dynamic_min_dmg.window.Chicken.dynamic_min_dmg.debug.hitbox_rightleft "Off"
-Chicken.dynamic_min_dmg.window.Chicken.dynamic_min_dmg.hitbox_pointscale 0.0
-Chicken.dynamic_min_dmg.window.Chicken.dynamic_min_dmg.prediction_amount 0.2
 adv 
 adv.conkey 35
 adv.dpi "100% (default)"
@@ -126,16 +113,16 @@ esp.chams.backtrack.overlay.clr 45 165 200 150
 esp.chams.backtrack.visible "Off"
 esp.chams.backtrack.visible.clr 141 87 208 150
 esp.chams.enemy 
-esp.chams.enemy.glow "Color"
-esp.chams.enemy.glow.clr 25 34 61 255
+esp.chams.enemy.glow "Health"
+esp.chams.enemy.glow.clr 255 255 255 100
 esp.chams.enemy.glow.healthclr1 255 0 0 255
 esp.chams.enemy.glow.healthclr2 0 255 0 255
 esp.chams.enemy.occluded "Flat"
-esp.chams.enemy.occluded.clr 140 152 239 12
+esp.chams.enemy.occluded.clr 0 177 255 255
 esp.chams.enemy.overlay "Off"
 esp.chams.enemy.overlay.clr 239 199 53 150
-esp.chams.enemy.visible "Flat"
-esp.chams.enemy.visible.clr 195 218 255 255
+esp.chams.enemy.visible "Color"
+esp.chams.enemy.visible.clr 0 201 255 255
 esp.chams.enemyattachments 
 esp.chams.enemyattachments.glow "Off"
 esp.chams.enemyattachments.glow.clr 255 255 255 255
@@ -248,17 +235,12 @@ esp.chams.weapon.overlay "Off"
 esp.chams.weapon.overlay.clr 255 255 255 150
 esp.chams.weapon.visible "Off"
 esp.chams.weapon.visible.clr 102 152 46 255
-esp.loa_fog_tab 
-esp.loa_fog_tab.lua_fog_color 80 80 90 255
-esp.loa_fog_tab.lua_fog_density 35.0
-esp.loa_fog_tab.lua_fog_distance_end 3500.0
-esp.loa_fog_tab.lua_fog_distance_start 50.0
 esp.local 
 esp.local.fov 100.0
-esp.local.outofview "Arrow"
-esp.local.outofviewscale 15.0
+esp.local.outofview "Arrow + Info"
+esp.local.outofviewscale 20.0
 esp.local.smoothghost "On"
-esp.local.thirdperson "Off"
+esp.local.thirdperson "On"
 esp.local.thirdpersondist 150.0
 esp.local.viewmodelfov 75.0
 esp.local.wallbanginfo 
@@ -294,13 +276,13 @@ esp.other.sharedesp "Shared with Team"
 esp.overlay 
 esp.overlay.enemy 
 esp.overlay.enemy.ammo "On"
-esp.overlay.enemy.ammo.clr1 70 142 196 255
-esp.overlay.enemy.ammo.clr2 70 142 196 255
+esp.overlay.enemy.ammo.clr1 255 255 255 255
+esp.overlay.enemy.ammo.clr2 161 161 161 255
 esp.overlay.enemy.armor "On"
 esp.overlay.enemy.barrel "Off"
 esp.overlay.enemy.barrel.clr 240 60 30 255
 esp.overlay.enemy.box "Off"
-esp.overlay.enemy.box.clr 140 152 239 92
+esp.overlay.enemy.box.clr 29 188 255 255
 esp.overlay.enemy.defusing "On"
 esp.overlay.enemy.defusing.clr 244 70 66 255
 esp.overlay.enemy.dormant "On"
@@ -325,7 +307,7 @@ esp.overlay.enemy.scoped.clr 81 191 234 255
 esp.overlay.enemy.skeleton "Off"
 esp.overlay.enemy.skeleton.clr 240 60 30 255
 esp.overlay.enemy.weapon "Name"
-esp.overlay.enemy.weaponfilter "Active"
+esp.overlay.enemy.weaponfilter "Active + Nades"
 esp.overlay.friendly 
 esp.overlay.friendly.ammo "Off"
 esp.overlay.friendly.ammo.clr1 0 136 236 255
@@ -389,14 +371,14 @@ esp.world.bullettracerfilter.local.clr 0 255 0 255
 esp.world.dmgindicator "On"
 esp.world.hiteffects 
 esp.world.hiteffects.marker "On"
-esp.world.hiteffects.sound "On"
+esp.world.hiteffects.sound "Off"
 esp.world.inferno 
 esp.world.inferno.enemy "On"
 esp.world.inferno.friendly "On"
 esp.world.inferno.local "On"
 esp.world.materials 
 esp.world.materials.skybox "vertigoblue_hdr"
-esp.world.materials.skybox.clr 55 36 96 255
+esp.world.materials.skybox.clr 255 255 255 255
 esp.world.materials.staticprops "On"
 esp.world.materials.staticprops.clr 48 48 68 255
 esp.world.materials.walls "On"
@@ -766,7 +748,7 @@ lbot.weapon.vis.zeus
 lbot.weapon.vis.zeus.autowall "Off"
 lbot.weapon.vis.zeus.smoke "Off"
 lua 
-menu 1009 446 true
+menu 1044 269 true
 misc 
 misc.antiuntrusted "On"
 misc.autoaccept "On"
@@ -792,18 +774,18 @@ misc.fakelag.factor 15.0
 misc.fakelag.key 0
 misc.fakelag.type "Adaptive"
 misc.fakelatency 
-misc.fakelatency.amount 200.0
+misc.fakelatency.amount 145.0
 misc.fakelatency.enable "On"
 misc.fakelatency.key 0
 misc.fastduck "On"
 misc.invisiblename "Off"
 misc.keyingsind "On"
-misc.keyingsind.clr 140 152 239 255
+misc.keyingsind.clr 0 177 255 255
 misc.keyingsind.clr2 255 255 255 255
 misc.keyingsind.clr3 25 25 25 255
 misc.keyingsind.rgb "Off"
-misc.keyingsind.x 386.0
-misc.keyingsind.y 535.0
+misc.keyingsind.x 392.0
+misc.keyingsind.y 533.0
 misc.log 
 misc.log.console "Off"
 misc.log.damage 
@@ -831,21 +813,14 @@ misc.strafe.mode "Silent"
 misc.strafe.retrack 1.0
 misc.strafe.snake 0
 misc.strafe.wasd "On"
-misc.watermark "Off"
-misc.watermark.clr 131 109 221 255
-misc.watermark.clr2 255 255 255 255
-misc.watermark.clr3 0 0 0 100
-misc.watermark.rgb "Off"
-misc.watermark.x 1440.0
-misc.watermark.y 10.0
 misc.weaponactiveind "On"
-misc.weaponactiveind.clr 140 152 239 255
+misc.weaponactiveind.clr 0 177 255 255
 misc.weaponactiveind.clr2 255 255 255 255
 misc.weaponactiveind.clr3 25 25 25 255
 misc.weaponactiveind.clr4 255 255 255 255
 misc.weaponactiveind.rgb "Off"
-misc.weaponactiveind.x 515.0
-misc.weaponactiveind.y 535.0
+misc.weaponactiveind.x 521.0
+misc.weaponactiveind.y 533.0
 players 289 38 false
 priority 1.0
 radar 1896 0 256 284
@@ -858,70 +833,55 @@ rbot.accuracy.movement.autopeekind.clr1 0 255 0 255
 rbot.accuracy.movement.autopeekind.clr2 255 0 0 255
 rbot.accuracy.movement.autopeekkey 102
 rbot.accuracy.movement.autopeektype "Hold"
-rbot.accuracy.movement.quickstop "Off"
+rbot.accuracy.movement.quickstop "On"
 rbot.accuracy.movement.slowkey 16
 rbot.accuracy.movement.slowspeed 20.0
 rbot.accuracy.posadj 
 rbot.accuracy.posadj.backtrack "On"
 rbot.accuracy.posadj.resolver "On"
-rbot.accuracy.weapon "Sniper"
-rbot.accuracy.weapon.Chicken.dynamic_min_dmg.damage "Off"
+rbot.accuracy.weapon "Auto Sniper"
 rbot.accuracy.weapon.asniper 
-rbot.accuracy.weapon.asniper.Chicken.dynamic_min_dmg.DamageInvisible 38.0
-rbot.accuracy.weapon.asniper.Chicken.dynamic_min_dmg.DamageVisible 51.0
 rbot.accuracy.weapon.asniper.antirecoil "On"
-rbot.accuracy.weapon.asniper.doublefire "Off"
-rbot.accuracy.weapon.asniper.doublefirehc 15.0
+rbot.accuracy.weapon.asniper.doublefire "Rapid"
+rbot.accuracy.weapon.asniper.doublefirehc 10.0
 rbot.accuracy.weapon.asniper.doublefireind "On"
 rbot.accuracy.weapon.asniper.hitchance 35.0
 rbot.accuracy.weapon.asniper.mindmg 38.0
 rbot.accuracy.weapon.hpistol 
-rbot.accuracy.weapon.hpistol.Chicken.dynamic_min_dmg.DamageInvisible 51.0
-rbot.accuracy.weapon.hpistol.Chicken.dynamic_min_dmg.DamageVisible 44.0
 rbot.accuracy.weapon.hpistol.antirecoil "On"
-rbot.accuracy.weapon.hpistol.doublefire "Off"
-rbot.accuracy.weapon.hpistol.doublefirehc 25.0
+rbot.accuracy.weapon.hpistol.doublefire "Rapid"
+rbot.accuracy.weapon.hpistol.doublefirehc 1.0
 rbot.accuracy.weapon.hpistol.doublefireind "On"
-rbot.accuracy.weapon.hpistol.hitchance 65.0
-rbot.accuracy.weapon.hpistol.mindmg 51.0
+rbot.accuracy.weapon.hpistol.hitchance 70.0
+rbot.accuracy.weapon.hpistol.mindmg 38.0
 rbot.accuracy.weapon.lmg 
-rbot.accuracy.weapon.lmg.Chicken.dynamic_min_dmg.DamageInvisible 50.0
-rbot.accuracy.weapon.lmg.Chicken.dynamic_min_dmg.DamageVisible 50.0
 rbot.accuracy.weapon.lmg.antirecoil "On"
-rbot.accuracy.weapon.lmg.doublefire "Off"
+rbot.accuracy.weapon.lmg.doublefire "Rapid"
 rbot.accuracy.weapon.lmg.doublefirehc 0.0
 rbot.accuracy.weapon.lmg.doublefireind "On"
 rbot.accuracy.weapon.lmg.hitchance 50.0
 rbot.accuracy.weapon.lmg.mindmg 50.0
 rbot.accuracy.weapon.pistol 
-rbot.accuracy.weapon.pistol.Chicken.dynamic_min_dmg.DamageInvisible 20.0
-rbot.accuracy.weapon.pistol.Chicken.dynamic_min_dmg.DamageVisible 20.0
 rbot.accuracy.weapon.pistol.antirecoil "On"
-rbot.accuracy.weapon.pistol.doublefire "Off"
-rbot.accuracy.weapon.pistol.doublefirehc 75.0
+rbot.accuracy.weapon.pistol.doublefire "Rapid"
+rbot.accuracy.weapon.pistol.doublefirehc 40.0
 rbot.accuracy.weapon.pistol.doublefireind "On"
 rbot.accuracy.weapon.pistol.hitchance 75.0
-rbot.accuracy.weapon.pistol.mindmg 20.0
+rbot.accuracy.weapon.pistol.mindmg 100.0
 rbot.accuracy.weapon.rifle 
-rbot.accuracy.weapon.rifle.Chicken.dynamic_min_dmg.DamageInvisible 50.0
-rbot.accuracy.weapon.rifle.Chicken.dynamic_min_dmg.DamageVisible 50.0
 rbot.accuracy.weapon.rifle.antirecoil "On"
-rbot.accuracy.weapon.rifle.doublefire "Off"
+rbot.accuracy.weapon.rifle.doublefire "Rapid"
 rbot.accuracy.weapon.rifle.doublefirehc 0.0
 rbot.accuracy.weapon.rifle.doublefireind "On"
 rbot.accuracy.weapon.rifle.hitchance 50.0
 rbot.accuracy.weapon.rifle.mindmg 50.0
 rbot.accuracy.weapon.scout 
-rbot.accuracy.weapon.scout.Chicken.dynamic_min_dmg.DamageInvisible 101.0
-rbot.accuracy.weapon.scout.Chicken.dynamic_min_dmg.DamageVisible 101.0
 rbot.accuracy.weapon.scout.antirecoil "On"
-rbot.accuracy.weapon.scout.doublefire "Off"
+rbot.accuracy.weapon.scout.doublefire "Rapid"
 rbot.accuracy.weapon.scout.doublefireind "On"
-rbot.accuracy.weapon.scout.hitchance 90.0
+rbot.accuracy.weapon.scout.hitchance 5.0
 rbot.accuracy.weapon.scout.mindmg 101.0
 rbot.accuracy.weapon.shared 
-rbot.accuracy.weapon.shared.Chicken.dynamic_min_dmg.DamageInvisible 1.0
-rbot.accuracy.weapon.shared.Chicken.dynamic_min_dmg.DamageVisible 1.0
 rbot.accuracy.weapon.shared.antirecoil "On"
 rbot.accuracy.weapon.shared.doublefire "Off"
 rbot.accuracy.weapon.shared.doublefirehc 0.0
@@ -929,44 +889,36 @@ rbot.accuracy.weapon.shared.doublefireind "On"
 rbot.accuracy.weapon.shared.hitchance 50.0
 rbot.accuracy.weapon.shared.mindmg 1.0
 rbot.accuracy.weapon.shotgun 
-rbot.accuracy.weapon.shotgun.Chicken.dynamic_min_dmg.DamageInvisible 50.0
-rbot.accuracy.weapon.shotgun.Chicken.dynamic_min_dmg.DamageVisible 50.0
 rbot.accuracy.weapon.shotgun.antirecoil "On"
-rbot.accuracy.weapon.shotgun.doublefire "Off"
+rbot.accuracy.weapon.shotgun.doublefire "Rapid"
 rbot.accuracy.weapon.shotgun.doublefirehc 0.0
 rbot.accuracy.weapon.shotgun.doublefireind "On"
 rbot.accuracy.weapon.shotgun.hitchance 50.0
 rbot.accuracy.weapon.shotgun.mindmg 50.0
 rbot.accuracy.weapon.smg 
-rbot.accuracy.weapon.smg.Chicken.dynamic_min_dmg.DamageInvisible 50.0
-rbot.accuracy.weapon.smg.Chicken.dynamic_min_dmg.DamageVisible 50.0
 rbot.accuracy.weapon.smg.antirecoil "On"
-rbot.accuracy.weapon.smg.doublefire "Off"
+rbot.accuracy.weapon.smg.doublefire "Rapid"
 rbot.accuracy.weapon.smg.doublefirehc 0.0
 rbot.accuracy.weapon.smg.doublefireind "On"
 rbot.accuracy.weapon.smg.hitchance 50.0
 rbot.accuracy.weapon.smg.mindmg 50.0
 rbot.accuracy.weapon.sniper 
-rbot.accuracy.weapon.sniper.Chicken.dynamic_min_dmg.DamageInvisible 102.0
-rbot.accuracy.weapon.sniper.Chicken.dynamic_min_dmg.DamageVisible 101.0
 rbot.accuracy.weapon.sniper.antirecoil "On"
-rbot.accuracy.weapon.sniper.doublefire "Off"
+rbot.accuracy.weapon.sniper.doublefire "Rapid"
 rbot.accuracy.weapon.sniper.doublefireind "On"
-rbot.accuracy.weapon.sniper.hitchance 85.0
+rbot.accuracy.weapon.sniper.hitchance 2.0
 rbot.accuracy.weapon.sniper.mindmg 102.0
 rbot.accuracy.weapon.zeus 
-rbot.accuracy.weapon.zeus.Chicken.dynamic_min_dmg.DamageInvisible 100.0
-rbot.accuracy.weapon.zeus.Chicken.dynamic_min_dmg.DamageVisible 100.0
 rbot.accuracy.weapon.zeus.antirecoil "On"
 rbot.accuracy.weapon.zeus.hitchance 85.0
 rbot.accuracy.weapon.zeus.mindmg 100.0
-rbot.accuracy.wpnmovement "Sniper"
+rbot.accuracy.wpnmovement "Auto Sniper"
 rbot.accuracy.wpnmovement.asniper 
 rbot.accuracy.wpnmovement.asniper.autostop "On"
 rbot.accuracy.wpnmovement.asniper.autostopopts 
 rbot.accuracy.wpnmovement.asniper.autostopopts.betweenshots "On"
 rbot.accuracy.wpnmovement.asniper.autostopopts.duck "Off"
-rbot.accuracy.wpnmovement.asniper.autostopopts.early "On"
+rbot.accuracy.wpnmovement.asniper.autostopopts.early "Off"
 rbot.accuracy.wpnmovement.asniper.autostopopts.inair "Off"
 rbot.accuracy.wpnmovement.asniper.autostopopts.inmolotov "On"
 rbot.accuracy.wpnmovement.asniper.autostopopts.slowwalk "On"
@@ -992,9 +944,9 @@ rbot.accuracy.wpnmovement.pistol
 rbot.accuracy.wpnmovement.pistol.autostop "On"
 rbot.accuracy.wpnmovement.pistol.autostopopts 
 rbot.accuracy.wpnmovement.pistol.autostopopts.betweenshots "On"
-rbot.accuracy.wpnmovement.pistol.autostopopts.duck "Off"
+rbot.accuracy.wpnmovement.pistol.autostopopts.duck "On"
 rbot.accuracy.wpnmovement.pistol.autostopopts.early "On"
-rbot.accuracy.wpnmovement.pistol.autostopopts.inair "Off"
+rbot.accuracy.wpnmovement.pistol.autostopopts.inair "On"
 rbot.accuracy.wpnmovement.pistol.autostopopts.inmolotov "On"
 rbot.accuracy.wpnmovement.pistol.autostopopts.slowwalk "On"
 rbot.accuracy.wpnmovement.rifle 
@@ -1009,10 +961,10 @@ rbot.accuracy.wpnmovement.rifle.autostopopts.slowwalk "On"
 rbot.accuracy.wpnmovement.scout 
 rbot.accuracy.wpnmovement.scout.autostop "On"
 rbot.accuracy.wpnmovement.scout.autostopopts 
-rbot.accuracy.wpnmovement.scout.autostopopts.betweenshots "Off"
+rbot.accuracy.wpnmovement.scout.autostopopts.betweenshots "On"
 rbot.accuracy.wpnmovement.scout.autostopopts.duck "Off"
 rbot.accuracy.wpnmovement.scout.autostopopts.early "Off"
-rbot.accuracy.wpnmovement.scout.autostopopts.inair "Off"
+rbot.accuracy.wpnmovement.scout.autostopopts.inair "On"
 rbot.accuracy.wpnmovement.scout.autostopopts.inmolotov "On"
 rbot.accuracy.wpnmovement.scout.autostopopts.slowwalk "Off"
 rbot.accuracy.wpnmovement.shared 
@@ -1064,7 +1016,7 @@ rbot.aim
 rbot.aim.automation 
 rbot.aim.automation.pistol "On"
 rbot.aim.automation.revolver "On"
-rbot.aim.automation.scope "On - No Unzoom"
+rbot.aim.automation.scope "Off"
 rbot.aim.enable "On"
 rbot.aim.extra 
 rbot.aim.extra.knife "Quick Stab"
@@ -1074,7 +1026,7 @@ rbot.aim.target.lock "On"
 rbot.aim.target.silentaim "On"
 rbot.antiaim 
 rbot.antiaim.advanced 
-rbot.antiaim.advanced.antialign "Lowerbody"
+rbot.antiaim.advanced.antialign "Micromovement"
 rbot.antiaim.advanced.antiresolver "Off"
 rbot.antiaim.advanced.autodir 
 rbot.antiaim.advanced.autodir.edges "Off"
@@ -1085,7 +1037,7 @@ rbot.antiaim.advanced.exposetype "1s"
 rbot.antiaim.advanced.pitch "89°"
 rbot.antiaim.advanced.rbot.ebind 6
 rbot.antiaim.base 180.0 "Desync"
-rbot.antiaim.base.lby 66.0
+rbot.antiaim.base.lby -39.0
 rbot.antiaim.base.rotation -50.0
 rbot.antiaim.base.spinspeed 60.0
 rbot.antiaim.condition 
@@ -1106,10 +1058,189 @@ rbot.antiaim.right -120.0 "Desync"
 rbot.antiaim.right.lby 0.0
 rbot.antiaim.right.rotation 58.0
 rbot.antiaim.right.spinspeed 60.0
+rbot.chieftain 
+rbot.chieftain.asniper.dobulefire.perf.lagpeek.value 0.125
+rbot.chieftain.asniper.doublefire.charging.delay 600.0
+rbot.chieftain.asniper.doublefire.chargingtype "Minimal"
+rbot.chieftain.asniper.doublefire.mode "Rechargeable"
+rbot.chieftain.asniper.doublefire.perf.dislby "Off"
+rbot.chieftain.asniper.doublefire.perf.lagpeek "On"
+rbot.chieftain.asniper.doublefire.perf.lagpeek.debugmode "Off"
+rbot.chieftain.asniper.doublefire.perf.lagpeek.fakelatency "Custom"
+rbot.chieftain.asniper.doublefire.perf.lagpeek.fakelatency.adjuster 145.0
+rbot.chieftain.asniper.doublefire.perf.lagpeek.hitboxscan "Maximum"
+rbot.chieftain.asniper.doublefire.speed "Automatic"
+rbot.chieftain.asniper.doublefire.speed.adjuster 16.0
+rbot.chieftain.asniper.noscopehc.dfhc.noscoped 10.0
+rbot.chieftain.asniper.noscopehc.dfhc.scoped 75.0
+rbot.chieftain.asniper.noscopehc.enable "On"
+rbot.chieftain.asniper.noscopehc.regularhc.noscoped 35.0
+rbot.chieftain.asniper.noscopehc.regularhc.scoped 88.0
+rbot.chieftain.doublefire.enable "On"
+rbot.chieftain.hpistol.dobulefire.perf.lagpeek.value 0.13
+rbot.chieftain.hpistol.doublefire.charging.delay 600.0
+rbot.chieftain.hpistol.doublefire.chargingtype "Minimal"
+rbot.chieftain.hpistol.doublefire.mode "Rechargeable"
+rbot.chieftain.hpistol.doublefire.perf.dislby "Off"
+rbot.chieftain.hpistol.doublefire.perf.lagpeek "On"
+rbot.chieftain.hpistol.doublefire.perf.lagpeek.debugmode "Off"
+rbot.chieftain.hpistol.doublefire.perf.lagpeek.fakelatency "Custom"
+rbot.chieftain.hpistol.doublefire.perf.lagpeek.fakelatency.adjuster 145.0
+rbot.chieftain.hpistol.doublefire.perf.lagpeek.hitboxscan "Maximum"
+rbot.chieftain.hpistol.doublefire.speed "Automatic"
+rbot.chieftain.hpistol.doublefire.speed.adjuster 16.0
+rbot.chieftain.hpistol.noscopehc.dfhc.noscoped 50.0
+rbot.chieftain.hpistol.noscopehc.dfhc.scoped 50.0
+rbot.chieftain.hpistol.noscopehc.enable "Off"
+rbot.chieftain.hpistol.noscopehc.regularhc.noscoped 50.0
+rbot.chieftain.hpistol.noscopehc.regularhc.scoped 50.0
+rbot.chieftain.lmg.dobulefire.perf.lagpeek.value 0.14
+rbot.chieftain.lmg.doublefire.charging.delay 500.0
+rbot.chieftain.lmg.doublefire.chargingtype "Off"
+rbot.chieftain.lmg.doublefire.mode "Chargeable without recharge"
+rbot.chieftain.lmg.doublefire.perf.dislby "Off"
+rbot.chieftain.lmg.doublefire.perf.lagpeek "Off"
+rbot.chieftain.lmg.doublefire.perf.lagpeek.debugmode "Off"
+rbot.chieftain.lmg.doublefire.perf.lagpeek.fakelatency "Off"
+rbot.chieftain.lmg.doublefire.perf.lagpeek.fakelatency.adjuster 200.0
+rbot.chieftain.lmg.doublefire.perf.lagpeek.hitboxscan "Medium"
+rbot.chieftain.lmg.doublefire.speed "Automatic"
+rbot.chieftain.lmg.doublefire.speed.adjuster 16.0
+rbot.chieftain.lmg.noscopehc.dfhc.noscoped 50.0
+rbot.chieftain.lmg.noscopehc.dfhc.scoped 50.0
+rbot.chieftain.lmg.noscopehc.enable "Off"
+rbot.chieftain.lmg.noscopehc.regularhc.noscoped 50.0
+rbot.chieftain.lmg.noscopehc.regularhc.scoped 50.0
+rbot.chieftain.misc.fakeduck.speed "Automatic"
+rbot.chieftain.misc.fakeduck.speed.adjuster 16.0
+rbot.chieftain.misc.fakeduck.type "Inaccuracy, but fast"
+rbot.chieftain.misc.fakelags.custom.factor.max 16.0
+rbot.chieftain.misc.fakelags.custom.factor.min 16.0
+rbot.chieftain.misc.fakelags.custom.type "Normal"
+rbot.chieftain.misc.fakelags.jitter 1.0
+rbot.chieftain.misc.fakelags.type "Adaptive"
+rbot.chieftain.misc.fakelatency "Maximum"
+rbot.chieftain.misc.fakelatency.adjuster 200.0
+rbot.chieftain.pistol.dobulefire.perf.lagpeek.value 0.14
+rbot.chieftain.pistol.doublefire.charging.delay 500.0
+rbot.chieftain.pistol.doublefire.chargingtype "Minimal"
+rbot.chieftain.pistol.doublefire.mode "Rechargeable"
+rbot.chieftain.pistol.doublefire.perf.dislby "Off"
+rbot.chieftain.pistol.doublefire.perf.lagpeek "Off"
+rbot.chieftain.pistol.doublefire.perf.lagpeek.debugmode "Off"
+rbot.chieftain.pistol.doublefire.perf.lagpeek.fakelatency "Off"
+rbot.chieftain.pistol.doublefire.perf.lagpeek.fakelatency.adjuster 200.0
+rbot.chieftain.pistol.doublefire.perf.lagpeek.hitboxscan "Medium"
+rbot.chieftain.pistol.doublefire.speed "Automatic"
+rbot.chieftain.pistol.doublefire.speed.adjuster 16.0
+rbot.chieftain.pistol.noscopehc.dfhc.noscoped 50.0
+rbot.chieftain.pistol.noscopehc.dfhc.scoped 50.0
+rbot.chieftain.pistol.noscopehc.enable "Off"
+rbot.chieftain.pistol.noscopehc.regularhc.noscoped 50.0
+rbot.chieftain.pistol.noscopehc.regularhc.scoped 50.0
+rbot.chieftain.rifle.dobulefire.perf.lagpeek.value 0.14
+rbot.chieftain.rifle.doublefire.charging.delay 500.0
+rbot.chieftain.rifle.doublefire.chargingtype "Off"
+rbot.chieftain.rifle.doublefire.mode "Chargeable without recharge"
+rbot.chieftain.rifle.doublefire.perf.dislby "Off"
+rbot.chieftain.rifle.doublefire.perf.lagpeek "Off"
+rbot.chieftain.rifle.doublefire.perf.lagpeek.debugmode "Off"
+rbot.chieftain.rifle.doublefire.perf.lagpeek.fakelatency "Off"
+rbot.chieftain.rifle.doublefire.perf.lagpeek.fakelatency.adjuster 200.0
+rbot.chieftain.rifle.doublefire.perf.lagpeek.hitboxscan "Medium"
+rbot.chieftain.rifle.doublefire.speed "Automatic"
+rbot.chieftain.rifle.doublefire.speed.adjuster 16.0
+rbot.chieftain.rifle.noscopehc.dfhc.noscoped 50.0
+rbot.chieftain.rifle.noscopehc.dfhc.scoped 50.0
+rbot.chieftain.rifle.noscopehc.enable "Off"
+rbot.chieftain.rifle.noscopehc.regularhc.noscoped 50.0
+rbot.chieftain.rifle.noscopehc.regularhc.scoped 50.0
+rbot.chieftain.scout.dobulefire.perf.lagpeek.value 0.125
+rbot.chieftain.scout.doublefire.charging.delay 600.0
+rbot.chieftain.scout.doublefire.chargingtype "Minimal"
+rbot.chieftain.scout.doublefire.mode "Rechargeable"
+rbot.chieftain.scout.doublefire.perf.dislby "Off"
+rbot.chieftain.scout.doublefire.perf.lagpeek "On"
+rbot.chieftain.scout.doublefire.perf.lagpeek.debugmode "Off"
+rbot.chieftain.scout.doublefire.perf.lagpeek.fakelatency "Custom"
+rbot.chieftain.scout.doublefire.perf.lagpeek.fakelatency.adjuster 145.0
+rbot.chieftain.scout.doublefire.perf.lagpeek.hitboxscan "High"
+rbot.chieftain.scout.doublefire.speed "Automatic"
+rbot.chieftain.scout.doublefire.speed.adjuster 16.0
+rbot.chieftain.scout.noscopehc.dfhc.noscoped 50.0
+rbot.chieftain.scout.noscopehc.dfhc.scoped 50.0
+rbot.chieftain.scout.noscopehc.enable "On"
+rbot.chieftain.scout.noscopehc.regularhc.noscoped 5.0
+rbot.chieftain.scout.noscopehc.regularhc.scoped 90.0
+rbot.chieftain.shotgun.dobulefire.perf.lagpeek.value 0.14
+rbot.chieftain.shotgun.doublefire.charging.delay 500.0
+rbot.chieftain.shotgun.doublefire.chargingtype "Off"
+rbot.chieftain.shotgun.doublefire.mode "Chargeable without recharge"
+rbot.chieftain.shotgun.doublefire.perf.dislby "Off"
+rbot.chieftain.shotgun.doublefire.perf.lagpeek "Off"
+rbot.chieftain.shotgun.doublefire.perf.lagpeek.debugmode "Off"
+rbot.chieftain.shotgun.doublefire.perf.lagpeek.fakelatency "Off"
+rbot.chieftain.shotgun.doublefire.perf.lagpeek.fakelatency.adjuster 200.0
+rbot.chieftain.shotgun.doublefire.perf.lagpeek.hitboxscan "Medium"
+rbot.chieftain.shotgun.doublefire.speed "Automatic"
+rbot.chieftain.shotgun.doublefire.speed.adjuster 16.0
+rbot.chieftain.shotgun.noscopehc.dfhc.noscoped 50.0
+rbot.chieftain.shotgun.noscopehc.dfhc.scoped 50.0
+rbot.chieftain.shotgun.noscopehc.enable "Off"
+rbot.chieftain.shotgun.noscopehc.regularhc.noscoped 50.0
+rbot.chieftain.shotgun.noscopehc.regularhc.scoped 50.0
+rbot.chieftain.smg.dobulefire.perf.lagpeek.value 0.14
+rbot.chieftain.smg.doublefire.charging.delay 500.0
+rbot.chieftain.smg.doublefire.chargingtype "Off"
+rbot.chieftain.smg.doublefire.mode "Chargeable without recharge"
+rbot.chieftain.smg.doublefire.perf.dislby "Off"
+rbot.chieftain.smg.doublefire.perf.lagpeek "Off"
+rbot.chieftain.smg.doublefire.perf.lagpeek.debugmode "Off"
+rbot.chieftain.smg.doublefire.perf.lagpeek.fakelatency "Off"
+rbot.chieftain.smg.doublefire.perf.lagpeek.fakelatency.adjuster 200.0
+rbot.chieftain.smg.doublefire.perf.lagpeek.hitboxscan "Medium"
+rbot.chieftain.smg.doublefire.speed "Automatic"
+rbot.chieftain.smg.doublefire.speed.adjuster 16.0
+rbot.chieftain.smg.noscopehc.dfhc.noscoped 50.0
+rbot.chieftain.smg.noscopehc.dfhc.scoped 50.0
+rbot.chieftain.smg.noscopehc.enable "Off"
+rbot.chieftain.smg.noscopehc.regularhc.noscoped 50.0
+rbot.chieftain.smg.noscopehc.regularhc.scoped 50.0
+rbot.chieftain.sniper.dobulefire.perf.lagpeek.value 0.125
+rbot.chieftain.sniper.doublefire.charging.delay 600.0
+rbot.chieftain.sniper.doublefire.chargingtype "Minimal"
+rbot.chieftain.sniper.doublefire.mode "Rechargeable"
+rbot.chieftain.sniper.doublefire.perf.dislby "Off"
+rbot.chieftain.sniper.doublefire.perf.lagpeek "On"
+rbot.chieftain.sniper.doublefire.perf.lagpeek.debugmode "Off"
+rbot.chieftain.sniper.doublefire.perf.lagpeek.fakelatency "Custom"
+rbot.chieftain.sniper.doublefire.perf.lagpeek.fakelatency.adjuster 145.0
+rbot.chieftain.sniper.doublefire.perf.lagpeek.hitboxscan "High"
+rbot.chieftain.sniper.doublefire.speed "Automatic"
+rbot.chieftain.sniper.doublefire.speed.adjuster 16.0
+rbot.chieftain.sniper.noscopehc.dfhc.noscoped 50.0
+rbot.chieftain.sniper.noscopehc.dfhc.scoped 50.0
+rbot.chieftain.sniper.noscopehc.enable "On"
+rbot.chieftain.sniper.noscopehc.regularhc.noscoped 2.0
+rbot.chieftain.sniper.noscopehc.regularhc.scoped 88.0
+rbot.chieftain.visuals.indicator.thirperson "Off"
+rbot.chieftain.visuals.indicator.thirperson.visuals.indicator.thirperson.backgroundclr 0 0 0 70
+rbot.chieftain.visuals.indicator.thirperson.visuals.indicator.thirperson.textclr 255 255 255 255
+rbot.flex_nade 
+rbot.flex_nade.nade_activation_dist 60.0
+rbot.flex_nade.nade_back_color 0 0 0 120
+rbot.flex_nade.nade_circle_color 171 153 242 255
+rbot.flex_nade.nade_draw_dist 1000.0
+rbot.flex_nade.nade_enable "On"
+rbot.flex_nade.nade_fixpredict "Off"
+rbot.flex_nade.nade_fov 250.0
+rbot.flex_nade.nade_line_color 171 153 242 255
+rbot.flex_nade.nade_pdraw_dist 100.0
+rbot.flex_nade.nade_text_color 171 153 242 255
 rbot.hitscan 
-rbot.hitscan.advanced "Sniper"
+rbot.hitscan.advanced "Auto Sniper"
 rbot.hitscan.advanced.asniper 
-rbot.hitscan.advanced.asniper.precisehitscan "On"
+rbot.hitscan.advanced.asniper.precisehitscan "Off"
 rbot.hitscan.advanced.asniper.predictive "On"
 rbot.hitscan.advanced.hpistol 
 rbot.hitscan.advanced.hpistol.precisehitscan "Off"
@@ -1124,7 +1255,7 @@ rbot.hitscan.advanced.rifle
 rbot.hitscan.advanced.rifle.precisehitscan "Off"
 rbot.hitscan.advanced.rifle.predictive "Off"
 rbot.hitscan.advanced.scout 
-rbot.hitscan.advanced.scout.precisehitscan "On"
+rbot.hitscan.advanced.scout.precisehitscan "Off"
 rbot.hitscan.advanced.scout.predictive "Off"
 rbot.hitscan.advanced.shared 
 rbot.hitscan.advanced.shared.precisehitscan "Off"
@@ -1142,7 +1273,7 @@ rbot.hitscan.advanced.zeus
 rbot.hitscan.advanced.zeus.precisehitscan "Off"
 rbot.hitscan.advanced.zeus.predictive "Off"
 rbot.hitscan.maxprocessingtime 75.0
-rbot.hitscan.mode "Sniper"
+rbot.hitscan.mode "Auto Sniper"
 rbot.hitscan.mode.asniper 
 rbot.hitscan.mode.asniper.autowall "On"
 rbot.hitscan.mode.asniper.bodyaim 
@@ -1156,7 +1287,7 @@ rbot.hitscan.mode.asniper.forcesafe.head "Off"
 rbot.hitscan.mode.asniper.forcesafe.limbs "Off"
 rbot.hitscan.mode.asniper.prefersafe 
 rbot.hitscan.mode.asniper.prefersafe.body "On"
-rbot.hitscan.mode.asniper.prefersafe.head "On"
+rbot.hitscan.mode.asniper.prefersafe.head "Off"
 rbot.hitscan.mode.asniper.prefersafe.limbs "On"
 rbot.hitscan.mode.hpistol 
 rbot.hitscan.mode.hpistol.autowall "On"
@@ -1287,7 +1418,7 @@ rbot.hitscan.mode.sniper.bodyaim.onshot "On"
 rbot.hitscan.mode.sniper.bodyaim.safepoint "On"
 rbot.hitscan.mode.sniper.forcesafe 
 rbot.hitscan.mode.sniper.forcesafe.body "Off"
-rbot.hitscan.mode.sniper.forcesafe.head "On"
+rbot.hitscan.mode.sniper.forcesafe.head "Off"
 rbot.hitscan.mode.sniper.forcesafe.limbs "On"
 rbot.hitscan.mode.sniper.prefersafe 
 rbot.hitscan.mode.sniper.prefersafe.body "On"
@@ -1308,19 +1439,19 @@ rbot.hitscan.mode.zeus.prefersafe
 rbot.hitscan.mode.zeus.prefersafe.body "Off"
 rbot.hitscan.mode.zeus.prefersafe.head "Off"
 rbot.hitscan.mode.zeus.prefersafe.limbs "Off"
-rbot.hitscan.points "Sniper"
+rbot.hitscan.points "Auto Sniper"
 rbot.hitscan.points.asniper 
 rbot.hitscan.points.asniper.scale 3 3 2 4 4 2 2 2 
 rbot.hitscan.points.hpistol 
-rbot.hitscan.points.hpistol.scale 3 3 0 4 4 2 2 2 
+rbot.hitscan.points.hpistol.scale 3 3 2 3 4 2 2 1 
 rbot.hitscan.points.lmg 
 rbot.hitscan.points.lmg.scale 1 0 0 0 0 0 0 0 
 rbot.hitscan.points.pistol 
-rbot.hitscan.points.pistol.scale 3 3 0 3 0 2 2 2 
+rbot.hitscan.points.pistol.scale 3 3 0 3 3 2 2 2 
 rbot.hitscan.points.rifle 
 rbot.hitscan.points.rifle.scale 1 0 0 0 0 0 0 0 
 rbot.hitscan.points.scout 
-rbot.hitscan.points.scout.scale 2 3 2 3 4 2 2 0 
+rbot.hitscan.points.scout.scale 3 3 2 3 4 2 2 1 
 rbot.hitscan.points.shared 
 rbot.hitscan.points.shared.scale 1 1 0 1 0 0 0 0 
 rbot.hitscan.points.shotgun 
@@ -1332,59 +1463,26 @@ rbot.hitscan.points.sniper.scale 1 3 0 3 4 0 0 0
 rbot.hitscan.points.zeus 
 rbot.hitscan.points.zeus.scale 0 3 0 3 3 0 0 0 
 rbot.master "On"
-rbot.minicord.tab 
-rbot.minicord.tab.minicord.draw.circle "Off"
-rbot.minicord.tab.minicord.draw.circle.minicord.draw.circle.color 0 220 83 255
-rbot.minicord.tab.minicord.draw.ticks "On"
-rbot.minicord.tab.minicord.draw.ticks.minicord.draw.ticks.color 0 220 83 255
-rbot.minicord.tab.minicord.other.aspectratio 120.0
-rbot.minicord.tab.minicord.other.crosshair "On"
-rbot.minicord.tab.minicord.other.dtautopeek "On"
-rbot.minicord.tab.minicord.other.dtautopeek.freestanding "On"
-rbot.minicord.tab.minicord.other.dtautopeek.optimalticks "On"
-rbot.minicord.tab.minicord.other.dtautopeek.pingspike "On"
-rbot.minicord.tab.minicord.other.exposure.slider 60.0
-rbot.minicord.tab.minicord.rbot.doublefire.debug "Off"
-rbot.minicord.tab.minicord.rbot.doublefire.enable "Off"
-rbot.minicord.tab.minicord.rbot.doublefire.mode "Speed burst + lag on peek"
-rbot.minicord.tab.minicord.rbot.doublefire.prediction.fakelags "Use double fire"
-rbot.minicord.tab.minicord.rbot.doublefire.prediction.mode "Dynamic [beta]"
-rbot.minicord.tab.minicord.rbot.doublefire.prediction.scan "High"
-rbot.minicord.tab.minicord.rbot.doublefire.prediction.value 0.125
-rbot.minicord.tab.minicord.rbot.doublefire.speed "Automatic"
-rbot.minicord.tab.minicord.rbot.fakeduck.accuracy "Slow"
-rbot.minicord.tab.minicord.rbot.fakeduck.inaccuracy "Slow (stable)"
-rbot.minicord.tab.minicord.rbot.fakeduck.speed "Automatic"
-rbot.minicord.tab.minicord.rbot.fakelags.factor 16.0
-rbot.minicord.tab.minicord.rbot.fakelags.type "Jitter"
-rbot.minicord.tab.minicord.rbot.noscopehc.enable "On"
-rbot.minicord.tab.minicord.rbot.noscopehc.noscopefdvalue 15.0
-rbot.minicord.tab.minicord.rbot.noscopehc.noscopevalue 35.0
-rbot.minicord.tab.minicord.rbot.noscopehc.scopefdvalue 75.0
-rbot.minicord.tab.minicord.rbot.noscopehc.scopevalue 88.0
-rbot.minicord.tab.minicord.rbot.revolver "On"
-rbot.minicord.tab.minicord.rbot.sv_maxusrcmdprocessticks_combo "Automatic"
-rbot.minicord.tab.minicord.rbot.sv_maxusrcmdprocessticks_slider 16.0
 resolver "On"
 spectators 71 397 true
 sphead "Default"
 theme 
 theme.footer 
 theme.footer.bg 38 38 38 255
-theme.footer.text 140 152 239 255
+theme.footer.text 0 177 255 255
 theme.header 
 theme.header.bg 25 25 25 255
-theme.header.line 140 152 239 255
+theme.header.line 0 177 255 255
 theme.header.text 255 255 255 255
 theme.nav 
 theme.nav.active 38 38 38 255
 theme.nav.bg 19 19 19 0
-theme.nav.shadow 140 152 239 255
+theme.nav.shadow 0 177 255 255
 theme.nav.text 255 255 255 255
 theme.tablist 
 theme.tablist.shadow 140 152 239 35
 theme.tablist.tabactivebg 38 38 38 255
-theme.tablist.tabdecorator 140 152 239 255
+theme.tablist.tabdecorator 0 177 255 255
 theme.tablist.text 255 255 255 106
 theme.tablist.textactive 255 255 255 255
 theme.ui 
@@ -1398,9 +1496,11 @@ bindtoggle "Mouse4" rbot.accuracy.weapon.scout.doublefire "Off" "Rapid" 1
 bindtoggle "Mouse4" rbot.accuracy.weapon.sniper.doublefire "Off" "Rapid" 2
 bindtoggle "Mouse4" rbot.minicord.tab.minicord.rbot.doublefire.forcekey "Off" "On" 3
 bindtoggle "Mouse4" rbot.minicord.tab.minicord.rbot.doublefire.enable "Off" "On" 4
-bindtoggle "Capslock" rbot.antiaim.condition.shiftonshot "Off" "On" 0
-bindtoggle "Left" rbot.accuracy.weapon.pistol.Chicken.dynamic_min_dmg.DamageVisible "20.0" "100.0" 0
-bindtoggle "Left" rbot.accuracy.weapon.pistol.Chicken.dynamic_min_dmg.DamageInvisible "20.0" "101.0" 1
+bindtoggle "Mouse4" rbot.Chieftain.scout.doublefire.mode "Off" "Rechargeable" 5
+bindtoggle "Mouse4" rbot.Chieftain.asniper.doublefire.mode "Off" "Rechargeable" 6
+bindtoggle "Mouse4" rbot.Chieftain.sniper.doublefire.mode "Off" "Rechargeable" 7
+bindtoggle "Mouse4" rbot.Chieftain.pistol.doublefire.mode "Off" "Rechargeable" 8
+bindtoggle "Mouse4" rbot.chieftain.doublefire.enable "Off" "On" 9
 bindtoggle "Numpad 4" rbot.accuracy.weapon.asniper.Chicken.dynamic_min_dmg.DamageVisible "51.0" "7.0" 0
 bindtoggle "Numpad 4" rbot.accuracy.weapon.scout.Chicken.dynamic_min_dmg.DamageInvisible "101.0" "10.0" 1
 bindtoggle "Numpad 4" rbot.accuracy.weapon.scout.Chicken.dynamic_min_dmg.DamageVisible "101.0" "10.0" 2
@@ -1409,6 +1509,19 @@ bindtoggle "Numpad 4" rbot.accuracy.weapon.sniper.Chicken.dynamic_min_dmg.Damage
 bindtoggle "Numpad 4" rbot.accuracy.weapon.hpistol.Chicken.dynamic_min_dmg.DamageInvisible "51.0" "20.0" 5
 bindtoggle "Numpad 4" rbot.accuracy.weapon.hpistol.Chicken.dynamic_min_dmg.DamageVisible "44.0" "20.0" 6
 bindtoggle "Numpad 4" rbot.accuracy.weapon.asniper.Chicken.dynamic_min_dmg.DamageInvisible "38.0" "7.0" 7
+bindtoggle "Numpad 4" rbot.accuracy.weapon.pistol.Chicken.dynamic_min_dmg.DamageVisible "20.0" "100.0" 8
+bindtoggle "Numpad 4" rbot.accuracy.weapon.pistol.Chicken.dynamic_min_dmg.DamageInvisible "20.0" "100.0" 9
+bindtoggle "Numpad 4" rbot.accuracy.weapon.scout.mindmg "101.0" "12.0" 10
+bindtoggle "Numpad 4" rbot.accuracy.weapon.hpistol.mindmg "38.0" "20.0" 11
+bindtoggle "Numpad 4" rbot.accuracy.weapon.sniper.mindmg "102.0" "20.0" 12
+bindtoggle "Numpad 4" rbot.accuracy.weapon.sniper.hitchance "88.0" "75.0" 13
+bindtoggle "Numpad 4" rbot.accuracy.weapon.hpistol.hitchance "70.0" "60.0" 14
+bindtoggle "Numpad 4" rbot.chieftain.asniper.noscopehc.regularhc.scoped "88.0" "70.0" 15
+bindtoggle "Numpad 4" rbot.chieftain.asniper.noscopehc.dfhc.scoped "75.0" "3.0" 16
+bindtoggle "Numpad 4" rbot.accuracy.weapon.asniper.mindmg "38.0" "7.0" 17
+bindtoggle "Numpad 4" rbot.accuracy.weapon.pistol.mindmg "100.0" "20.0" 18
+bindtoggle "Numpad 4" rbot.accuracy.weapon.pistol.hitchance "75.0" "65.0" 19
+bindtoggle "Numpad 8" rbot.antiaim.condition.shiftonshot "Off" "On" 0
 unalias
 alias cls "clear"
 alias lyb "rbot.antiaim.advanced.antialign"
@@ -1424,18 +1537,18 @@ alias autowallon "rbot.hitscan.mode.pistol.autowall 1; rbot.hitscan.mode.hpistol
 alias autowalloff "rbot.hitscan.mode.pistol.autowall 0; rbot.hitscan.mode.hpistol.autowall 0; rbot.hitscan.mode.smg.autowall 0; rbot.hitscan.mode.rifle.autowall 0; rbot.hitscan.mode.shotgun.autowall 0; rbot.hitscan.mode.scout.autowall 0; rbot.hitscan.mode.asniper.autowall 0; rbot.hitscan.mode.sniper.autowall 0; rbot.hitscan.mode.lmg.autowall 0; rbot.accuracy.weapon.sniper.mindmg 100; rbot.accuracy.weapon.pistol.mindmg 25; rbot.accuracy.weapon.hpistol.mindmg 60; rbot.accuracy.weapon.smg.mindmg 24; rbot.accuracy.weapon.rifle.mindmg 90; rbot.accuracy.weapon.shotgun.mindmg 10; rbot.accuracy.weapon.scout.mindmg 80; rbot.accuracy.weapon.asniper.mindmg 15; rbot.accuracy.weapon.lmg.mindmg 50; rbot.accuracy.weapon.zeus.mindmg 100;"
 alias auto10 "rbot.accuracy.weapon.pistol.mindmg 10; rbot.accuracy.weapon.zeus.mindmg 10; rbot.accuracy.weapon.hpistol.mindmg 10; rbot.accuracy.weapon.smg.mindmg 10; rbot.accuracy.weapon.rifle.mindmg 10; rbot.accuracy.weapon.shotgun.mindmg 10; rbot.accuracy.weapon.scout.mindmg 10; rbot.accuracy.weapon.asniper.mindmg 10; rbot.accuracy.weapon.sniper.mindmg 10; rbot.accuracy.weapon.lmg.mindmg 10;"
 skin.clear
-skin.add "weapon_tec9" "gs_tec9_decimator" "0.0" "0" "0" "" "" "" "" "" ""
-skin.add "weapon_usp_silencer" "am_intelligence_magenta" "0.0" "0" "0" "" "" "" "" "" ""
 skin.add "weapon_glock" "gs_glock_polymer" "0.0" "0" "0" "" "" "" "" "" ""
-skin.add "weapon_g3sg1" "gs_g3sg1_disrupt" "0.0" "0" "0" "" "" "" "" "" ""
-skin.add "weapon_ssg08" "cu_ssg08_chromatic" "0.0" "0" "0" "" "" "" "" "" ""
 skin.add "weapon_knife_karambit" "aq_oiled" "0.0" "387" "0" "" "" "" "" "" ""
-skin.add "sporty_gloves" "sporty_slingshot" "0.0" "387" "0" "" "" "" "" "" ""
 skin.add "weapon_elite" "gs_dual_elites_dezastre" "0.0" "387" "0" "" "" "" "" "" ""
-skin.add "weapon_cz75a" "cu_cz75_whirlwind" "0.0" "387" "0" "" "" "" "" "" ""
 skin.add "weapon_p250" "cu_p250_cassette" "0.0" "387" "0" "" "" "" "" "" ""
 skin.add "weapon_fiveseven" "aa_fade_red_blue" "0.0" "387" "0" "" "" "" "" "" ""
-skin.add "weapon_awp" "aa_awp_fade" "0.0" "387" "0" "" "" "" "" "" ""
-skin.add "weapon_scar20" "gs_scar20_bloodsport" "0.0" "387" "0" "" "" "" "" "" ""
-skin.add "customplayer_tm_professional_varh" "" "0.0" "0" "0" "" "" "" "" "" ""
-skin.add "weapon_deagle" "gs_deagle_mecha" "0.0" "0" "0" "" "" "" "" "" ""
+skin.add "customplayer_tm_professional_varj" "" "0.0" "0" "0" "" "" "" "" "" ""
+skin.add "motorcycle_gloves" "motorcycle_smoke" "0.0" "0" "0" "" "" "" "" "" ""
+skin.add "weapon_deagle" "cu_deag_printstream" "0.0" "0" "0" "" "" "" "" "" ""
+skin.add "weapon_awp" "gs_awp_gungnir" "0.0" "0" "0" "" "" "" "" "" ""
+skin.add "weapon_ssg08" "gs_ssg08_checker" "0.0" "0" "0" "" "" "" "" "" ""
+skin.add "weapon_scar20" "gs_scar20_enforcer" "0.0" "0" "0" "" "" "" "" "" ""
+skin.add "weapon_g3sg1" "hy_arctic" "0.0" "0" "0" "" "" "" "" "" ""
+skin.add "weapon_tec9" "gs_tec9_decimator" "0.0" "0" "0" "" "" "" "" "" ""
+skin.add "weapon_usp_silencer" "cu_usps_noir" "0.0" "0" "0" "" "" "" "" "" ""
+skin.add "weapon_cz75a" "gs_cz75_tread" "0.0" "0" "0" "" "" "" "" "" ""
