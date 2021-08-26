@@ -52,6 +52,16 @@ local function lp_weapon_id(WEAPONID)
 end
 
 callbacks.Register('Draw', 'current_weapon_group', function()
+    if not engine_GetServerIP() or engine_GetServerIP() then
+        if entities_GetLocalPlayer() then
+            if not entities_GetLocalPlayer():IsAlive() then
+                return
+            end
+        else
+            return
+        end
+    end
+    
     --Iterate through all weapon groups.
     for k, v in pairs(WEAPON_GROUPS_NAME) do
         --If the ID of the current weapon is not equal to one of the ID table, then set the 'global' group in the menu.
