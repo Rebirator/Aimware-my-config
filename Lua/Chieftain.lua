@@ -3,7 +3,7 @@
                                 Chieftain made by GLadiator                                       
 
   Also, a special big thanks to all the people below, without them many functions would not exist:
-  	        Chicken4676 and John.k for visible check and velocity prediction for this             
+            Chicken4676 and John.k for visible check and velocity prediction for this             
                   2878713023 for Drag, pos.save, GradientRectV and GradientRectH                  
                       Sestain for making it clear how to do the "idealtick"                         
                                   filka_nv for freestanding fix                                     
