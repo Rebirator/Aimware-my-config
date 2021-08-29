@@ -1160,10 +1160,6 @@ local function autopeek_settings(getmaxprocessticks)
     if gui_GetValue('rbot.accuracy.movement.autopeektype') == 0 then
         if input_IsButtonDown(gui_Reference('Ragebot', 'Accuracy', 'Movement', 'Auto Peek Key'):GetValue()) then
             autopeek_is_active = true
-
-            CHIEFTAIN_AUTOPEEK_SETTINGS_DOUBLEFIRE['KNIFE'][1]:SetValue(1)
-            CHIEFTAIN_AUTOPEEK_SETTINGS_FREESTANDING['KNIFE'][1]:SetValue(0)
-            CHIEFTAIN_AUTOPEEK_SETTINGS_MINIMUM_DAMAGE['KNIFE'][1]:SetValue(1)
         elseif input_IsButtonReleased(gui_Reference('Ragebot', 'Accuracy', 'Movement', 'Auto Peek Key'):GetValue()) then
             autopeek_is_active = false
         end
@@ -1174,14 +1170,30 @@ local function autopeek_settings(getmaxprocessticks)
             else
                 autopeek_is_active = false
             end
-
-            CHIEFTAIN_AUTOPEEK_SETTINGS_DOUBLEFIRE['KNIFE'][1]:SetValue(1)
-            CHIEFTAIN_AUTOPEEK_SETTINGS_FREESTANDING['KNIFE'][1]:SetValue(0)
-            CHIEFTAIN_AUTOPEEK_SETTINGS_MINIMUM_DAMAGE['KNIFE'][1]:SetValue(1)
         end
     end
 
     if autopeek_is_active == true then
+        if WEAPON_CURRENT_GROUP == 'KNIFE' then
+            gui_SetValue('rbot.antiaim.advanced.autodir.edges', CACHE_AUTODIR_EDGE)
+            gui_SetValue('rbot.antiaim.advanced.autodir.targets', CACHE_AUTODIR_TARGET)
+
+            gui_SetValue('rbot.antiaim.left', CACHE_EDGE_LEFT)
+            gui_SetValue('rbot.antiaim.right', CACHE_EDGE_RIGHT)
+
+            gui_SetValue('rbot.accuracy.weapon.pistol.mindmg', CACHE_WPNDMG_PISTOL)
+            gui_SetValue('rbot.accuracy.weapon.hpistol.mindmg', CACHE_WPNDMG_HPISTOL)
+            gui_SetValue('rbot.accuracy.weapon.smg.mindmg', CACHE_WPNDMG_SMG)
+            gui_SetValue('rbot.accuracy.weapon.rifle.mindmg', CACHE_WPNDMG_RIFLE)
+            gui_SetValue('rbot.accuracy.weapon.shotgun.mindmg', CACHE_WPNDMG_SHOTGUN)
+            gui_SetValue('rbot.accuracy.weapon.scout.mindmg', CACHE_WPNDMG_SCOUT)
+            gui_SetValue('rbot.accuracy.weapon.asniper.mindmg', CACHE_WPNDMG_ASNIPER)
+            gui_SetValue('rbot.accuracy.weapon.sniper.mindmg', CACHE_WPNDMG_SNIPER)
+            gui_SetValue('rbot.accuracy.weapon.lmg.mindmg', CACHE_WPNDMG_LMG)
+
+            return
+        end
+
         if CHIEFTAIN_AUTOPEEK_SETTINGS_DOUBLEFIRE[WEAPON_CURRENT_GROUP][1]:GetValue() then
             CHIEFTAIN_DOUBLEFIRE_ENABLE:SetValue(1)
         end
