@@ -572,12 +572,14 @@ local function menuсontroler()
             if not entities_GetLocalPlayer():IsAlive() then
                 CHIEFTAIN_NOT_SUPPORT_GROUP:SetInvisible(false)
                 CHIEFTAIN_SUBTAB_DOUBLEFIRE:SetInvisible(true)
+                CHIEFTAIN_SUBTAB_AUTOPEEK:SetInvisible(true)
                 CHIEFTAIN_SUBTAB_NOSCOPEHC:SetInvisible(true)
                 return
             end
         else
             CHIEFTAIN_NOT_SUPPORT_GROUP:SetInvisible(false)
             CHIEFTAIN_SUBTAB_DOUBLEFIRE:SetInvisible(true)
+            CHIEFTAIN_SUBTAB_AUTOPEEK:SetInvisible(true)
             CHIEFTAIN_SUBTAB_NOSCOPEHC:SetInvisible(true)
             return
         end
