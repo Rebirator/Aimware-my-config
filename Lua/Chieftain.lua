@@ -1153,10 +1153,6 @@ local function autopeek_settings(getmaxprocessticks)
 		return
 	end
 
-    if not CHIEFTAIN_AUTOPEEK_SETTINGS_DOUBLEFIRE[WEAPON_CURRENT_GROUP][1]:GetValue() and not CHIEFTAIN_AUTOPEEK_SETTINGS_FREESTANDING[WEAPON_CURRENT_GROUP][1]:GetValue() and not CHIEFTAIN_AUTOPEEK_SETTINGS_MINIMUM_DAMAGE[WEAPON_CURRENT_GROUP][1]:GetValue() then
-        return
-    end
-
     if gui_GetValue('rbot.accuracy.movement.autopeektype') == 0 then
         if input_IsButtonDown(gui_Reference('Ragebot', 'Accuracy', 'Movement', 'Auto Peek Key'):GetValue()) then
             autopeek_is_active = true
@@ -1174,7 +1170,7 @@ local function autopeek_settings(getmaxprocessticks)
     end
 
     if autopeek_is_active == true then
-        if WEAPON_CURRENT_GROUP == 'KNIFE' then
+        if WEAPON_CURRENT_GROUP == 'GLOBAL' or WEAPON_CURRENT_GROUP == 'KNIFE' then
             gui_SetValue('rbot.antiaim.advanced.autodir.edges', CACHE_AUTODIR_EDGE)
             gui_SetValue('rbot.antiaim.advanced.autodir.targets', CACHE_AUTODIR_TARGET)
 
@@ -1247,6 +1243,26 @@ local function autopeek_settings(getmaxprocessticks)
 
         autopeek_state = true
     elseif autopeek_is_active == false then
+        if WEAPON_CURRENT_GROUP == 'GLOBAL' or WEAPON_CURRENT_GROUP == 'KNIFE' then
+            gui_SetValue('rbot.antiaim.advanced.autodir.edges', CACHE_AUTODIR_EDGE)
+            gui_SetValue('rbot.antiaim.advanced.autodir.targets', CACHE_AUTODIR_TARGET)
+
+            gui_SetValue('rbot.antiaim.left', CACHE_EDGE_LEFT)
+            gui_SetValue('rbot.antiaim.right', CACHE_EDGE_RIGHT)
+
+            gui_SetValue('rbot.accuracy.weapon.pistol.mindmg', CACHE_WPNDMG_PISTOL)
+            gui_SetValue('rbot.accuracy.weapon.hpistol.mindmg', CACHE_WPNDMG_HPISTOL)
+            gui_SetValue('rbot.accuracy.weapon.smg.mindmg', CACHE_WPNDMG_SMG)
+            gui_SetValue('rbot.accuracy.weapon.rifle.mindmg', CACHE_WPNDMG_RIFLE)
+            gui_SetValue('rbot.accuracy.weapon.shotgun.mindmg', CACHE_WPNDMG_SHOTGUN)
+            gui_SetValue('rbot.accuracy.weapon.scout.mindmg', CACHE_WPNDMG_SCOUT)
+            gui_SetValue('rbot.accuracy.weapon.asniper.mindmg', CACHE_WPNDMG_ASNIPER)
+            gui_SetValue('rbot.accuracy.weapon.sniper.mindmg', CACHE_WPNDMG_SNIPER)
+            gui_SetValue('rbot.accuracy.weapon.lmg.mindmg', CACHE_WPNDMG_LMG)
+
+            return
+        end
+        
         if CHIEFTAIN_AUTOPEEK_SETTINGS_DOUBLEFIRE[WEAPON_CURRENT_GROUP][1]:GetValue() then
             CHIEFTAIN_DOUBLEFIRE_ENABLE:SetValue(CACHE_DOUBLEFIRE)
         end
@@ -1656,6 +1672,7 @@ callbacks.Register('Draw', 'ChieftainDrawMain', function()
     fakelags(getmaxprocessticks)
     fakeduck(getmaxprocessticks)
     doublefire_bind()
+    autopeek_settings(getmaxprocessticks)
     aspect_ratio()
     world_modulation()
 
@@ -1666,7 +1683,6 @@ callbacks.Register('Draw', 'ChieftainDrawMain', function()
     fakelatency()
     doublefire(getmaxprocessticks)
     lag_on_peek()
-    autopeek_settings(getmaxprocessticks)
     no_scope_hc()
 
     if WEAPON_CURRENT_GROUP == 'KNIFE' then
