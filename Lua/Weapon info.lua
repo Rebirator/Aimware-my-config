@@ -3,7 +3,6 @@
 --                    Current weapon group from Chieftain by GLadiator
 --	                   GradientRectV and GradientRectH by 2878713023 				        
 --                            Drag and pos.save by 2878713023                               
---                               Choked commands by w4bbit                                  
 --                                   LC ind.by Clipper                                      
 ------------------------------------------Credits-------------------------------------------
 
@@ -41,7 +40,7 @@ local WEAPONID_LIGHTMACHINEGUNS = { 14, 28 }
 local WEAPONID_KNIFES           = { 41, 42, 59, 69, 74, 75, 76, 78, 500, 503, 505, 506, 507, 508, 509, 512, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 525 }
 local WEAPONID_ALLWEAPONS       = { WEAPONID_PISTOLS, WEAPONID_HEAVYPISTOLS, WEAPONID_SUBMACHINEGUNS, WEAPONID_RIFLES, WEAPONID_SHOTGUNS, WEAPONID_SCOUT, WEAPONID_AUTOSNIPERS, WEAPONID_SNIPER, WEAPONID_LIGHTMACHINEGUNS, WEAPONID_KNIFES }
 local WEAPON_GROUPS_NAME        = { 'PISTOL', 'HPISTOL', 'SMG', 'RIFLE', 'SHOTGUN', 'SCOUT', 'ASNIPER', 'SNIPER', 'LMG', 'KNIFE' }
-local WEAPON_CURRENT_GROUP      = ''
+local WEAPON_CURRENT_GROUP      = 'GLOBAL'
 
 local function lp_weapon_id(WEAPONID)
     for k, v in pairs(WEAPONID) do
@@ -104,8 +103,6 @@ WEAPON_INFO_THIRDPERSON_POS:SetDescription('Select the position where the weapon
 
 
 local SHIFTED_TICKS = 0
-local chokedCommands = 0
-local prevSendPacket = true
 local originRecords = {}
 
 local function to_int(n)
@@ -245,6 +242,26 @@ local function draw_GradientRectH(x, y, w, h, clr, clr1)
     a, a1 = nil, nil
 end
 
+
+local function lc_status_and_shitftedticks(UserCmd)
+    if UserCmd.sendpacket then
+        table.insert(originRecords, entities_GetLocalPlayer():GetAbsOrigin())
+    end
+
+    if gui_GetValue('rbot.antiaim.advanced.antialign') == 0 then
+        if gui_GetValue('rbot.accuracy.weapon.' .. string_lower(WEAPON_CURRENT_GROUP) .. '.doublefirefl') > 1 then
+            SHIFTED_TICKS = (gui_Reference('Misc', 'General', 'Server', 'sv_maxusrcmdprocessticks'):GetValue() - (gui_GetValue('rbot.accuracy.weapon.' .. string_lower(WEAPON_CURRENT_GROUP) .. '.doublefirefl') - 1) - 2)
+        else
+            SHIFTED_TICKS = (gui_Reference('Misc', 'General', 'Server', 'sv_maxusrcmdprocessticks'):GetValue() - 2)
+        end
+    else
+        if gui_GetValue('rbot.accuracy.weapon.' .. string_lower(WEAPON_CURRENT_GROUP) .. '.doublefirefl') > 1 then
+            SHIFTED_TICKS = (gui_Reference('Misc', 'General', 'Server', 'sv_maxusrcmdprocessticks'):GetValue() - (gui_GetValue('rbot.accuracy.weapon.' .. string_lower(WEAPON_CURRENT_GROUP) .. '.doublefirefl') - 1) - 1)
+        else
+            SHIFTED_TICKS = (gui_Reference('Misc', 'General', 'Server', 'sv_maxusrcmdprocessticks'):GetValue() - 1)
+        end
+    end
+end
 
 local font = draw_CreateFont("Mini 7 Condensed", 10, 400)
 
@@ -474,31 +491,6 @@ local function weapon_info()
     end
 end
 
-callbacks.Register("CreateMove", 'WeaponInfoCMD', function(UserCmd)
-    if entities_GetLocalPlayer() then
-        if entities_GetLocalPlayer():IsAlive() then
-            if UserCmd.sendpacket then
-                table.insert(originRecords, entities_GetLocalPlayer():GetAbsOrigin())
-            end
-
-            -- increment chokedcommands (like cl_move would have) (not using a ternary here intentionally, ugly otherwise!)
-            if prevSendPacket then
-                chokedCommands = 0
-            else
-                chokedCommands = chokedCommands + 1
-            end
-            -- store our final sendpacket for this cmd
-            prevSendPacket = UserCmd:GetSendPacket()
-
-            if gui_GetValue('rbot.antiaim.advanced.antialign') == 0 then
-                SHIFTED_TICKS = (gui_Reference('Misc', 'General', 'Server', 'sv_maxusrcmdprocessticks'):GetValue() - 1) - chokedCommands
-            else
-                SHIFTED_TICKS = gui_Reference('Misc', 'General', 'Server', 'sv_maxusrcmdprocessticks'):GetValue() - chokedCommands
-            end
-        end
-    end
-end)
-
 callbacks.Register('Draw', 'current_weapon_group', function()
     if not engine_GetServerIP() or engine_GetServerIP() then
         if entities_GetLocalPlayer() then
@@ -523,4 +515,26 @@ callbacks.Register('Draw', 'current_weapon_group', function()
     weapon_info()
 
     return true
+end)
+
+callbacks.Register("CreateMove", 'WeaponInfoCMD', function(UserCmd)
+    if not engine_GetServerIP() or engine_GetServerIP() then
+        if entities_GetLocalPlayer() then
+            if not entities_GetLocalPlayer():IsAlive() then
+                return
+            end
+        else
+            return
+        end
+    end
+
+    if WEAPON_CURRENT_GROUP == 'GLOBAL' or WEAPON_CURRENT_GROUP == 'KNIFE' then
+        return
+    end
+
+    if UserCmd.sendpacket then
+        table.insert(originRecords, entities_GetLocalPlayer():GetAbsOrigin())
+    end
+
+    lc_status_and_shitftedticks(UserCmd)
 end)
