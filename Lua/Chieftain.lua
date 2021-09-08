@@ -7,9 +7,10 @@
                   2878713023 for Drag, pos.save, GradientRectV and GradientRectH                  
                       Sestain for making it clear how to do the "idealtick"                         
                                   filka_nv for freestanding fix                                     
+                                   daerisgay for aspect ratio                                       
                                     Clipper for LC indicator                                        
 
-------------------------------------------Credits-------------------------------------------------]]
+------------------------------------------Credits-----------------------------------------------]]--
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -40,9 +41,9 @@ local input_IsButtonDown, input_IsButtonPressed, input_IsButtonReleased, input_G
       input.IsButtonDown, input.IsButtonPressed, input.IsButtonReleased, input.GetMousePos
 ;
 
-local gui_GetValue, gui_SetValue, gui_Reference, client_GetConVar, client_SetConVar
+local gui_GetValue, gui_SetValue, gui_Reference, client_GetConVar, client_SetConVar, client_Command
 =
-      gui.GetValue, gui.SetValue, gui.Reference, client.GetConVar, client.SetConVar
+      gui.GetValue, gui.SetValue, gui.Reference, client.GetConVar, client.SetConVar, client.Command
 ;
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -143,23 +144,23 @@ end
 
 local CHIEFTAIN_TAB                                     = gui.Tab(gui_Reference('Ragebot'), 'chieftain', '☭ Chieftain ➤')
 
-local CHIEFTAIN_SUBTAB_WEAPONSELECTION                  = gui.Groupbox(CHIEFTAIN_TAB, 'Selected weapon group', 16, 16, 296, 1)
+local CHIEFTAIN_SUBTAB_WEAPONSELECTION                  = gui.Groupbox(CHIEFTAIN_TAB, 'Selected group', 16, 16, 296, 1)
 local CHIEFTAIN_CURRENT_WEAPON                          = gui.Text(CHIEFTAIN_SUBTAB_WEAPONSELECTION, 'Current weapon group: global')
 local CHIEFTAIN_NOT_SUPPORT_GROUP                       = gui.Text(CHIEFTAIN_TAB, 'This weapon group is not supported!')
 CHIEFTAIN_NOT_SUPPORT_GROUP:SetPosX(382)
 CHIEFTAIN_NOT_SUPPORT_GROUP:SetPosY(50)
 
-local CHIEFTAIN_SUBTAB_CHOKE                             = gui.Groupbox(CHIEFTAIN_TAB, 'Fakelags & Fakeduck', 16, 109, 296, 1)
-local CHIEFTAIN_MISC_FAKELAGS_TYPE                      = gui.Combobox(CHIEFTAIN_SUBTAB_CHOKE, 'misc.fakelags.type', 'Fakelags type', 'Normal', 'Adaptive', 'Custom')
-local CHIEFTAIN_MISC_FAKELAGS_JITTER                    = gui.Slider(CHIEFTAIN_SUBTAB_CHOKE, 'misc.fakelags.jitter', 'Jitter factor', 0, 0, 3)
-local CHIEFTAIN_MISC_FAKELAGS_CUSTOM_TYPE               = gui.Combobox(CHIEFTAIN_SUBTAB_CHOKE, 'misc.fakelags.custom.type', 'Fakelags pattern', 'Normal', 'Adaptive', 'Switch')
-local CHIEFTAIN_MISC_FAKELAGS_CUSTOM_FACTOR_MIN         = gui.Slider(CHIEFTAIN_SUBTAB_CHOKE, 'misc.fakelags.custom.factor.min', 'Factor minimum', 16, 3, 61)
-local CHIEFTAIN_MISC_FAKELAGS_CUSTOM_FACTOR_MAX         = gui.Slider(CHIEFTAIN_SUBTAB_CHOKE, 'misc.fakelags.custom.factor.max', 'Factor maximum', 16, 3, 61)
-local CHIEFTAIN_MISC_FAKEDUCK_TYPE                      = gui.Combobox(CHIEFTAIN_SUBTAB_CHOKE, 'misc.fakeduck.type', 'Fakeduck type', 'Accurate, but slow', 'Inaccuracy, but fast')
-local CHIEFTAIN_MISC_FAKEDUCK_SPEED                     = gui.Combobox(CHIEFTAIN_SUBTAB_CHOKE, 'misc.fakeduck.speed', 'Fakeduck speed', 'Automatic', 'Fast', 'Faster', 'Standard', 'Slower', 'Custom')
-local CHIEFTAIN_MISC_FAKEDUCK_SPEED_ADJUSTER            = gui.Slider(CHIEFTAIN_SUBTAB_CHOKE, 'misc.fakeduck.speed.adjuster', 'Fakeduck speed adjuster', 16, 3, 61)
-local CHIEFTAIN_MISC_FAKELATENCY                        = gui.Combobox(CHIEFTAIN_SUBTAB_CHOKE, 'misc.fakelatency', 'Fakelatency', 'Off', 'Low', 'Medium', 'High', 'Maximum', 'Custom')
-local CHIEFTAIN_MISC_FAKELATENCY_ADJUSTER               = gui.Slider(CHIEFTAIN_SUBTAB_CHOKE, 'misc.fakelatency.adjuster', 'Fakelatency adjuster', 200, 0, 1000, 5)
+local CHIEFTAIN_SUBTAB_MISC                             = gui.Groupbox(CHIEFTAIN_TAB, 'Fakelags & Fakeduck', 16, 109, 296, 1)
+local CHIEFTAIN_MISC_FAKELAGS_TYPE                      = gui.Combobox(CHIEFTAIN_SUBTAB_MISC, 'misc.fakelags.type', 'Fakelags type', 'Normal', 'Adaptive', 'Custom')
+local CHIEFTAIN_MISC_FAKELAGS_JITTER                    = gui.Slider(CHIEFTAIN_SUBTAB_MISC, 'misc.fakelags.jitter', 'Jitter factor', 0, 0, 3)
+local CHIEFTAIN_MISC_FAKELAGS_CUSTOM_TYPE               = gui.Combobox(CHIEFTAIN_SUBTAB_MISC, 'misc.fakelags.custom.type', 'Fakelags pattern', 'Normal', 'Adaptive', 'Switch')
+local CHIEFTAIN_MISC_FAKELAGS_CUSTOM_FACTOR_MIN         = gui.Slider(CHIEFTAIN_SUBTAB_MISC, 'misc.fakelags.custom.factor.min', 'Factor minimum', 16, 3, 61)
+local CHIEFTAIN_MISC_FAKELAGS_CUSTOM_FACTOR_MAX         = gui.Slider(CHIEFTAIN_SUBTAB_MISC, 'misc.fakelags.custom.factor.max', 'Factor maximum', 16, 3, 61)
+local CHIEFTAIN_MISC_FAKEDUCK_TYPE                      = gui.Combobox(CHIEFTAIN_SUBTAB_MISC, 'misc.fakeduck.type', 'Fakeduck type', 'Accurate, but slow', 'Inaccuracy, but fast')
+local CHIEFTAIN_MISC_FAKEDUCK_SPEED                     = gui.Combobox(CHIEFTAIN_SUBTAB_MISC, 'misc.fakeduck.speed', 'Fakeduck factor', 'Automatic', 'Max Process Ticks - 2', 'Max Process Ticks - 1', 'Max Process Ticks', 'Max Process Ticks + 1', 'Custom')
+local CHIEFTAIN_MISC_FAKEDUCK_SPEED_ADJUSTER            = gui.Slider(CHIEFTAIN_SUBTAB_MISC, 'misc.fakeduck.speed.adjuster', 'Fakeduck factor adjuster', 16, 3, 61)
+local CHIEFTAIN_MISC_FAKELATENCY                        = gui.Combobox(CHIEFTAIN_SUBTAB_MISC, 'misc.fakelatency', 'Fakelatency', 'Off', 'Low', 'Medium', 'High', 'Maximum', 'Custom')
+local CHIEFTAIN_MISC_FAKELATENCY_ADJUSTER               = gui.Slider(CHIEFTAIN_SUBTAB_MISC, 'misc.fakelatency.adjuster', 'Fakelatency adjuster', 200, 0, 1000, 5)
 
 local CHIEFTAIN_SUBTAB_VISUALS                          = gui.Groupbox(CHIEFTAIN_TAB, 'Visuals', 16, 550, 296, 1)
 local CHIEFTAIN_VISUALS_WPNINFO                         = gui.Multibox(CHIEFTAIN_SUBTAB_VISUALS, 'Weapon info')
@@ -176,11 +177,18 @@ local CHIEFTAIN_VISUALS_WPNINFO_FIRSTPERSON_X           = gui.Slider(CHIEFTAIN_S
 local CHIEFTAIN_VISUALS_WPNINFO_FIRSTPERSON_Y           = gui.Slider(CHIEFTAIN_SUBTAB_VISUALS, 'visuals.wpninfo.firsperson.y', 'y', 300, 0, 10000, 1)
 CHIEFTAIN_VISUALS_WPNINFO_FIRSTPERSON_X:SetInvisible(true)
 CHIEFTAIN_VISUALS_WPNINFO_FIRSTPERSON_Y:SetInvisible(true)
+local CHIEFTAIN_VISUALS_FPSBOOST                        = gui.Multibox(CHIEFTAIN_SUBTAB_VISUALS, 'Graphic options')
+local CHIEFTAIN_VISUALS_FPSBOOST_SHADOWS                = gui.Checkbox(CHIEFTAIN_VISUALS_FPSBOOST, 'visuals.fpsboost.disshadows', 'Disable shadows', false)
+local CHIEFTAIN_VISUALS_FPSBOOST_3DSKY                  = gui.Checkbox(CHIEFTAIN_VISUALS_FPSBOOST, 'visuals.fpsboost.dis3dsky', 'Disable 3D sky', false)
+local CHIEFTAIN_VISUALS_FPSBOOST_FOG                    = gui.Checkbox(CHIEFTAIN_VISUALS_FPSBOOST, 'visuals.fpsboost.diswaterskyfog', 'Disable water and sky fog', false)
+local CHIEFTAIN_VISUALS_FPSBOOST_BLOOM                  = gui.Checkbox(CHIEFTAIN_VISUALS_FPSBOOST, 'visuals.fpsboost.disbloom', 'Disable bloom', false)
+local CHIEFTAIN_VISUALS_FPSBOOST_BLUR                   = gui.Checkbox(CHIEFTAIN_VISUALS_FPSBOOST, 'visuals.fpsboost.disblur', 'Disable panorama blur and shadow', false)
+local CHIEFTAIN_VISUALS_FPSBOOST_OTHER                  = gui.Checkbox(CHIEFTAIN_VISUALS_FPSBOOST, 'visuals.fpsboost.disother', 'Disable other shit', false)
 local CHIEFTAIN_VISUALS_ASPECTRATIO_VALUE               = gui.Slider(CHIEFTAIN_SUBTAB_VISUALS, 'visuals.aspectratio', 'Aspect ratio', 100, 70, 130, 5)
 local CHIEFTAIN_VISUALS_WORLDEXPOSURE_VALUE             = gui.Slider(CHIEFTAIN_SUBTAB_VISUALS, 'visuals.worldexposure', 'World exposure', 0, 0, 100, 5)
 local CHIEFTAIN_VISUALS_BLOOM_VALUE                     = gui.Slider(CHIEFTAIN_SUBTAB_VISUALS, 'visuals.bloom', 'Bloom', 0, 0, 100, 5)
 local CHIEFTAIN_VISUALS_VIEWMODELAMBIENT_VALUE          = gui.Slider(CHIEFTAIN_SUBTAB_VISUALS, 'visuals.viewmodelambient', 'Viewmodel ambient light', 0, 0, 100, 5)
-local CHIEFTAIN_VISUALS_WORLDAMBIENT_VALUE                   = gui.ColorPicker(CHIEFTAIN_SUBTAB_VISUALS, 'visuals.ambient', 'World ambient light', 0, 0, 0)
+local CHIEFTAIN_VISUALS_WORLDAMBIENT_VALUE              = gui.ColorPicker(CHIEFTAIN_SUBTAB_VISUALS, 'visuals.ambient', 'World ambient light', 0, 0, 0)
 local CHIEFTAIN_VISUALS_FOG_MODULATION                  = gui.Checkbox(CHIEFTAIN_SUBTAB_VISUALS, 'visuals.fogmodul', 'Fog modulation', false)
 local CHIEFTAIN_VISUALS_FOG_MODULATION_COLOR            = gui.ColorPicker(CHIEFTAIN_VISUALS_FOG_MODULATION, 'visuals.fogmodul.color', 'Fog modulation color', 255, 255, 255, 255)
 local CHIEFTAIN_VISUALS_FOG_MODULATION_DENSITY          = gui.Slider(CHIEFTAIN_SUBTAB_VISUALS, 'visuals.fogmodul.density', 'Fog density', 50, 0, 100, 1)
@@ -189,20 +197,20 @@ local CHIEFTAIN_VISUALS_FOG_MODULATION_END              = gui.Slider(CHIEFTAIN_S
 
 local CHIEFTAIN_SUBTAB_DOUBLEFIRE                       = gui.Groupbox(CHIEFTAIN_TAB, 'Double fire', 328, 16, 296, 1)
 local CHIEFTAIN_DOUBLEFIRE_ENABLE                       = gui.Checkbox(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'doublefire.enable', 'Enable', false)
-local CHIEFTAIN_DOUBLEFIRE_MODE                         = gui_Combobox(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'doublefire.mode', 'Mode', 'Select the desired double fire mode.', 'Chargeable without recharge', 'Rechargeable')
+local CHIEFTAIN_DOUBLEFIRE_MODE                         = gui_Combobox(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'doublefire.mode', 'Mode', 'Select the desired double fire mode.', 'None', 'Chargeable without recharge', 'Rechargeable')
 local CHIEFTAIN_DOUBLEFIRE_PERF                         = gui_Multibox(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'Performance options', 'Using performance options increase double fire efficiency.')
 local CHIEFTAIN_DOUBLEFIRE_PERF_DISLBY                  = gui_Checkbox(CHIEFTAIN_DOUBLEFIRE_PERF, 'doublefire.perf.dislby', 'Disable LBY', 'Disabling LBY greatly improves double fire efficiency.', false)
 local CHIEFTAIN_DOUBLEFIRE_PERF_LAGPEEK                 = gui_Checkbox(CHIEFTAIN_DOUBLEFIRE_PERF, 'doublefire.perf.lagpeek', 'Lag on peek [scripted]', 'Lag before the peek forces the enemy to delay.', false)
 local CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM              = gui.Combobox(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'doublefire.chargingtype', 'Gradual charging system', 'Off', 'On')
 local CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM_DELAY        = gui.Slider(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'doublefire.charging.delay', 'Delay before the control charge', 500, 100, 3000, 50)
-local CHIEFTAIN_DOUBLEFIRE_SPEED                        = gui_Combobox(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'doublefire.speed', 'Speed', 'Select double fire speed, or leave automatic.', 'Automatic', 'High ping', 'Reliable', 'Standard', 'Accelerated', 'Custom')
-local CHIEFTAIN_DOUBLEFIRE_SPEED_ADJUSTER               = gui_Slider(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'doublefire.speed.adjuster', 'Speed adjuster', 'How much to shift tickbase for double fire.', 16, 3, 24, 1)
+local CHIEFTAIN_DOUBLEFIRE_TICKBASE                     = gui_Combobox(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'doublefire.tickbase', 'Tickbase shifting', 'Select how much to shifting tickbase, or leave automatic.', 'Depending on the ping', 'Max Process Ticks - 2', 'Max Process Ticks - 1', 'Max Process Ticks', 'Max Process Ticks + 1', 'Custom')
+local CHIEFTAIN_DOUBLEFIRE_TICKBASE_ADJUSTER            = gui_Slider(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'doublefire.tickbase.adjuster', 'Tickbase adjuster', 'Shifting bigger than Max Process Ticks can be unstable. ', 16, 3, 24, 1)
 local CHIEFTAIN_DOUBLEFIRE_FAKELATENCY                  = gui_Combobox(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'doublefire.fakelatency', 'Fakelatency', 'Using fakelatency makes the backtrack of enemies longer.', 'Off', 'Low', 'Medium', 'High', 'Maximum', 'Custom')
 local CHIEFTAIN_DOUBLEFIRE_FAKELATENCY_ADJUSTER         = gui_Slider(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'doublefire.fakelatency.adjuster', 'Fakelatency adjuster', 'By default, servers only support up to 200ms.', 200, 0, 1000, 5)
 
 local CHIEFTAIN_SUBTAB_AUTOPEEK                         = gui.Groupbox(CHIEFTAIN_TAB, 'Autopeek settings', 328, 850, 296, 1)
 local CHIEFTAIN_AUTOPEEK_SETTINGS_DOUBLEFIRE            = gui_Checkbox(CHIEFTAIN_SUBTAB_AUTOPEEK, 'autopeek.doublefire', 'Double fire', 'Always uses double fire when autopeek is active.', false)
-local CHIEFTAIN_AUTOPEEK_SETTINGS_DOUBLEFIRE_ADAPTIVE   = gui_Checkbox(CHIEFTAIN_SUBTAB_AUTOPEEK, 'autopeek.doublefire.adaptive', 'Automatic double fire speed', 'Shifting optimal double fire speed during autopeek.', false)
+local CHIEFTAIN_AUTOPEEK_SETTINGS_DOUBLEFIRE_ADAPTIVE   = gui_Checkbox(CHIEFTAIN_SUBTAB_AUTOPEEK, 'autopeek.doublefire.adaptive', 'Automatic tickbase shifting', 'Shifting optimal double fire tickbase during autopeek.', false)
 local CHIEFTAIN_AUTOPEEK_SETTINGS_FREESTANDING          = gui_Checkbox(CHIEFTAIN_SUBTAB_AUTOPEEK, 'autopeek.freestanding', 'Freestanding', 'Freestanding for a safer peek with autopeek.', false)
 local CHIEFTAIN_AUTOPEEK_SETTINGS_FREESTANDING_FIX      = gui_Checkbox(CHIEFTAIN_SUBTAB_AUTOPEEK, 'autopeek.freestanding.fixer', 'Freestanding correсtion', 'Disables if you completely peek the enemy.', false)
 local CHIEFTAIN_AUTOPEEK_SETTINGS_MINIMUM_DAMAGE        = gui_Checkbox(CHIEFTAIN_SUBTAB_AUTOPEEK, 'autopeek.mindamage', 'Damage override', 'Sets your damage value when autopeek is active.', false)
@@ -224,12 +232,14 @@ CHIEFTAIN_MISC_FAKELATENCY:SetDescription('Using fakelatency makes the backtrack
 CHIEFTAIN_MISC_FAKELATENCY_ADJUSTER:SetDescription('By default, servers only support up to 200ms.')
 CHIEFTAIN_MISC_FAKEDUCK_TYPE:SetDescription('Choose your preferred fakeduck type.')
 CHIEFTAIN_MISC_FAKEDUCK_SPEED:SetDescription('Affects height, speed, and shooting accuracy.')
-CHIEFTAIN_MISC_FAKEDUCK_SPEED_ADJUSTER:SetDescription('Set a custom value for the fakeduck speed.')
+CHIEFTAIN_MISC_FAKEDUCK_SPEED_ADJUSTER:SetDescription('How many fakeduck ticks will be choked.')
 CHIEFTAIN_VISUALS_WPNINFO:SetDescription('Displays information about weapon and anti-aims.')
 CHIEFTAIN_VISUALS_WPNINFO_FIRSTPERSON:SetDescription('Displays weapon info in first person view.')
 CHIEFTAIN_VISUALS_WPNINFO_THIRDPERSON:SetDescription('Displays weapon info in third person view.')
 CHIEFTAIN_VISUALS_WPNINFO_RAINBOW:SetDescription('Turns on the fagot colors mode.')
 CHIEFTAIN_VISUALS_WPNINFO_THIRDPERSON_POS:SetDescription('Select the position where the weapon info will be located.')
+CHIEFTAIN_VISUALS_FPSBOOST:SetDescription('Disabling some graphical elements increases FPS.')
+CHIEFTAIN_VISUALS_FPSBOOST_SHADOWS:SetDescription('After switching on again, you will need to wait a little!')
 CHIEFTAIN_VISUALS_ASPECTRATIO_VALUE:SetDescription('Expanding or narrowing the play space.')
 CHIEFTAIN_VISUALS_WORLDEXPOSURE_VALUE:SetDescription('Exposure, or simply the most correct night mode.')
 CHIEFTAIN_VISUALS_BLOOM_VALUE:SetDescription('Increases and blurs the lighting. Requires post-processing.')
@@ -250,20 +260,8 @@ callbacks.Register("Draw", 'guiEndSetup', function(guiEndSetup)
     local TEXT = 'Current weapon group: '
 
     --If we are not on the server or not alive, then we cannot access the local player, therefore, it remains only to hide all the elements until we have gained access to the local player.
-    if not engine_GetServerIP() or engine_GetServerIP() then
-        if entities_GetLocalPlayer() then
-            if not entities_GetLocalPlayer():IsAlive() then
-                for ID, group in pairs(PERGROUP_ELEMENTS) do
-                    for key, element in pairs(group) do
-                        element[1]:SetInvisible(true)
-                        if PARENT ~= 0 then 
-                            PARENT:SetText(TEXT .. 'global')
-                        end
-                    end
-                end
-                return
-            end
-        else
+    if entities_GetLocalPlayer() then
+        if not entities_GetLocalPlayer():IsAlive() then
             for ID, group in pairs(PERGROUP_ELEMENTS) do
                 for key, element in pairs(group) do
                     element[1]:SetInvisible(true)
@@ -273,7 +271,17 @@ callbacks.Register("Draw", 'guiEndSetup', function(guiEndSetup)
                 end
             end
             return
-        end 
+        end
+    else
+        for ID, group in pairs(PERGROUP_ELEMENTS) do
+            for key, element in pairs(group) do
+                element[1]:SetInvisible(true)
+                if PARENT ~= 0 then 
+                    PARENT:SetText(TEXT .. 'global')
+                end
+            end
+        end
+        return
     end
 
     --Iterate through all weapon groups.
@@ -476,17 +484,31 @@ local function draw_GradientRectH(x, y, w, h, clr, clr1)
 end
 
 local function dt_setup(N)
-    gui_SetValue('rbot.accuracy.weapon.shared.doublefire', 0)
-	gui_SetValue('rbot.accuracy.weapon.pistol.doublefire', N)
-	gui_SetValue('rbot.accuracy.weapon.hpistol.doublefire', N)
-	gui_SetValue('rbot.accuracy.weapon.smg.doublefire', N)
-	gui_SetValue('rbot.accuracy.weapon.rifle.doublefire', N)
-	gui_SetValue('rbot.accuracy.weapon.shotgun.doublefire', N)
-	gui_SetValue('rbot.accuracy.weapon.scout.doublefire', N)
-	gui_SetValue('rbot.accuracy.weapon.asniper.doublefire', N)
-	gui_SetValue('rbot.accuracy.weapon.sniper.doublefire', N)
-	gui_SetValue('rbot.accuracy.weapon.lmg.doublefire', N)
-    gui_SetValue('rbot.accuracy.weapon.knife.doublefire', N)
+    if N ~= 0 then
+        gui_SetValue('rbot.accuracy.weapon.shared.doublefire', 0)
+        gui_SetValue('rbot.accuracy.weapon.pistol.doublefire', CHIEFTAIN_DOUBLEFIRE_MODE['PISTOL'][1]:GetValue())
+        gui_SetValue('rbot.accuracy.weapon.hpistol.doublefire', CHIEFTAIN_DOUBLEFIRE_MODE['HPISTOL'][1]:GetValue())
+        gui_SetValue('rbot.accuracy.weapon.smg.doublefire', CHIEFTAIN_DOUBLEFIRE_MODE['SMG'][1]:GetValue())
+        gui_SetValue('rbot.accuracy.weapon.rifle.doublefire', CHIEFTAIN_DOUBLEFIRE_MODE['RIFLE'][1]:GetValue())
+        gui_SetValue('rbot.accuracy.weapon.shotgun.doublefire', CHIEFTAIN_DOUBLEFIRE_MODE['SHOTGUN'][1]:GetValue())
+        gui_SetValue('rbot.accuracy.weapon.scout.doublefire', CHIEFTAIN_DOUBLEFIRE_MODE['SCOUT'][1]:GetValue())
+        gui_SetValue('rbot.accuracy.weapon.asniper.doublefire', CHIEFTAIN_DOUBLEFIRE_MODE['ASNIPER'][1]:GetValue())
+        gui_SetValue('rbot.accuracy.weapon.sniper.doublefire', CHIEFTAIN_DOUBLEFIRE_MODE['SNIPER'][1]:GetValue())
+        gui_SetValue('rbot.accuracy.weapon.lmg.doublefire', CHIEFTAIN_DOUBLEFIRE_MODE['LMG'][1]:GetValue())
+        gui_SetValue('rbot.accuracy.weapon.knife.doublefire', CHIEFTAIN_DOUBLEFIRE_MODE['KNIFE'][1]:GetValue())
+    else
+        gui_SetValue('rbot.accuracy.weapon.shared.doublefire', 0)
+        gui_SetValue('rbot.accuracy.weapon.pistol.doublefire', N)
+        gui_SetValue('rbot.accuracy.weapon.hpistol.doublefire', N)
+        gui_SetValue('rbot.accuracy.weapon.smg.doublefire', N)
+        gui_SetValue('rbot.accuracy.weapon.rifle.doublefire', N)
+        gui_SetValue('rbot.accuracy.weapon.shotgun.doublefire', N)
+        gui_SetValue('rbot.accuracy.weapon.scout.doublefire', N)
+        gui_SetValue('rbot.accuracy.weapon.asniper.doublefire', N)
+        gui_SetValue('rbot.accuracy.weapon.sniper.doublefire', N)
+        gui_SetValue('rbot.accuracy.weapon.lmg.doublefire', N)
+        gui_SetValue('rbot.accuracy.weapon.knife.doublefire', N)
+    end
 end
 
 local function dtfl_setup(N)
@@ -567,22 +589,20 @@ local function menuсontroler()
 
     --DYNAMIC ELEMENTS
     --If we are not on the server or not alive, then we cannot access the elements, therefore we need "return" in this block until access appears.
-    if not engine_GetServerIP() or engine_GetServerIP() then
-        if entities_GetLocalPlayer() then
-            if not entities_GetLocalPlayer():IsAlive() then
-                CHIEFTAIN_NOT_SUPPORT_GROUP:SetInvisible(false)
-                CHIEFTAIN_SUBTAB_DOUBLEFIRE:SetInvisible(true)
-                CHIEFTAIN_SUBTAB_AUTOPEEK:SetInvisible(true)
-                CHIEFTAIN_SUBTAB_NOSCOPEHC:SetInvisible(true)
-                return
-            end
-        else
+    if entities_GetLocalPlayer() then
+        if not entities_GetLocalPlayer():IsAlive() then
             CHIEFTAIN_NOT_SUPPORT_GROUP:SetInvisible(false)
             CHIEFTAIN_SUBTAB_DOUBLEFIRE:SetInvisible(true)
             CHIEFTAIN_SUBTAB_AUTOPEEK:SetInvisible(true)
             CHIEFTAIN_SUBTAB_NOSCOPEHC:SetInvisible(true)
             return
         end
+    else
+        CHIEFTAIN_NOT_SUPPORT_GROUP:SetInvisible(false)
+        CHIEFTAIN_SUBTAB_DOUBLEFIRE:SetInvisible(true)
+        CHIEFTAIN_SUBTAB_AUTOPEEK:SetInvisible(true)
+        CHIEFTAIN_SUBTAB_NOSCOPEHC:SetInvisible(true)
+        return
     end
 
     --We cannot access the elements, therefore we stop the function.
@@ -599,14 +619,14 @@ local function menuсontroler()
         CHIEFTAIN_SUBTAB_NOSCOPEHC:SetInvisible(false)
     end
 
-    if CHIEFTAIN_DOUBLEFIRE_ENABLE:GetValue() then
+    if CHIEFTAIN_DOUBLEFIRE_ENABLE:GetValue() and CHIEFTAIN_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:GetValue() ~= 0 then
         CHIEFTAIN_SUBTAB_AUTOPEEK:SetPosY(414)
         CHIEFTAIN_SUBTAB_NOSCOPEHC:SetPosY(810)
 
         CHIEFTAIN_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:SetDisabled(false)
         CHIEFTAIN_DOUBLEFIRE_PERF[WEAPON_CURRENT_GROUP][1]:SetInvisible(false)
         CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM:SetInvisible(false)
-        CHIEFTAIN_DOUBLEFIRE_SPEED[WEAPON_CURRENT_GROUP][1]:SetInvisible(false)
+        CHIEFTAIN_DOUBLEFIRE_TICKBASE[WEAPON_CURRENT_GROUP][1]:SetInvisible(false)
 
         if not CHIEFTAIN_DOUBLEFIRE_PERF_DISLBY[WEAPON_CURRENT_GROUP][1]:GetValue() and gui_GetValue('rbot.antiaim.advanced.antialign') == 1 then
             CHIEFTAIN_DOUBLEFIRE_PERF_DISLBY[WEAPON_CURRENT_GROUP][1]:SetDisabled(true)
@@ -621,10 +641,10 @@ local function menuсontroler()
             CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM_DELAY:SetInvisible(true)
         end
 
-        if CHIEFTAIN_DOUBLEFIRE_SPEED[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 then
-            CHIEFTAIN_DOUBLEFIRE_SPEED_ADJUSTER[WEAPON_CURRENT_GROUP][1]:SetInvisible(false)
+        if CHIEFTAIN_DOUBLEFIRE_TICKBASE[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 then
+            CHIEFTAIN_DOUBLEFIRE_TICKBASE_ADJUSTER[WEAPON_CURRENT_GROUP][1]:SetInvisible(false)
         else
-            CHIEFTAIN_DOUBLEFIRE_SPEED_ADJUSTER[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
+            CHIEFTAIN_DOUBLEFIRE_TICKBASE_ADJUSTER[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
         end
 
         if CHIEFTAIN_DOUBLEFIRE_FAKELATENCY[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 then
@@ -633,16 +653,16 @@ local function menuсontroler()
             CHIEFTAIN_DOUBLEFIRE_FAKELATENCY_ADJUSTER[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
         end
 
-        if CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM:GetValue() ~= 0 and CHIEFTAIN_DOUBLEFIRE_SPEED[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 and CHIEFTAIN_DOUBLEFIRE_FAKELATENCY[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 then
+        if CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM:GetValue() ~= 0 and CHIEFTAIN_DOUBLEFIRE_TICKBASE[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 and CHIEFTAIN_DOUBLEFIRE_FAKELATENCY[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 then
             CHIEFTAIN_SUBTAB_AUTOPEEK:SetPosY(670)
             CHIEFTAIN_SUBTAB_NOSCOPEHC:SetPosY(1066)
-        elseif CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM:GetValue() ~= 0 and CHIEFTAIN_DOUBLEFIRE_SPEED[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 or CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM:GetValue() ~= 0 and CHIEFTAIN_DOUBLEFIRE_FAKELATENCY[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 then
+        elseif CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM:GetValue() ~= 0 and CHIEFTAIN_DOUBLEFIRE_TICKBASE[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 or CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM:GetValue() ~= 0 and CHIEFTAIN_DOUBLEFIRE_FAKELATENCY[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 then
             CHIEFTAIN_SUBTAB_AUTOPEEK:SetPosY(608)
             CHIEFTAIN_SUBTAB_NOSCOPEHC:SetPosY(1004)
-        elseif CHIEFTAIN_DOUBLEFIRE_SPEED[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 and CHIEFTAIN_DOUBLEFIRE_FAKELATENCY[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 then
+        elseif CHIEFTAIN_DOUBLEFIRE_TICKBASE[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 and CHIEFTAIN_DOUBLEFIRE_FAKELATENCY[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 then
             CHIEFTAIN_SUBTAB_AUTOPEEK:SetPosY(608)
             CHIEFTAIN_SUBTAB_NOSCOPEHC:SetPosY(1004)
-        elseif CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM:GetValue() ~= 0 or CHIEFTAIN_DOUBLEFIRE_SPEED[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 or CHIEFTAIN_DOUBLEFIRE_FAKELATENCY[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 then
+        elseif CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM:GetValue() ~= 0 or CHIEFTAIN_DOUBLEFIRE_TICKBASE[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 or CHIEFTAIN_DOUBLEFIRE_FAKELATENCY[WEAPON_CURRENT_GROUP][1]:GetValue() == 5 then
             CHIEFTAIN_SUBTAB_AUTOPEEK:SetPosY(546)
             CHIEFTAIN_SUBTAB_NOSCOPEHC:SetPosY(942)
         else
@@ -653,12 +673,17 @@ local function menuсontroler()
         CHIEFTAIN_SUBTAB_AUTOPEEK:SetPosY(204)
         CHIEFTAIN_SUBTAB_NOSCOPEHC:SetPosY(600)
         
-        CHIEFTAIN_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:SetDisabled(true)
+        if CHIEFTAIN_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:GetValue() ~= 0 then
+            CHIEFTAIN_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:SetDisabled(true)
+        else
+            CHIEFTAIN_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:SetDisabled(false)
+        end
+
         CHIEFTAIN_DOUBLEFIRE_PERF[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
         CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM:SetInvisible(true)
         CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM_DELAY:SetInvisible(true)
-        CHIEFTAIN_DOUBLEFIRE_SPEED[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
-        CHIEFTAIN_DOUBLEFIRE_SPEED_ADJUSTER[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
+        CHIEFTAIN_DOUBLEFIRE_TICKBASE[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
+        CHIEFTAIN_DOUBLEFIRE_TICKBASE_ADJUSTER[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
         CHIEFTAIN_DOUBLEFIRE_FAKELATENCY[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
         CHIEFTAIN_DOUBLEFIRE_FAKELATENCY_ADJUSTER[WEAPON_CURRENT_GROUP][1]:SetInvisible(true)
     end
@@ -841,10 +866,10 @@ end
 
 local function doublefire(getmaxprocessticks)
     local lp_ping = entities_GetPlayerResources():GetPropInt("m_iPing", entities_GetLocalPlayer():GetIndex())
-	local DT_SPEED_ARR = {getmaxprocessticks - 2, getmaxprocessticks - 1, getmaxprocessticks, getmaxprocessticks + 1, CHIEFTAIN_DOUBLEFIRE_SPEED_ADJUSTER[WEAPON_CURRENT_GROUP][1]:GetValue()}
+	local DT_SPEED_ARR = {getmaxprocessticks - 2, getmaxprocessticks - 1, getmaxprocessticks, getmaxprocessticks + 1, CHIEFTAIN_DOUBLEFIRE_TICKBASE_ADJUSTER[WEAPON_CURRENT_GROUP][1]:GetValue()}
 
     if DT_ENABLED and not FD_ENABLED then
-        if CHIEFTAIN_DOUBLEFIRE_SPEED[WEAPON_CURRENT_GROUP][1]:GetValue() == 0 then
+        if CHIEFTAIN_DOUBLEFIRE_TICKBASE[WEAPON_CURRENT_GROUP][1]:GetValue() == 0 then
             if gui_GetValue('misc.fakelatency.enable') then
                 if CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM:GetValue() == 0 then
                     SV_MAXUSRCMDPROCESSTICKS:SetValue(getmaxprocessticks)
@@ -874,9 +899,9 @@ local function doublefire(getmaxprocessticks)
             end
         else
             if CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM:GetValue() == 0 then
-                SV_MAXUSRCMDPROCESSTICKS:SetValue(DT_SPEED_ARR[CHIEFTAIN_DOUBLEFIRE_SPEED[WEAPON_CURRENT_GROUP][1]:GetValue()])
+                SV_MAXUSRCMDPROCESSTICKS:SetValue(DT_SPEED_ARR[CHIEFTAIN_DOUBLEFIRE_TICKBASE[WEAPON_CURRENT_GROUP][1]:GetValue()])
             else
-                DT_SPEED = DT_SPEED_ARR[CHIEFTAIN_DOUBLEFIRE_SPEED[WEAPON_CURRENT_GROUP][1]:GetValue()]
+                DT_SPEED = DT_SPEED_ARR[CHIEFTAIN_DOUBLEFIRE_TICKBASE[WEAPON_CURRENT_GROUP][1]:GetValue()]
             end
         end
     end
@@ -898,7 +923,7 @@ local function doublefire(getmaxprocessticks)
             SV_MAXUSRCMDPROCESSTICKS:SetValue(DT_TICKS)
         end
 
-        dt_setup(CHIEFTAIN_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:GetValue() + 1)
+        dt_setup()
 
         if CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM:GetValue() ~= 0 then
             if CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM:GetValue() == 1 then
@@ -1077,7 +1102,7 @@ local function lag_on_peek()
             gui_SetValue("misc.speedburst.enable", 1)
             dt_setup(0)
         else
-            dt_setup(CHIEFTAIN_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:GetValue() + 1)
+            dt_setup()
             gui_SetValue("misc.speedburst.enable", 0)
         end
     end
@@ -1101,7 +1126,7 @@ local function lag_on_peek()
         LocalPlayer_predicted_pos.z = LocalPlayer_predicted_pos.z + LocalPlayer:GetPropVector("localdata", "m_vecViewOffset[0]").z
     
         if is_vis(LocalPlayer_predicted_pos) then
-            dt_setup(CHIEFTAIN_DOUBLEFIRE_MODE[WEAPON_CURRENT_GROUP][1]:GetValue() + 1)
+            dt_setup()
             gui_SetValue("misc.speedburst.enable", 0)
         end
     end
@@ -1262,7 +1287,7 @@ local function autopeek_settings(getmaxprocessticks)
 
             return
         end
-        
+
         if CHIEFTAIN_AUTOPEEK_SETTINGS_DOUBLEFIRE[WEAPON_CURRENT_GROUP][1]:GetValue() then
             CHIEFTAIN_DOUBLEFIRE_ENABLE:SetValue(CACHE_DOUBLEFIRE)
         end
@@ -1575,6 +1600,136 @@ end
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+can_change_shadows = true
+can_change_3dsky = true
+can_change_fog = true
+can_change_bloom = true
+can_change_blur = true
+can_change_other = true
+
+local function fps_boost()
+    if CHIEFTAIN_VISUALS_FPSBOOST_SHADOWS:GetValue() then
+        if can_change_shadows then
+            client_SetConVar('cl_csm_enabled', 0, true)
+            client_SetConVar('cl_foot_contact_shadows', 0, true)
+            client_SetConVar('cl_csm_shadows', 0, true)
+            client_SetConVar('cl_csm_rope_shadows', 0, true)
+            client_SetConVar('cl_csm_world_shadows', 0, true)
+            client_SetConVar('cl_csm_world_shadows_in_viewmodelcascade', 0, true)
+            client_SetConVar('cl_csm_static_prop_shadows', 0, true)
+            client_SetConVar('cl_csm_sprite_shadows', 0, true)
+            client_SetConVar('cl_csm_translucent_shadows', 0, true)
+            client_SetConVar('cl_csm_viewmodel_shadows', 0, true)
+            client_SetConVar('cl_minimal_rtt_shadows', 0, true)
+            client_SetConVar('cl_csm_entity_shadows', 0, true)
+            client_SetConVar('r_shadows', 0, true)
+            can_change_shadows = false
+        end
+    else
+        if not can_change_shadows then
+            client_SetConVar('cl_csm_enabled', 1, true)
+            client_SetConVar('cl_foot_contact_shadows', 1, true)
+            client_SetConVar('cl_csm_shadows', 1, true)
+            client_SetConVar('cl_csm_rope_shadows', 1, true)
+            client_SetConVar('cl_csm_world_shadows', 1, true)
+            client_SetConVar('cl_csm_world_shadows_in_viewmodelcascade', 1, true)
+            client_SetConVar('cl_csm_static_prop_shadows', 1, true)
+            client_SetConVar('cl_csm_sprite_shadows', 1, true)
+            client_SetConVar('cl_csm_translucent_shadows', 1, true)
+            client_SetConVar('cl_csm_viewmodel_shadows', 1, true)
+            client_SetConVar('cl_minimal_rtt_shadows', 0, true)
+            client_SetConVar('cl_csm_entity_shadows', 1, true)
+            client_SetConVar('r_shadows', 1, true)
+            can_change_shadows = true
+        end
+    end
+
+    if CHIEFTAIN_VISUALS_FPSBOOST_3DSKY:GetValue() then
+        if can_change_3dsky then
+            client_SetConVar('r_3dsky', 0, true)
+            can_change_3dsky = false
+        end
+    else
+        if not can_change_3dsky then
+            client_SetConVar('r_3dsky', 1, true)
+            can_change_3dsky = true
+        end
+    end
+
+    if CHIEFTAIN_VISUALS_FPSBOOST_FOG:GetValue() then
+        if can_change_fog then
+            client_SetConVar('fog_enable_water_fog', 0, true)
+            client_SetConVar('fog_enableskybox', 0, true)
+            can_change_fog = false
+        end
+    else
+        if not can_change_fog then
+            client_SetConVar('fog_enable_water_fog', 1, true)
+            client_SetConVar('fog_enableskybox', 1, true)
+            can_change_fog = true
+        end
+    end
+
+    if CHIEFTAIN_VISUALS_FPSBOOST_BLOOM:GetValue() then
+        if can_change_bloom then
+            client_SetConVar('mat_disable_bloom', 1, true)
+            can_change_bloom = false
+        end
+    else
+        if not can_change_bloom then
+            client_SetConVar('mat_disable_bloom', 0, true)
+            can_change_bloom = true
+        end
+    end
+
+    if CHIEFTAIN_VISUALS_FPSBOOST_BLUR:GetValue() then
+        if can_change_blur then
+            client_SetConVar('@panorama_disable_blur', 1, true)
+            client_SetConVar('@panorama_disable_box_shadow', 1, true)
+            can_change_blur = false
+        end
+    else
+        if not can_change_blur then
+            client_SetConVar('@panorama_disable_blur', 0, true)
+            client_SetConVar('@panorama_disable_box_shadow', 0, true)
+            can_change_blur = true
+        end
+    end
+
+    if CHIEFTAIN_VISUALS_FPSBOOST_OTHER:GetValue() then
+        if can_change_other then
+            client_SetConVar('cl_autohelp', 0, true)
+            client_SetConVar('cl_disablefreezecam', 1, true)
+            client_SetConVar('cl_disablehtmlmotd', 1, true)
+            client_SetConVar('cl_forcepreload', 1, true)
+            client_SetConVar('cl_showhelp', 0, true)
+            client_SetConVar('cl_freezecameffects_showholiday', 0, true)
+            client_SetConVar('gameinstructor_enable', 0, true)
+            client_SetConVar('mat_queue_mode', -1, true)
+            client_SetConVar('r_drawtracers_firstperson', 0, true)
+            client_SetConVar('r_dynamic', 0, true)
+            can_change_other = false
+        end
+    else
+        if not can_change_other then
+            client_SetConVar('cl_autohelp', 1, true)
+            client_SetConVar('cl_disablefreezecam', 0, true)
+            client_SetConVar('cl_disablehtmlmotd', 0, true)
+            client_SetConVar('cl_forcepreload', 0, true)
+            client_SetConVar('cl_showhelp', 1, true)
+            client_SetConVar('cl_freezecameffects_showholiday',1, true)
+            client_SetConVar('gameinstructor_enable', 1, true)
+            client_SetConVar('mat_queue_mode', -1, true)
+            client_SetConVar('r_drawtracers_firstperson', 1, true)
+            client_SetConVar('r_dynamic', 1, true)
+            can_change_other = true
+        end
+    end
+end
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+local CACHE_ASPECTRATIO = CHIEFTAIN_VISUALS_ASPECTRATIO_VALUE:GetValue()
 local aspect_ratio_table = {};
 
 local function gcd(a, b)
@@ -1587,65 +1742,126 @@ end
 local function set_aspect_ratio(aspect_ratio_multiplier)
     local screen_width, screen_height = draw_GetScreenSize()
     local aspectratio_value = (screen_width * aspect_ratio_multiplier) / screen_height
-    client_SetConVar("r_aspectratio", tonumber(aspectratio_value), true)
+    client_SetConVar('r_aspectratio', tonumber(aspectratio_value), true)
 end
 
 local function aspect_ratio()
-    local screen_width, screen_height = draw_GetScreenSize()
+    if CACHE_ASPECTRATIO ~= CHIEFTAIN_VISUALS_ASPECTRATIO_VALUE:GetValue() then
+        local screen_width, screen_height = draw_GetScreenSize()
 
-    for i = 1, 200 do
-        local i2 = 2 - i * 0.01
-        local divisor = gcd(screen_width * i2, screen_height)
-        if screen_width * i2 / divisor < 100 or i2 == 1 then
-            aspect_ratio_table[i] = screen_width * i2 / divisor .. ":" .. screen_height / divisor
+        for i = 1, 200 do
+            local i2 = 2 - i * 0.01
+            local divisor = gcd(screen_width * i2, screen_height)
+            if screen_width * i2 / divisor < 100 or i2 == 1 then
+                aspect_ratio_table[i] = screen_width * i2 / divisor .. ":" .. screen_height / divisor
+            end
         end
-    end
 
-    set_aspect_ratio(2 - CHIEFTAIN_VISUALS_ASPECTRATIO_VALUE:GetValue() * 0.01)
+        set_aspect_ratio(2 - CHIEFTAIN_VISUALS_ASPECTRATIO_VALUE:GetValue() * 0.01)
+
+        CACHE_ASPECTRATIO = CHIEFTAIN_VISUALS_ASPECTRATIO_VALUE:GetValue()
+    end
 end
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+can_change_exposure = false
+can_change_bloom = false
+can_change_ambient = false
+can_change_fog = false
+
+local function world_modulation_cache()
+    CACHE_WORLDEXPOSURE      = CHIEFTAIN_VISUALS_WORLDEXPOSURE_VALUE:GetValue()
+
+    CACHE_BLOOM              = CHIEFTAIN_VISUALS_BLOOM_VALUE:GetValue()
+
+    CACHE_WORLDAMBIENT       = CHIEFTAIN_VISUALS_WORLDAMBIENT_VALUE:GetValue()
+
+    CACHE_VIEWMODELAMBIENT   = CHIEFTAIN_VISUALS_VIEWMODELAMBIENT_VALUE:GetValue()
+
+    CACHE_FOGCOLOR           = CHIEFTAIN_VISUALS_FOG_MODULATION_COLOR:GetValue()
+    CACHE_FOGDENSITY         = CHIEFTAIN_VISUALS_FOG_MODULATION_DENSITY:GetValue()
+    CACHE_FOGSTART           = CHIEFTAIN_VISUALS_FOG_MODULATION_START:GetValue()
+    CACHE_FOGEND             = CHIEFTAIN_VISUALS_FOG_MODULATION_END:GetValue()
+end
+
 local function world_modulation()
-    local controller = entities_FindByClass("CEnvTonemapController")[1];
+    local controller = entities_FindByClass('CEnvTonemapController')[1];
     if(controller) then
-        controller:SetProp("m_bUseCustomBloomScale", 1)
+        controller:SetProp('m_bUseCustomBloomScale', 1)
 
         if CHIEFTAIN_VISUALS_WORLDEXPOSURE_VALUE:GetValue() ~= 0 then
-            controller:SetProp("m_bUseCustomAutoExposureMin", 1)
-            controller:SetProp("m_bUseCustomAutoExposureMax", 1)
+            if CACHE_WORLDEXPOSURE ~= CHIEFTAIN_VISUALS_WORLDEXPOSURE_VALUE:GetValue() then
+                controller:SetProp('m_bUseCustomAutoExposureMin', 1)
+                controller:SetProp('m_bUseCustomAutoExposureMax', 1)
+                controller:SetProp('m_flCustomAutoExposureMin', -math_abs(CHIEFTAIN_VISUALS_WORLDEXPOSURE_VALUE:GetValue() * 0.01) + 1.01)
+                controller:SetProp('m_flCustomAutoExposureMax', -math_abs(CHIEFTAIN_VISUALS_WORLDEXPOSURE_VALUE:GetValue() * 0.01) + 1.01)
+                can_change_exposure = true
+            end
         else
-            controller:SetProp("m_bUseCustomAutoExposureMin", 0)
-            controller:SetProp("m_bUseCustomAutoExposureMax", 0)
+            if can_change_exposure then
+                controller:SetProp('m_bUseCustomAutoExposureMin', 0)
+                controller:SetProp('m_bUseCustomAutoExposureMax', 0)
+                can_change_exposure = false
+            end
         end
 
-        controller:SetProp("m_flCustomAutoExposureMin", -math_abs(CHIEFTAIN_VISUALS_WORLDEXPOSURE_VALUE:GetValue() * 0.01) + 1.01)
-        controller:SetProp("m_flCustomAutoExposureMax", -math_abs(CHIEFTAIN_VISUALS_WORLDEXPOSURE_VALUE:GetValue() * 0.01) + 1.01)
+        if CHIEFTAIN_VISUALS_BLOOM_VALUE:GetValue() ~= 0 then
+            if CACHE_BLOOM ~= CHIEFTAIN_VISUALS_BLOOM_VALUE:GetValue() then
+                controller:SetProp('m_bUseCustomBloomScale', 1)
+                controller:SetProp('m_flCustomBloomScaleMinimum', CHIEFTAIN_VISUALS_BLOOM_VALUE:GetValue() * 0.05)
+                controller:SetProp('m_flCustomBloomScale', CHIEFTAIN_VISUALS_BLOOM_VALUE:GetValue() * 0.05)
+                can_change_bloom = true
+            end
+        else
+            if can_change_bloom then
+                controller:SetProp('m_bUseCustomBloomScale', 0)
+                can_change_bloom = false
+            end
+        end
 
-        controller:SetProp("m_bUseCustomBloomScale", 1)
-        controller:SetProp("m_flCustomBloomScaleMinimum", CHIEFTAIN_VISUALS_BLOOM_VALUE:GetValue() * 0.05)
-        controller:SetProp("m_flCustomBloomScale", CHIEFTAIN_VISUALS_BLOOM_VALUE:GetValue() * 0.05)
-
-        client_SetConVar("r_modelAmbientMin", CHIEFTAIN_VISUALS_VIEWMODELAMBIENT_VALUE:GetValue() * 0.10, true)
+        if CACHE_VIEWMODELAMBIENT ~= CHIEFTAIN_VISUALS_VIEWMODELAMBIENT_VALUE:GetValue() then
+            client_SetConVar('r_modelAmbientMin', CHIEFTAIN_VISUALS_VIEWMODELAMBIENT_VALUE:GetValue() * 0.10, true)
+        end
 
         local ambient_r, ambient_g, ambient_b = CHIEFTAIN_VISUALS_WORLDAMBIENT_VALUE:GetValue()
-        if ambient_r > 0 or ambient_g > 0 or ambient_b > 0 then
-            client_SetConVar("mat_ambient_light_r", ambient_r / 255, true)
-            client_SetConVar("mat_ambient_light_g", ambient_g / 255, true)
-            client_SetConVar("mat_ambient_light_b", ambient_b / 255, true)
+        if ambient_r ~= 0 or ambient_g ~= 0 or ambient_b ~= 0 then
+            if CACHE_WORLDAMBIENT ~= CHIEFTAIN_VISUALS_WORLDAMBIENT_VALUE:GetValue() then
+                client_SetConVar('mat_ambient_light_r', ambient_r / 255, true)
+                client_SetConVar('mat_ambient_light_g', ambient_g / 255, true)
+                client_SetConVar('mat_ambient_light_b', ambient_b / 255, true)
+                can_change_ambient = true
+            end
+        else
+            if can_change_ambient then
+                client_SetConVar('mat_ambient_light_r', 0, true)
+                client_SetConVar('mat_ambient_light_g', 0, true)
+                client_SetConVar('mat_ambient_light_b', 0, true)
+                can_change_ambient = false
+            end
         end
+
 
         if CHIEFTAIN_VISUALS_FOG_MODULATION:GetValue() then
-            client_SetConVar("fog_override", 1, true)
+            if CACHE_FOGCOLOR ~= CHIEFTAIN_VISUALS_FOG_MODULATION_COLOR:GetValue() or CACHE_FOGDENSITY ~= CHIEFTAIN_VISUALS_FOG_MODULATION_DENSITY:GetValue() * 0.01 or CACHE_FOGSTART ~= CHIEFTAIN_VISUALS_FOG_MODULATION_START:GetValue() or CACHE_FOGEND ~= CHIEFTAIN_VISUALS_FOG_MODULATION_END:GetValue() then
+                client_SetConVar('fog_override', 1, true)
 
-            local r, g, b = CHIEFTAIN_VISUALS_FOG_MODULATION_COLOR:GetValue()
-            client_SetConVar("fog_color", r .. " " .. g .. " " .. b, true)
-            client_SetConVar('fog_maxdensity', CHIEFTAIN_VISUALS_FOG_MODULATION_DENSITY:GetValue() * 0.01, true)
-            client_SetConVar("fog_start", CHIEFTAIN_VISUALS_FOG_MODULATION_START:GetValue(), true)
-            client_SetConVar("fog_end", CHIEFTAIN_VISUALS_FOG_MODULATION_END:GetValue(), true)
+                local r, g, b = CHIEFTAIN_VISUALS_FOG_MODULATION_COLOR:GetValue()
+                client_SetConVar('fog_color', r .. " " .. g .. " " .. b, true)
+                client_SetConVar('fog_maxdensity', CHIEFTAIN_VISUALS_FOG_MODULATION_DENSITY:GetValue() * 0.01, true)
+                client_SetConVar('fog_start', CHIEFTAIN_VISUALS_FOG_MODULATION_START:GetValue(), true)
+                client_SetConVar('fog_end', CHIEFTAIN_VISUALS_FOG_MODULATION_END:GetValue(), true)
+
+                can_change_fog = true
+            end
         else
-            client_SetConVar("fog_override", 0, true)
+            if can_change_fog then
+                client_SetConVar('fog_override', 0, true)
+                can_change_fog = false
+            end
         end
+
+        world_modulation_cache()
     end
 end
 
@@ -1656,14 +1872,12 @@ end
 callbacks.Register('Draw', 'ChieftainDrawMain', function()
     menuсontroler()
     
-    if not engine_GetServerIP() or engine_GetServerIP() then
-        if entities_GetLocalPlayer() then
-            if not entities_GetLocalPlayer():IsAlive() then
-                return
-            end
-        else
+    if entities_GetLocalPlayer() then
+        if not entities_GetLocalPlayer():IsAlive() then
             return
         end
+    else
+        return
     end
 
     panorama.RunScript([[ LoadoutAPI.IsLoadoutAllowed = () => { return true; }; ]])
@@ -1673,6 +1887,7 @@ callbacks.Register('Draw', 'ChieftainDrawMain', function()
     fakeduck(getmaxprocessticks)
     doublefire_bind()
     autopeek_settings(getmaxprocessticks)
+    fps_boost()
     aspect_ratio()
     world_modulation()
 
@@ -1690,17 +1905,15 @@ callbacks.Register('Draw', 'ChieftainDrawMain', function()
     end
     
     weapon_info()
-end)
+end) 
 
 callbacks.Register('CreateMove', 'ChieftainCreateMoveMain', function(UserCmd)
-    if not engine_GetServerIP() or engine_GetServerIP() then
-        if entities_GetLocalPlayer() then
-            if not entities_GetLocalPlayer():IsAlive() then
-                return
-            end
-        else
+    if entities_GetLocalPlayer() then
+        if not entities_GetLocalPlayer():IsAlive() then
             return
         end
+    else
+        return
     end
 
     if WEAPON_CURRENT_GROUP == 'GLOBAL' or WEAPON_CURRENT_GROUP == 'KNIFE' then
