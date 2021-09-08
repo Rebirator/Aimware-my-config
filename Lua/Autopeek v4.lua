@@ -89,7 +89,7 @@ callbacks.Register('Draw', function()
         AutopeekHasShot = false
     end
 
-    if input.IsButtonDown(ui_keybox:GetValue()) then
+    if input.IsButtonDown(ui_keybox:GetValue()) and ui_checkbox_visualize:GetValue() then
         draw.Color(200, 0, 0, 255)
         drawCircle({LocalPlayerPos[1], LocalPlayerPos[2], LocalPlayerPos[3]}, 3)
         draw.Color(255, 65, 0, 255)
