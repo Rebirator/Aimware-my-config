@@ -5,12 +5,29 @@
 
 ------------------------------------------Credits-----------------------------------------------]]--
 
+local CanEnable = false
+local Enabled = false
+
 callbacks.Register( 'Draw', 'AntiLagOnPeek', function( )
-    if entities.GetLocalPlayer( ):GetTeamNumber( ) == 1 then
-        client.SetConVar( 'cl_lagcompensation', 0, true )
+    if not entities.GetLocalPlayer( ) or Enabled == true then
+        return
     end
-end)
+
+    if not entities.GetLocalPlayer( ):IsAlive( ) then
+        CanEnable = true
+    else
+        CanEnable = false
+    end
+
+    if CanEnable then
+        client.Command( 'jointeam 1', true )
+        client.SetConVar( 'cl_lagcompensation', 0, true )
+        
+        Enabled = true
+    end
+end )
 
 callbacks.Register( 'Unload', function( )
+    client.Command( 'jointeam 1', true )
     client.SetConVar( 'cl_lagcompensation', 1, true )
-end)
+end )
