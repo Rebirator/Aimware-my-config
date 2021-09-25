@@ -1603,11 +1603,18 @@ end
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-local FPS_BOOST_CHANGER = { can_change_shadows = true, can_change_3dsky = true, can_change_fog = true, can_change_bloom = true, can_change_blur = true, can_change_other = true }
+do
+    local can_change_shadows = true
+    local can_change_3dsky = true
+    local can_change_fog = true
+    local can_change_bloom = true
+    local can_change_blur = true
+    local can_change_other = true
+end
 
 local function fps_boost()
     if CHIEFTAIN_VISUALS_FPSBOOST_SHADOWS:GetValue() then
-        if FPS_BOOST_CHANGER.can_change_shadows then
+        if can_change_shadows then
             client_SetConVar('cl_foot_contact_shadows', 0, true)
             client_SetConVar('cl_csm_shadows', 0, true)
             client_SetConVar('cl_csm_rope_shadows', 0, true)
@@ -1620,10 +1627,10 @@ local function fps_boost()
             client_SetConVar('cl_minimal_rtt_shadows', 0, true)
             client_SetConVar('cl_csm_entity_shadows', 0, true)
             client_SetConVar('r_shadows', 0, true)
-            FPS_BOOST_CHANGER.can_change_shadows = false
+            can_change_shadows = false
         end
     else
-        if not FPS_BOOST_CHANGER.can_change_shadows then
+        if not can_change_shadows then
             client_SetConVar('cl_csm_enabled', 1, true)
             client_SetConVar('cl_foot_contact_shadows', 1, true)
             client_SetConVar('cl_csm_shadows', 1, true)
@@ -1637,89 +1644,87 @@ local function fps_boost()
             client_SetConVar('cl_minimal_rtt_shadows', 0, true)
             client_SetConVar('cl_csm_entity_shadows', 1, true)
             client_SetConVar('r_shadows', 1, true)
-            FPS_BOOST_CHANGER.can_change_shadows = true
+            can_change_shadows = true
         end
     end
 
     if CHIEFTAIN_VISUALS_FPSBOOST_3DSKY:GetValue() then
-        if FPS_BOOST_CHANGER.can_change_3dsky then
+        if can_change_3dsky then
             client_SetConVar('r_3dsky', 0, true)
-            FPS_BOOST_CHANGER.can_change_3dsky = false
+            can_change_3dsky = false
         end
     else
-        if not FPS_BOOST_CHANGER.can_change_3dsky then
+        if not can_change_3dsky then
             client_SetConVar('r_3dsky', 1, true)
-            FPS_BOOST_CHANGER.can_change_3dsky = true
+            can_change_3dsky = true
         end
     end
 
     if CHIEFTAIN_VISUALS_FPSBOOST_FOG:GetValue() then
-        if FPS_BOOST_CHANGER.can_change_fog then
+        if can_change_fog then
             client_SetConVar('fog_enable_water_fog', 0, true)
             client_SetConVar('fog_enableskybox', 0, true)
-            FPS_BOOST_CHANGER.can_change_fog = false
+            can_change_fog = false
         end
     else
-        if not FPS_BOOST_CHANGER.can_change_fog then
+        if not can_change_fog then
             client_SetConVar('fog_enable_water_fog', 1, true)
             client_SetConVar('fog_enableskybox', 1, true)
-            FPS_BOOST_CHANGER.can_change_fog = true
+            can_change_fog = true
         end
     end
 
     if CHIEFTAIN_VISUALS_FPSBOOST_BLOOM:GetValue() then
-        if FPS_BOOST_CHANGER.can_change_bloom then
+        if can_change_bloom then
             client_SetConVar('mat_disable_bloom', 1, true)
-            FPS_BOOST_CHANGER.can_change_bloom = false
+            can_change_bloom = false
         end
     else
-        if not FPS_BOOST_CHANGER.can_change_bloom then
+        if not can_change_bloom then
             client_SetConVar('mat_disable_bloom', 0, true)
-            FPS_BOOST_CHANGER.can_change_bloom = true
+            can_change_bloom = true
         end
     end
 
     if CHIEFTAIN_VISUALS_FPSBOOST_BLUR:GetValue() then
-        if FPS_BOOST_CHANGER.can_change_blur then
+        if can_change_blur then
             client_SetConVar('@panorama_disable_blur', 1, true)
             client_SetConVar('@panorama_disable_box_shadow', 1, true)
-            FPS_BOOST_CHANGER.can_change_blur = false
+            can_change_blur = false
         end
     else
-        if not FPS_BOOST_CHANGER.can_change_blur then
+        if not can_change_blur then
             client_SetConVar('@panorama_disable_blur', 0, true)
             client_SetConVar('@panorama_disable_box_shadow', 0, true)
-            FPS_BOOST_CHANGER.can_change_blur = true
+            can_change_blur = true
         end
     end
 
     if CHIEFTAIN_VISUALS_FPSBOOST_OTHER:GetValue() then
-        if FPS_BOOST_CHANGER.can_change_other then
+        if can_change_other then
             client_SetConVar('cl_autohelp', 0, true)
             client_SetConVar('cl_disablefreezecam', 1, true)
             client_SetConVar('cl_disablehtmlmotd', 1, true)
-            client_SetConVar('cl_forcepreload', 1, true)
             client_SetConVar('cl_showhelp', 0, true)
             client_SetConVar('cl_freezecameffects_showholiday', 0, true)
             client_SetConVar('gameinstructor_enable', 0, true)
             client_SetConVar('mat_queue_mode', -1, true)
             client_SetConVar('r_drawtracers_firstperson', 0, true)
             client_SetConVar('r_dynamic', 0, true)
-            FPS_BOOST_CHANGER.can_change_other = false
+            can_change_other = false
         end
     else
-        if not FPS_BOOST_CHANGER.can_change_other then
+        if not can_change_other then
             client_SetConVar('cl_autohelp', 1, true)
             client_SetConVar('cl_disablefreezecam', 0, true)
             client_SetConVar('cl_disablehtmlmotd', 0, true)
-            client_SetConVar('cl_forcepreload', 0, true)
             client_SetConVar('cl_showhelp', 1, true)
             client_SetConVar('cl_freezecameffects_showholiday',1, true)
             client_SetConVar('gameinstructor_enable', 1, true)
             client_SetConVar('mat_queue_mode', -1, true)
             client_SetConVar('r_drawtracers_firstperson', 1, true)
             client_SetConVar('r_dynamic', 1, true)
-            FPS_BOOST_CHANGER.can_change_other = true
+            can_change_other = true
         end
     end
 end
@@ -1762,9 +1767,13 @@ end
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-local WORLD_MODULATION_CHANGER = { can_change_exposure = true, can_change_bloom = true, can_change_ambient = true, can_change_fog = true }
-
 do
+    local can_change_exposure = true
+    local can_change_bloom = true
+    local can_change_ambient = true
+    local can_change_fog = true
+
+
     local CACHE_WORLDEXPOSURE      = CHIEFTAIN_VISUALS_WORLDEXPOSURE_VALUE:GetValue()
 
     local CACHE_BLOOM              = CHIEFTAIN_VISUALS_BLOOM_VALUE:GetValue()
@@ -1805,13 +1814,13 @@ local function world_modulation()
                 controller:SetProp('m_bUseCustomAutoExposureMax', 1)
                 controller:SetProp('m_flCustomAutoExposureMin', 1.00 - (CHIEFTAIN_VISUALS_WORLDEXPOSURE_VALUE:GetValue() * 0.01))
                 controller:SetProp('m_flCustomAutoExposureMax', 1.00 - (CHIEFTAIN_VISUALS_WORLDEXPOSURE_VALUE:GetValue() * 0.01))
-                WORLD_MODULATION_CHANGER.can_change_exposure = true
+                can_change_exposure = true
             end
         else
-            if WORLD_MODULATION_CHANGER.can_change_exposure then
+            if can_change_exposure then
                 controller:SetProp('m_bUseCustomAutoExposureMin', 0)
                 controller:SetProp('m_bUseCustomAutoExposureMax', 0)
-                WORLD_MODULATION_CHANGER.can_change_exposure = false
+                can_change_exposure = false
             end
         end
 
@@ -1820,12 +1829,12 @@ local function world_modulation()
                 controller:SetProp('m_bUseCustomBloomScale', 1)
                 controller:SetProp('m_flCustomBloomScaleMinimum', CHIEFTAIN_VISUALS_BLOOM_VALUE:GetValue() * 0.05)
                 controller:SetProp('m_flCustomBloomScale', CHIEFTAIN_VISUALS_BLOOM_VALUE:GetValue() * 0.05)
-                WORLD_MODULATION_CHANGER.can_change_bloom = true
+                can_change_bloom = true
             end
         else
-            if WORLD_MODULATION_CHANGER.can_change_bloom then
+            if can_change_bloom then
                 controller:SetProp('m_bUseCustomBloomScale', 0)
-                WORLD_MODULATION_CHANGER.can_change_bloom = false
+                can_change_bloom = false
             end
         end
 
@@ -1839,14 +1848,14 @@ local function world_modulation()
                 client_SetConVar('mat_ambient_light_r', ambient_r / 255, true)
                 client_SetConVar('mat_ambient_light_g', ambient_g / 255, true)
                 client_SetConVar('mat_ambient_light_b', ambient_b / 255, true)
-                WORLD_MODULATION_CHANGER.can_change_ambient = true
+                can_change_ambient = true
             end
         else
-            if WORLD_MODULATION_CHANGER.can_change_ambient then
+            if can_change_ambient then
                 client_SetConVar('mat_ambient_light_r', 0, true)
                 client_SetConVar('mat_ambient_light_g', 0, true)
                 client_SetConVar('mat_ambient_light_b', 0, true)
-                WORLD_MODULATION_CHANGER.can_change_ambient = false
+                can_change_ambient = false
             end
         end
 
@@ -1862,12 +1871,12 @@ local function world_modulation()
                 client_SetConVar('fog_start', CHIEFTAIN_VISUALS_FOG_MODULATION_START:GetValue(), true)
                 client_SetConVar('fog_end', CHIEFTAIN_VISUALS_FOG_MODULATION_END:GetValue(), true)
 
-                WORLD_MODULATION_CHANGER.can_change_fog = true
+                can_change_fog = true
             end
         else
-            if WORLD_MODULATION_CHANGER.can_change_fog then
+            if can_change_fog then
                 client_SetConVar('fog_override', 0, true)
-                WORLD_MODULATION_CHANGER.can_change_fog = false
+                can_change_fog = false
             end
         end
 
