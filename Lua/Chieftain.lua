@@ -1646,14 +1646,12 @@ local function world_modulation()
             controller:SetProp('m_bUseCustomAutoExposureMax', 1)
             controller:SetProp('m_flCustomAutoExposureMin', 1.01 - (CHIEFTAIN_VISUALS_WORLDEXPOSURE_VALUE:GetValue() * 0.01))
             controller:SetProp('m_flCustomAutoExposureMax', 1.01 - (CHIEFTAIN_VISUALS_WORLDEXPOSURE_VALUE:GetValue() * 0.01))
-            can_change_exposure = true
         end
 
         if CACHE_BLOOM ~= CHIEFTAIN_VISUALS_BLOOM_VALUE:GetValue() then
             controller:SetProp('m_bUseCustomBloomScale', 1)
             controller:SetProp('m_flCustomBloomScaleMinimum', CHIEFTAIN_VISUALS_BLOOM_VALUE:GetValue() * 0.05)
             controller:SetProp('m_flCustomBloomScale', CHIEFTAIN_VISUALS_BLOOM_VALUE:GetValue() * 0.05)
-            can_change_bloom = true
         end
 
         if CACHE_VIEWMODELAMBIENT ~= CHIEFTAIN_VISUALS_VIEWMODELAMBIENT_VALUE:GetValue() then
@@ -1665,7 +1663,6 @@ local function world_modulation()
             client_SetConVar('mat_ambient_light_r', ambient_r / 255, true)
             client_SetConVar('mat_ambient_light_g', ambient_g / 255, true)
             client_SetConVar('mat_ambient_light_b', ambient_b / 255, true)
-            can_change_ambient = true
         end
 
 
