@@ -383,9 +383,9 @@ local function weaponinfo_draw(x, y, r, g, b, a)
     local doublefire = 'OFF'
 
     if gui_GetValue('rbot.accuracy.weapon.' .. string_lower(WEAPON_CURRENT_GROUP) .. '.doublefire') == 1 then
-        doublefire = ' SHIFT'
+        doublefire = ' DEFENSIVE'
     elseif gui_GetValue('rbot.accuracy.weapon.' .. string_lower(WEAPON_CURRENT_GROUP) .. '.doublefire') == 2 then
-        doublefire = ' RAPID'
+        doublefire = ' OFFENSIVE'
     end
 
     if gui_GetValue('rbot.accuracy.weapon.' .. string_lower(WEAPON_CURRENT_GROUP) .. '.doublefire') ~= 0 then
