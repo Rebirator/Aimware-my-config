@@ -187,7 +187,7 @@ local CHIEFTAIN_VISUALS_FPSBOOST_OTHER                  = gui.Checkbox(CHIEFTAIN
 local CHIEFTAIN_VISUALS_ASPECTRATIO_VALUE               = gui.Slider(CHIEFTAIN_SUBTAB_VISUALS, 'visuals.aspectratio', 'Aspect ratio', 100, 70, 130, 5)
 local CHIEFTAIN_VISUALS_WORLDEXPOSURE_VALUE             = gui.Slider(CHIEFTAIN_SUBTAB_VISUALS, 'visuals.worldexposure', 'World exposure', 0, 0, 100, 5)
 local CHIEFTAIN_VISUALS_BLOOM_VALUE                     = gui.Slider(CHIEFTAIN_SUBTAB_VISUALS, 'visuals.bloom', 'Bloom', 0, 0, 100, 5)
-local CHIEFTAIN_VISUALS_VIEWMODELAMBIENT_VALUE          = gui.Slider(CHIEFTAIN_SUBTAB_VISUALS, 'visuals.viewmodelambient', 'Viewmodel ambient light', 0, 0, 100, 5)
+local CHIEFTAIN_VISUALS_VIEWMODELAMBIENT_VALUE          = gui.Slider(CHIEFTAIN_SUBTAB_VISUALS, 'visuals.modelsambient', 'Models ambient light', 0, 0, 100, 5)
 local CHIEFTAIN_VISUALS_WORLDAMBIENT_VALUE              = gui.ColorPicker(CHIEFTAIN_SUBTAB_VISUALS, 'visuals.ambient', 'World ambient light', 0, 0, 0)
 local CHIEFTAIN_VISUALS_FOG_MODULATION                  = gui.Checkbox(CHIEFTAIN_SUBTAB_VISUALS, 'visuals.fogmodul', 'Fog modulation', false)
 local CHIEFTAIN_VISUALS_FOG_MODULATION_COLOR            = gui.ColorPicker(CHIEFTAIN_VISUALS_FOG_MODULATION, 'visuals.fogmodul.color', 'Fog modulation color', 255, 255, 255, 255)
@@ -197,10 +197,9 @@ local CHIEFTAIN_VISUALS_FOG_MODULATION_END              = gui.Slider(CHIEFTAIN_S
 
 local CHIEFTAIN_SUBTAB_DOUBLEFIRE                       = gui.Groupbox(CHIEFTAIN_TAB, 'Double fire', 328, 16, 296, 1)
 local CHIEFTAIN_DOUBLEFIRE_ENABLE                       = gui.Checkbox(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'doublefire.enable', 'Enable', false)
-local CHIEFTAIN_DOUBLEFIRE_MODE                         = gui_Combobox(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'doublefire.mode', 'Mode', 'Select the desired double fire mode.', 'None', 'Chargeable without recharge', 'Rechargeable')
+local CHIEFTAIN_DOUBLEFIRE_MODE                         = gui_Combobox(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'doublefire.mode', 'Mode', 'Select the desired double fire mode.', 'None', 'Defensive (more efficient)', 'Offensive')
 local CHIEFTAIN_DOUBLEFIRE_PERF                         = gui_Multibox(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'Performance options', 'Using performance options increase double fire efficiency.')
 local CHIEFTAIN_DOUBLEFIRE_PERF_DISLBY                  = gui_Checkbox(CHIEFTAIN_DOUBLEFIRE_PERF, 'doublefire.perf.dislby', 'Disable LBY', 'Disabling LBY greatly improves double fire efficiency.', false)
-local CHIEFTAIN_DOUBLEFIRE_PERF_LAGPEEK                 = gui_Checkbox(CHIEFTAIN_DOUBLEFIRE_PERF, 'doublefire.perf.lagpeek', 'Lag on peek [scripted]', 'Lag before the peek forces the enemy to delay.', false)
 local CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM              = gui.Combobox(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'doublefire.chargingtype', 'Gradual charging system', 'Off', 'On')
 local CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM_DELAY        = gui.Slider(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'doublefire.charging.delay', 'Delay before the control charge', 500, 100, 3000, 50)
 local CHIEFTAIN_DOUBLEFIRE_TICKBASE                     = gui_Combobox(CHIEFTAIN_SUBTAB_DOUBLEFIRE, 'doublefire.tickbase', 'Tickbase shifting', 'Select how much to shifting tickbase, or leave automatic.', 'Depending on the ping', 'Max Process Ticks - 2', 'Max Process Ticks - 1', 'Max Process Ticks', 'Max Process Ticks + 1', 'Custom')
@@ -243,7 +242,7 @@ CHIEFTAIN_VISUALS_FPSBOOST:SetDescription('Disabling some graphical elements inc
 CHIEFTAIN_VISUALS_ASPECTRATIO_VALUE:SetDescription('Expanding or narrowing the play space.')
 CHIEFTAIN_VISUALS_WORLDEXPOSURE_VALUE:SetDescription('Exposure, or simply the most correct night mode.')
 CHIEFTAIN_VISUALS_BLOOM_VALUE:SetDescription('Increases and blurs the lighting. Requires post-processing.')
-CHIEFTAIN_VISUALS_VIEWMODELAMBIENT_VALUE:SetDescription('Increases the brightness of the viewmodel.')
+CHIEFTAIN_VISUALS_VIEWMODELAMBIENT_VALUE:SetDescription('Increases the brightness of the player models.')
 CHIEFTAIN_VISUALS_FOG_MODULATION:SetDescription('Simple fog customization. Requires to disable "No Fog".')
 CHIEFTAIN_DOUBLEFIRE_ENABLE:SetDescription('Bind this to turn double fire on and off by key.')
 CHIEFTAIN_DOUBLEFIRE_CHARGING_SYSTEM:SetDescription('This is not a fast charge, but it makes it more measured.')
@@ -973,168 +972,6 @@ end
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-local function entities_check()
-    local LocalPlayer = entities_GetLocalPlayer();
-    local Player
-    if LocalPlayer ~= nil then
-        Player = LocalPlayer:GetAbsOrigin()
-        if (math_floor((entities_GetLocalPlayer():GetPropInt("m_fFlags") % 4) * 0.5) == 1) then
-            z = 46
-        else
-            z = 64
-        end
-        Player.z = Player.z + LocalPlayer:GetPropVector("localdata", "m_vecViewOffset[0]").z
-        return Player, LocalPlayer
-    end
-end
-
-function predict_velocity(entity, prediction_amount)
-	local VelocityX = entity:GetPropFloat( "localdata", "m_vecVelocity[0]" );
-	local VelocityY = entity:GetPropFloat( "localdata", "m_vecVelocity[1]" );
-	local VelocityZ = entity:GetPropFloat( "localdata", "m_vecVelocity[2]" );
-	
-	absVelocity = {VelocityX, VelocityY, VelocityZ}
-	
-	pos_ = {entity:GetAbsOrigin()}
-	
-	modifed_velocity = {vector_Multiply(absVelocity, prediction_amount)}
-	
-	
-	return {vector_Subtract({vector_Add(pos_, modifed_velocity)}, {0,0,0})}
-end
-
-local function is_vis(LocalPlayerPos)
-    local is_vis = false
-    local players = entities_FindByClass("CCSPlayer")
-
-    for i, player in pairs(players) do
-        if player:GetTeamNumber() ~= entities_GetLocalPlayer():GetTeamNumber() and player:IsPlayer() and entities_check() ~= nil and player:IsAlive() then			
-            for hitbox = 0, 18 do
-                if 	hitbox == 0  or
-                  --hitbox == 1  or
-                    hitbox == 2  or
-                  --hitbox == 3  or
-                  --hitbox == 4  or
-                    hitbox == 5  or
-                  --hitbox == 6  or
-                  --hitbox == 7  or
-                  --hitbox == 8  or
-                    hitbox == 9  or
-                    hitbox == 10 or
-                    hitbox == 11 or
-                    hitbox == 12 or
-                  --hitbox == 13 or
-                  --hitbox == 14 or
-                    hitbox == 15 or
-                    hitbox == 16 or
-                    hitbox == 17 or
-                    hitbox == 18 then
-                    for x = 3, 4 do
-                        local HitboxPos = player:GetHitboxPosition(hitbox)
-
-                        if x == 0 then
-                            HitboxPos.x = HitboxPos.x
-                            HitboxPos.y = HitboxPos.y
-                        elseif x == 1 then
-                            HitboxPos.x = HitboxPos.x
-                            HitboxPos.y = HitboxPos.y + 4
-                        elseif x == 2 then
-                            HitboxPos.x = HitboxPos.x
-                            HitboxPos.y = HitboxPos.y - 4
-                        elseif x == 3 then
-                            HitboxPos.x = HitboxPos.x + 4
-                            HitboxPos.y = HitboxPos.y
-                        elseif x == 4 then
-                            HitboxPos.x = HitboxPos.x - 4
-                            HitboxPos.y = HitboxPos.y
-                        end
-
-                        local c = (engine_TraceLine(LocalPlayerPos, HitboxPos, 0x1)).contents
-                            
-                        local x, y   = client_WorldToScreen(LocalPlayerPos)
-                        local x2, y2 = client_WorldToScreen(HitboxPos)
-                            
-                        --Debug
-                        --if c == 0 then draw_Color(0,255,0) else draw_Color(225,0,0) end
-                        --if x and x2 then
-                        --    draw_Line(x,y,x2,y2)
-                        --end
-                        --Debug
-                            
-                        if c == 0 then
-                            is_vis = true
-                            break
-                        end
-                    end
-                end
-            end
-        end
-    end
-
-    return is_vis
-end
-
-local function lag_on_peek()
-    if not DT_ENABLED or DT_ENABLED and not CHIEFTAIN_DOUBLEFIRE_PERF_LAGPEEK[WEAPON_CURRENT_GROUP][1]:GetValue() then
-        return
-    end
-
-    local Player, LocalPlayer = entities_check()
-	
-    local m_vecVelocity0 = entities_GetLocalPlayer():GetPropFloat("localdata", "m_vecVelocity[0]")
-    local m_vecVelocity1 = entities_GetLocalPlayer():GetPropFloat("localdata", "m_vecVelocity[1]")
-    local velocity = math_sqrt(m_vecVelocity0 * m_vecVelocity0 + m_vecVelocity1 * m_vecVelocity1)
-    
-    if LocalPlayer then
-        local perfect_prediction_velocity = 0.180 + 0.230 - (velocity * 0.0001)
-
-        local prediction = predict_velocity(LocalPlayer, perfect_prediction_velocity)
-        local my_pos = LocalPlayer:GetAbsOrigin()
-        
-        local x,y,z = vector_Add(
-            {my_pos.x, my_pos.y, my_pos.z},
-            {prediction[1], prediction[2], prediction[3]}
-        )
-    
-        local LocalPlayer_predicted_pos = Vector3(x,y,z)
-        LocalPlayer_predicted_pos.z = LocalPlayer_predicted_pos.z + LocalPlayer:GetPropVector("localdata", "m_vecViewOffset[0]").z
-    
-        if is_vis(LocalPlayer_predicted_pos) then
-            gui_SetValue("misc.speedburst.enable", 1)
-            dt_setup(0)
-        else
-            dt_setup()
-            gui_SetValue("misc.speedburst.enable", 0)
-        end
-    end
-    if LocalPlayer then
-        local perfect_prediction_velocity = 0.180 - (velocity * 0.0001)
-
-        --Debug
-        --local x, y = draw_GetScreenSize()
-        --draw_TextShadow(to_int(x * 0.5 + 20), to_int(y * 0.5 + 20), string_format("%.3f", perfect_prediction_velocity) .. ' prediction', 255, 255, 255, 255)
-        --Debug
-
-        local prediction = predict_velocity(LocalPlayer, perfect_prediction_velocity)
-        local my_pos = LocalPlayer:GetAbsOrigin()
-        
-        local x,y,z = vector_Add(
-            {my_pos.x, my_pos.y, my_pos.z},
-            {prediction[1], prediction[2], prediction[3]}
-        )
-    
-        local LocalPlayer_predicted_pos = Vector3(x,y,z)
-        LocalPlayer_predicted_pos.z = LocalPlayer_predicted_pos.z + LocalPlayer:GetPropVector("localdata", "m_vecViewOffset[0]").z
-    
-        if is_vis(LocalPlayer_predicted_pos) then
-            dt_setup()
-            gui_SetValue("misc.speedburst.enable", 0)
-        end
-    end
-end
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 do
     local CACHE_DOUBLEFIRE      = CHIEFTAIN_DOUBLEFIRE_ENABLE:GetValue()
     local CACHE_AUTODIR_EDGE    = gui_GetValue('rbot.antiaim.advanced.autodir.edges')
@@ -1491,9 +1328,9 @@ local function weaponinfo_draw(x, y, r, g, b, a)
     local doublefire = 'OFF'
 
     if gui_GetValue('rbot.accuracy.weapon.' .. string_lower(WEAPON_CURRENT_GROUP) .. '.doublefire') == 1 then
-        doublefire = ' SHIFT'
+        doublefire = ' DEFENSIVE'
     elseif gui_GetValue('rbot.accuracy.weapon.' .. string_lower(WEAPON_CURRENT_GROUP) .. '.doublefire') == 2 then
-        doublefire = ' RAPID'
+        doublefire = ' OFFENSIVE'
     end
 
     if gui_GetValue('rbot.accuracy.weapon.' .. string_lower(WEAPON_CURRENT_GROUP) .. '.doublefire') ~= 0 then
@@ -1768,11 +1605,7 @@ end
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 do
-    local can_change_exposure = true
-    local can_change_bloom = true
-    local can_change_ambient = true
     local can_change_fog = true
-
 
     local CACHE_WORLDEXPOSURE      = CHIEFTAIN_VISUALS_WORLDEXPOSURE_VALUE:GetValue()
 
@@ -1808,34 +1641,19 @@ local function world_modulation()
     if(controller) then
         controller:SetProp('m_bUseCustomBloomScale', 1)
 
-        if CHIEFTAIN_VISUALS_WORLDEXPOSURE_VALUE:GetValue() ~= 0 then
-            if CACHE_WORLDEXPOSURE ~= CHIEFTAIN_VISUALS_WORLDEXPOSURE_VALUE:GetValue() then
-                controller:SetProp('m_bUseCustomAutoExposureMin', 1)
-                controller:SetProp('m_bUseCustomAutoExposureMax', 1)
-                controller:SetProp('m_flCustomAutoExposureMin', 1.00 - (CHIEFTAIN_VISUALS_WORLDEXPOSURE_VALUE:GetValue() * 0.01))
-                controller:SetProp('m_flCustomAutoExposureMax', 1.00 - (CHIEFTAIN_VISUALS_WORLDEXPOSURE_VALUE:GetValue() * 0.01))
-                can_change_exposure = true
-            end
-        else
-            if can_change_exposure then
-                controller:SetProp('m_bUseCustomAutoExposureMin', 0)
-                controller:SetProp('m_bUseCustomAutoExposureMax', 0)
-                can_change_exposure = false
-            end
+        if CACHE_WORLDEXPOSURE ~= CHIEFTAIN_VISUALS_WORLDEXPOSURE_VALUE:GetValue() then
+            controller:SetProp('m_bUseCustomAutoExposureMin', 1)
+            controller:SetProp('m_bUseCustomAutoExposureMax', 1)
+            controller:SetProp('m_flCustomAutoExposureMin', 1.01 - (CHIEFTAIN_VISUALS_WORLDEXPOSURE_VALUE:GetValue() * 0.01))
+            controller:SetProp('m_flCustomAutoExposureMax', 1.01 - (CHIEFTAIN_VISUALS_WORLDEXPOSURE_VALUE:GetValue() * 0.01))
+            can_change_exposure = true
         end
 
-        if CHIEFTAIN_VISUALS_BLOOM_VALUE:GetValue() ~= 0 then
-            if CACHE_BLOOM ~= CHIEFTAIN_VISUALS_BLOOM_VALUE:GetValue() then
-                controller:SetProp('m_bUseCustomBloomScale', 1)
-                controller:SetProp('m_flCustomBloomScaleMinimum', CHIEFTAIN_VISUALS_BLOOM_VALUE:GetValue() * 0.05)
-                controller:SetProp('m_flCustomBloomScale', CHIEFTAIN_VISUALS_BLOOM_VALUE:GetValue() * 0.05)
-                can_change_bloom = true
-            end
-        else
-            if can_change_bloom then
-                controller:SetProp('m_bUseCustomBloomScale', 0)
-                can_change_bloom = false
-            end
+        if CACHE_BLOOM ~= CHIEFTAIN_VISUALS_BLOOM_VALUE:GetValue() then
+            controller:SetProp('m_bUseCustomBloomScale', 1)
+            controller:SetProp('m_flCustomBloomScaleMinimum', CHIEFTAIN_VISUALS_BLOOM_VALUE:GetValue() * 0.05)
+            controller:SetProp('m_flCustomBloomScale', CHIEFTAIN_VISUALS_BLOOM_VALUE:GetValue() * 0.05)
+            can_change_bloom = true
         end
 
         if CACHE_VIEWMODELAMBIENT ~= CHIEFTAIN_VISUALS_VIEWMODELAMBIENT_VALUE:GetValue() then
@@ -1843,20 +1661,11 @@ local function world_modulation()
         end
 
         local ambient_r, ambient_g, ambient_b = CHIEFTAIN_VISUALS_WORLDAMBIENT_VALUE:GetValue()
-        if ambient_r ~= 0 or ambient_g ~= 0 or ambient_b ~= 0 then
-            if CACHE_WORLDAMBIENT ~= CHIEFTAIN_VISUALS_WORLDAMBIENT_VALUE:GetValue() then
-                client_SetConVar('mat_ambient_light_r', ambient_r / 255, true)
-                client_SetConVar('mat_ambient_light_g', ambient_g / 255, true)
-                client_SetConVar('mat_ambient_light_b', ambient_b / 255, true)
-                can_change_ambient = true
-            end
-        else
-            if can_change_ambient then
-                client_SetConVar('mat_ambient_light_r', 0, true)
-                client_SetConVar('mat_ambient_light_g', 0, true)
-                client_SetConVar('mat_ambient_light_b', 0, true)
-                can_change_ambient = false
-            end
+        if CACHE_WORLDAMBIENT ~= CHIEFTAIN_VISUALS_WORLDAMBIENT_VALUE:GetValue() then
+            client_SetConVar('mat_ambient_light_r', ambient_r / 255, true)
+            client_SetConVar('mat_ambient_light_g', ambient_g / 255, true)
+            client_SetConVar('mat_ambient_light_b', ambient_b / 255, true)
+            can_change_ambient = true
         end
 
 
@@ -1916,7 +1725,6 @@ callbacks.Register('Draw', 'ChieftainDrawMain', function()
 
     fakelatency()
     doublefire(getmaxprocessticks)
-    lag_on_peek()
     no_scope_hc()
 
     if WEAPON_CURRENT_GROUP == 'KNIFE' then
