@@ -309,7 +309,7 @@ local function FakeExposeAndAntiResolver( )
     g_cache_antiresolver    = ANTIAIM_EXTRA_ANTIRESOLVER:GetValue( );
 end;
 
-callbacks.Register( "Draw", "AntiAimSystemRebuildMain", function( )
+callbacks.Register( "Draw", "OldAntiAimSystemRebuildMain", function( )
     if globals_CurTime( ) > g_last_curtime then
         MenuController( )
 
@@ -359,7 +359,7 @@ local OnResetCache = gui.Button( ANTIAIM_EXTRA_SUBTAB, "Reset cache", function( 
     g_cache_antiresolver            = nil;
 end );
 
-callbacks.Register( "Unload", "AntiAimSystemRebuildOnUnload", function( )
+callbacks.Register( "Unload", "OldAntiAimSystemRebuildOnUnload", function( )
     gui_Reference( "Ragebot", "Anti-Aim", "Base Direction" ):SetInvisible( false );
     gui_Reference( "Ragebot", "Anti-Aim", "Left Direction" ):SetInvisible( false );
     gui_Reference( "Ragebot", "Anti-Aim", "Right Direction" ):SetInvisible( false );
