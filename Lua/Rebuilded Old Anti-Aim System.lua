@@ -309,10 +309,14 @@ local function FakeExposeAndAntiResolver( )
     g_cache_antiresolver    = ANTIAIM_EXTRA_ANTIRESOLVER:GetValue( );
 end;
 
-callbacks.Register( "Draw", "OldAntiAimSystemRebuildMain", function( )
+callbacks.Register( "Draw", "OldAntiAimSystemRebuildController", function( )
     if globals_CurTime( ) > g_last_curtime then
         MenuController( )
+    end;
+end );
 
+callbacks.Register( "CreateMove", "OldAntiAimSystemRebuildMain", function( )
+    if globals_CurTime( ) > g_last_curtime then
         if not ANTIAIM_ANTIAIM_ENABLED:GetValue( ) then
             gui_Command( "rbot.antiaim.base 0 \"Off\"" );
             gui_SetValue( "rbot.antiaim.advanced.autodir.edges", 0 );
@@ -333,7 +337,7 @@ callbacks.Register( "Draw", "OldAntiAimSystemRebuildMain", function( )
 end );
 
 local OnResetCache = gui.Button( ANTIAIM_EXTRA_SUBTAB, "Reset cache", function( )
-    g_last_curtime                  = nil;
+    g_last_curtime                  = 0;
 
     g_cache_pitch                   = nil;
     g_cache_realyaw                 = nil;
