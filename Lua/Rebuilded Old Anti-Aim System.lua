@@ -1,6 +1,6 @@
 --[[--------------------------------------Credits---------------------------------------------------
 
-                       Old Anti-Aim System Rebuild made by GLadiator                             
+                      Rebuilded Old Anti-Aim System made by GLadiator                             
 
 ------------------------------------------Credits-----------------------------------------------]]--
 
@@ -20,7 +20,7 @@ gui_Reference( "Ragebot", "Anti-Aim", "Condition" ):SetInvisible( true );
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-local ANTIAIM_TAB                         = gui_Reference( "Ragebot", "Anti-Aim" );
+local ANTIAIM_TAB                           = gui_Reference( "Ragebot", "Anti-Aim" );
 
 local ANTIAIM_ANTIAIM_SUBTAB                = gui.Groupbox( ANTIAIM_TAB, "Anti-Aim", 16, 16, 296, 1 )
 local ANTIAIM_ANTIAIM_ENABLED               = gui.Checkbox( ANTIAIM_ANTIAIM_SUBTAB, "antiaim.enabled", "Enable", false )
