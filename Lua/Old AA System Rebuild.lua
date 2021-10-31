@@ -1,31 +1,12 @@
-local math_floor, math_random, math_sqrt, string_lower, string_format, math_pow
-=
-      math.floor, math.random, math.sqrt, string.lower, string.format, math.pow
-;
+--[[--------------------------------------Credits---------------------------------------------------
 
-local draw_SetFont, draw_GetScreenSize, draw_GetTextSize, draw_Color, draw_Text, draw_TextShadow, draw_Line, draw_CreateTexture, draw_SetTexture, draw_FilledRect, common_RasterizeSVG
-= 
-      draw.SetFont, draw.GetScreenSize, draw.GetTextSize, draw.Color, draw.Text, draw.TextShadow, draw.Line, draw.CreateTexture, draw.SetTexture, draw.FilledRect, common.RasterizeSVG
-; 
+                       Old Anti-Aim System Rebuild made by GLadiator                             
 
-local entities_GetByIndex, entities_GetLocalPlayer, entities_FindByClass, entities_GetPlayerResources, client_GetConVar, client_WorldToScreen, vector_Multiply, vector_Subtract, vector_Add, vector_Distance
-=
-      entities.GetByIndex, entities.GetLocalPlayer, entities.FindByClass, entities.GetPlayerResources, client.GetConVar, client.WorldToScreen, vector.Multiply, vector.Subtract, vector.Add, vector.Distance
-;
+------------------------------------------Credits-----------------------------------------------]]--
 
-local engine_TraceLine, engine_GetServerIP, engine_GetViewAngles, globals_CurTime, globals_RealTime, globals_MaxClients
+local entities_GetByIndex, globals_CurTime, globals_MaxClients, gui_GetValue, gui_SetValue, gui_Reference, gui_Command
 =
-      engine.TraceLine, engine.GetServerIP, engine.GetViewAngles, globals.CurTime, globals.RealTime, globals.MaxClients
-;
-
-local input_IsButtonDown, input_IsButtonPressed, input_IsButtonReleased, input_GetMousePos
-=
-      input.IsButtonDown, input.IsButtonPressed, input.IsButtonReleased, input.GetMousePos
-;
-
-local gui_GetValue, gui_SetValue, gui_Reference, gui_Command, client_GetConVar, client_SetConVar, client_Command
-=
-      gui.GetValue, gui.SetValue, gui.Reference, gui.Command, client.GetConVar, client.SetConVar, client.Command
+      entities.GetByIndex, globals.CurTime, globals.MaxClients, gui.GetValue, gui.SetValue, gui.Reference, gui.Command
 ;
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
