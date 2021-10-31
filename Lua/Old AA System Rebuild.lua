@@ -62,10 +62,7 @@ ANTIAIM_EXTRA_ANTIRESOLVER:SetDescription( "Makes continous shots harder to hit.
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-local g_desync_side = 0;
-
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-local g_last_curtime                = globals_CurTime( );
+local g_last_curtime                = nil;
 
 local g_cache_pitch                 = nil;
 local g_cache_realyaw               = nil;
@@ -336,7 +333,7 @@ callbacks.Register( "Draw", "AntiAimSystemRebuildMain", function( )
 end );
 
 local OnResetCache = gui.Button( ANTIAIM_EXTRA_SUBTAB, "Reset cache", function( )
-    g_cache_desync_side             = nil;
+    g_last_curtime                  = nil;
 
     g_cache_pitch                   = nil;
     g_cache_realyaw                 = nil;
