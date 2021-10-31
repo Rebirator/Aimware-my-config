@@ -310,9 +310,7 @@ local function FakeExposeAndAntiResolver( )
 end;
 
 callbacks.Register( "Draw", "OldAntiAimSystemRebuildController", function( )
-    if globals_CurTime( ) > g_last_curtime then
-        MenuController( )
-    end;
+    MenuController( )
 end );
 
 callbacks.Register( "CreateMove", "OldAntiAimSystemRebuildMain", function( )
