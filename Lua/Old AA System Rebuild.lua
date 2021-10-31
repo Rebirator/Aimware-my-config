@@ -62,7 +62,7 @@ ANTIAIM_EXTRA_ANTIRESOLVER:SetDescription( "Makes continous shots harder to hit.
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-local g_last_curtime                = nil;
+local g_last_curtime                = 0;
 
 local g_cache_pitch                 = nil;
 local g_cache_realyaw               = nil;
