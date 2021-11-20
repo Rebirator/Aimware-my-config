@@ -156,7 +156,6 @@ local CHIEFTAIN_MISC_FAKELAGS_JITTER                    = gui.Slider(CHIEFTAIN_S
 local CHIEFTAIN_MISC_FAKELAGS_CUSTOM_TYPE               = gui.Combobox(CHIEFTAIN_SUBTAB_MISC, 'misc.fakelags.custom.type', 'Fakelags pattern', 'Normal', 'Adaptive', 'Switch')
 local CHIEFTAIN_MISC_FAKELAGS_CUSTOM_FACTOR_MIN         = gui.Slider(CHIEFTAIN_SUBTAB_MISC, 'misc.fakelags.custom.factor.min', 'Factor minimum', 16, 3, 61)
 local CHIEFTAIN_MISC_FAKELAGS_CUSTOM_FACTOR_MAX         = gui.Slider(CHIEFTAIN_SUBTAB_MISC, 'misc.fakelags.custom.factor.max', 'Factor maximum', 16, 3, 61)
-local CHIEFTAIN_MISC_FAKEDUCK_TYPE                      = gui.Combobox(CHIEFTAIN_SUBTAB_MISC, 'misc.fakeduck.type', 'Fakeduck type', 'Accurate, but slow', 'Inaccuracy, but fast')
 local CHIEFTAIN_MISC_FAKEDUCK_SPEED                     = gui.Combobox(CHIEFTAIN_SUBTAB_MISC, 'misc.fakeduck.speed', 'Fakeduck factor', 'Automatic', 'Max Process Ticks - 2', 'Max Process Ticks - 1', 'Max Process Ticks', 'Max Process Ticks + 1', 'Custom')
 local CHIEFTAIN_MISC_FAKEDUCK_SPEED_ADJUSTER            = gui.Slider(CHIEFTAIN_SUBTAB_MISC, 'misc.fakeduck.speed.adjuster', 'Fakeduck factor adjuster', 16, 3, 61)
 local CHIEFTAIN_MISC_FAKELATENCY                        = gui.Combobox(CHIEFTAIN_SUBTAB_MISC, 'misc.fakelatency', 'Fakelatency', 'Off', 'Low', 'Medium', 'High', 'Maximum', 'Custom')
@@ -230,7 +229,6 @@ CHIEFTAIN_MISC_FAKELAGS_CUSTOM_FACTOR_MIN:SetDescription('How many minimum fakel
 CHIEFTAIN_MISC_FAKELAGS_CUSTOM_FACTOR_MAX:SetDescription('How many maximum fakelags ticks will be choked.')
 CHIEFTAIN_MISC_FAKELATENCY:SetDescription('Using fakelatency makes the backtrack of enemies longer.')
 CHIEFTAIN_MISC_FAKELATENCY_ADJUSTER:SetDescription('By default, servers only support up to 200ms.')
-CHIEFTAIN_MISC_FAKEDUCK_TYPE:SetDescription('Choose your preferred fakeduck type.')
 CHIEFTAIN_MISC_FAKEDUCK_SPEED:SetDescription('Affects height, speed, and shooting accuracy.')
 CHIEFTAIN_MISC_FAKEDUCK_SPEED_ADJUSTER:SetDescription('How many fakeduck ticks will be choked.')
 CHIEFTAIN_VISUALS_WPNINFO:SetDescription('Displays information about weapon and anti-aims.')
@@ -556,17 +554,17 @@ local function menuсontroler()
     end
 
     if CHIEFTAIN_MISC_FAKELAGS_TYPE:GetValue() == 2 and CHIEFTAIN_MISC_FAKEDUCK_SPEED:GetValue() == 5 and CHIEFTAIN_MISC_FAKELATENCY:GetValue() == 5 then
-        CHIEFTAIN_SUBTAB_VISUALS:SetPosY(771)
+        CHIEFTAIN_SUBTAB_VISUALS:SetPosY(701)
     elseif CHIEFTAIN_MISC_FAKELAGS_TYPE:GetValue() == 2 and CHIEFTAIN_MISC_FAKEDUCK_SPEED:GetValue() == 5 or CHIEFTAIN_MISC_FAKELAGS_TYPE:GetValue() == 2 and CHIEFTAIN_MISC_FAKELATENCY:GetValue() == 5 then
-        CHIEFTAIN_SUBTAB_VISUALS:SetPosY(709)
-    elseif CHIEFTAIN_MISC_FAKEDUCK_SPEED:GetValue() == 5 and CHIEFTAIN_MISC_FAKELATENCY:GetValue() == 5 then
         CHIEFTAIN_SUBTAB_VISUALS:SetPosY(639)
+    elseif CHIEFTAIN_MISC_FAKEDUCK_SPEED:GetValue() == 5 and CHIEFTAIN_MISC_FAKELATENCY:GetValue() == 5 then
+        CHIEFTAIN_SUBTAB_VISUALS:SetPosY(569)
     elseif CHIEFTAIN_MISC_FAKELAGS_TYPE:GetValue() == 2 then
-        CHIEFTAIN_SUBTAB_VISUALS:SetPosY(647)
-    elseif CHIEFTAIN_MISC_FAKEDUCK_SPEED:GetValue() == 5 or CHIEFTAIN_MISC_FAKELATENCY:GetValue() == 5 then
         CHIEFTAIN_SUBTAB_VISUALS:SetPosY(577)
+    elseif CHIEFTAIN_MISC_FAKEDUCK_SPEED:GetValue() == 5 or CHIEFTAIN_MISC_FAKELATENCY:GetValue() == 5 then
+        CHIEFTAIN_SUBTAB_VISUALS:SetPosY(507)
     else
-        CHIEFTAIN_SUBTAB_VISUALS:SetPosY(515)
+        CHIEFTAIN_SUBTAB_VISUALS:SetPosY(445)
     end
 
     if CHIEFTAIN_VISUALS_WPNINFO_THIRDPERSON:GetValue() then
@@ -784,25 +782,14 @@ local function fakeduck(getmaxprocessticks)
     if gui_GetValue('rbot.antiaim.extra.fakecrouchkey') == 0 then
 		return
 	end
-
-    local FD_TYPE = { 0, 1 }
     local FD_SPEED = { getmaxprocessticks - 2, getmaxprocessticks - 1, getmaxprocessticks, getmaxprocessticks + 1, CHIEFTAIN_MISC_FAKEDUCK_SPEED_ADJUSTER:GetValue() }
 
-    gui_SetValue('rbot.antiaim.extra.fakecrouchstyle', FD_TYPE[CHIEFTAIN_MISC_FAKEDUCK_TYPE:GetValue() + 1])
     if input_IsButtonDown(gui_Reference('Ragebot', 'Anti-Aim', 'Extra', 'Fake Duck'):GetValue()) then 
         if CHIEFTAIN_MISC_FAKEDUCK_SPEED:GetValue() == 0 then
-            if CHIEFTAIN_MISC_FAKEDUCK_TYPE:GetValue() == 0 then
-                if getmaxprocessticks == '6' or getmaxprocessticks == '8' then
-                    SV_MAXUSRCMDPROCESSTICKS:SetValue(7)
-                else
-                    SV_MAXUSRCMDPROCESSTICKS:SetValue(getmaxprocessticks)
-                end
-            elseif CHIEFTAIN_MISC_FAKEDUCK_TYPE:GetValue() ~= 0 then
-                if getmaxprocessticks == '6' or getmaxprocessticks == '8' then
-                    SV_MAXUSRCMDPROCESSTICKS:SetValue(7)
-                else
-                    SV_MAXUSRCMDPROCESSTICKS:SetValue(getmaxprocessticks - 1)
-                end
+            if getmaxprocessticks == '6' or getmaxprocessticks == '8' then
+                SV_MAXUSRCMDPROCESSTICKS:SetValue(7)
+            else
+                SV_MAXUSRCMDPROCESSTICKS:SetValue(getmaxprocessticks)
             end
 
             FD_ENABLED = 1
