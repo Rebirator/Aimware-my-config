@@ -26,7 +26,7 @@ local ANTIAIM_ANTIAIM_SUBTAB                = gui.Groupbox( ANTIAIM_TAB, "Anti-A
 local ANTIAIM_ANTIAIM_ENABLED               = gui.Checkbox( ANTIAIM_ANTIAIM_SUBTAB, "antiaim.enabled", "Enable", false )
 local ANTIAIM_ANTIAIM_PITCH                 = gui.Combobox( ANTIAIM_ANTIAIM_SUBTAB, "antiaim.pitch", "Pitch Angle", "Off", "Down", "180° (Untrusted)" );
 local ANTIAIM_ANTIAIM_REAL                  = gui.Combobox( ANTIAIM_ANTIAIM_SUBTAB, "antiaim.realyaw", "Real Yaw", "Off", "Left", "Right", "Backward" );
-local ANTIAIM_ANTIAIM_REAL_ADD              = gui.Slider( ANTIAIM_ANTIAIM_SUBTAB, "antiaim.realyaw.add", "Real Yaw Angle Modifer", 0, -180, 180 );
+local ANTIAIM_ANTIAIM_REAL_ADD              = gui.Slider( ANTIAIM_ANTIAIM_SUBTAB, "antiaim.realyaw.add", "Real Yaw Angle Modifier", 0, -180, 180 );
 local ANTIAIM_ANTIAIM_FAKE                  = gui.Combobox( ANTIAIM_ANTIAIM_SUBTAB, "antiaim.fakeyaw", "Fake Yaw", "Off", "Default", "Opposite" );
 local ANTIAIM_ANTIAIM_FAKE_DEFAULT_VALUE    = gui.Slider( ANTIAIM_ANTIAIM_SUBTAB, "antiaim.fakeyaw.default.value", "Maximum Desync", 0, -58, 58 );
 local ANTIAIM_ANTIAIM_FAKE_AUTODIR_LEFT     = gui.Slider( ANTIAIM_ANTIAIM_SUBTAB, "antiaim.fakeyaw.autodir.left", "Maximum Desync Left", 0, 0, 58 );
@@ -37,13 +37,12 @@ local ANTIAIM_ANTIAIM_FAKE_AUTODIR_MODE     = gui.Combobox( ANTIAIM_ANTIAIM_SUBT
 
 local ANTIAIM_EXTRA_SUBTAB                  = gui.Groupbox( ANTIAIM_TAB, "Extra", 328, 16, 296, 1 );
 local ANTIAIM_EXTRA_FAKEDUCK                = gui.Keybox( ANTIAIM_EXTRA_SUBTAB, "extra.fakeduck", "Fake Duck", nil );
-local ANTIAIM_EXTRA_FAKEDUCK_STYLE          = gui.Combobox( ANTIAIM_EXTRA_SUBTAB, "extra.fakeduck.style", "Fake Duck Style", "Duck", "Unduck" );
 local ANTIAIM_EXTRA_STATICLEGS              = gui.Checkbox( ANTIAIM_EXTRA_SUBTAB, "extra.staticlegs", "Static Legs", false );
 local ANTIAIM_EXTRA_CONDITIONS              = gui.Multibox( ANTIAIM_EXTRA_SUBTAB, "Conditions" );
 local ANTIAIM_EXTRA_CONDITIONS_ONUSE        = gui.Checkbox( ANTIAIM_EXTRA_CONDITIONS, "extra.conditions.onuse", "Disable On Use", false );
 local ANTIAIM_EXTRA_CONDITIONS_ONKNIFE      = gui.Checkbox( ANTIAIM_EXTRA_CONDITIONS, "extra.conditions.onknife", "Disable On Knife", false );
 local ANTIAIM_EXTRA_CONDITIONS_ONGRENADE    = gui.Checkbox( ANTIAIM_EXTRA_CONDITIONS, "extra.conditions.ongrenade", "Disable On Grenade", false );
-local ANTIAIM_EXTRA_CONDITIONS_FREEZETIME   = gui.Checkbox( ANTIAIM_EXTRA_CONDITIONS, "extra.conditions.freezetime", "During Freeze Time", false );
+local ANTIAIM_EXTRA_CONDITIONS_FREEZETIME   = gui.Checkbox( ANTIAIM_EXTRA_CONDITIONS, "extra.conditions.freezetime", "Disable During Freeze Time", false );
 local ANTIAIM_EXTRA_SHIFTONSHOT             = gui.Checkbox( ANTIAIM_EXTRA_SUBTAB, "extra.shiftonshot", "Shift On Shot", false );
 local ANTIAIM_EXTRA_FAKEEXPOSE              = gui.Keybox( ANTIAIM_EXTRA_SUBTAB, "extra.fakeexpose", "Fake Expose Toggle", nil );
 local ANTIAIM_EXTRA_FAKEEXPOSE_TYPE         = gui.Combobox( ANTIAIM_EXTRA_SUBTAB, "extra.fakeexpose.type", "Fake Expose Type", "1s", "1.5s" );
@@ -76,7 +75,6 @@ local g_cache_fakeyaw_autodir       = nil;
 local g_cache_fakeyaw_autodir_mode  = nil;
 local g_cache_attargets             = nil;
 local g_cache_fakeduckkey           = nil;
-local g_cache_fakeduck_style        = nil;
 local g_cache_staticlegs            = nil;
 local g_cache_conditions_onuse      = nil;
 local g_cache_conditions_onknife    = nil;
@@ -261,16 +259,14 @@ local function AtTargets( )
 end;
 
 local function FakeDuckAndStaticLegs( )
-    if g_cache_fakeduckkey == ANTIAIM_EXTRA_FAKEDUCK:GetValue( ) and g_cache_fakeduck_style == ANTIAIM_EXTRA_FAKEDUCK_STYLE:GetValue( ) and g_cache_staticlegs == ANTIAIM_EXTRA_STATICLEGS:GetValue( ) then
+    if g_cache_fakeduckkey == ANTIAIM_EXTRA_FAKEDUCK:GetValue( ) and g_cache_staticlegs == ANTIAIM_EXTRA_STATICLEGS:GetValue( ) then
         return;
     end
 
     gui_SetValue( "rbot.antiaim.extra.fakecrouchkey", ANTIAIM_EXTRA_FAKEDUCK:GetValue( ) );
-    gui_SetValue( "rbot.antiaim.extra.fakecrouchstyle", ANTIAIM_EXTRA_FAKEDUCK_STYLE:GetValue( ) );
     gui_SetValue( "rbot.antiaim.extra.staticlegs", ANTIAIM_EXTRA_STATICLEGS:GetValue( ) );
 
     g_cache_fakeduckkey     = ANTIAIM_EXTRA_FAKEDUCK:GetValue( );
-    g_cache_fakeduck_style  = ANTIAIM_EXTRA_FAKEDUCK_STYLE:GetValue( );
     g_cache_staticlegs      = ANTIAIM_EXTRA_STATICLEGS:GetValue( );
 end;
 
@@ -351,7 +347,6 @@ local OnResetCache = gui.Button( ANTIAIM_EXTRA_SUBTAB, "Reset cache", function( 
     g_cache_fakeyaw_autodir_mode    = nil;
     g_cache_attargets               = nil;
     g_cache_fakeduckkey             = nil;
-    g_cache_fakeduck_style          = nil;
     g_cache_staticlegs              = nil;
     g_cache_conditions_onuse        = nil;
     g_cache_conditions_onknife      = nil;
