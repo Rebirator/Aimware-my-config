@@ -30,7 +30,7 @@ callbacks.Register( "CreateMove", "RollAA001", function( UserCmd )
     
     if g_bRollAA:GetValue( ) then
         local local_player = entities.GetLocalPlayer( );
-        if math.sqrt( local_player:GetPropFloat( "localdata", "m_vecVelocity[0]" ) ^ 2 + local_player:GetPropFloat( "localdata", "m_vecVelocity[1]" ) ^ 2 ) < 10 then
+        if math.sqrt( local_player:GetPropFloat( "localdata", "m_vecVelocity[0]" ) ^ 2 + local_player:GetPropFloat( "localdata", "m_vecVelocity[1]" ) ^ 2 ) < 5 then
             if gui_GetValue( "rbot.antiaim.base.rotation" ) > 0 then
                 UserCmd.viewangles = EulerAngles( UserCmd.viewangles.x, UserCmd.viewangles.y, g_iRollAAValue:GetValue( ) );
             else
