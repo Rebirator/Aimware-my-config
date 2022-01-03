@@ -24,12 +24,12 @@ callbacks.Register( "CreateMove", "RollAA001", function( UserCmd )
             else
                 UserCmd.viewangles = EulerAngles( UserCmd.viewangles.x, UserCmd.viewangles.y, -g_iRollAAValue:GetValue( ) );
             end;
-        else if g_iRollAAMovValue:GetValue( ) > 0 and bit_band( local_player:GetPropInt( "m_fFlags" ), 1 ) == 1 then
+        elseif g_iRollAAMovValue:GetValue( ) > 0 and bit_band( local_player:GetPropInt( "m_fFlags" ), 1 ) == 1 then
             if gui_GetValue( "rbot.antiaim.base.rotation" ) > 0 then
-                UserCmd.viewangles = EulerAngles( UserCmd.viewangles.x, UserCmd.viewangles.y, g_iRollAAMovValue:GetValue( ) );
+                UserCmd.viewangles = EulerAngles( UserCmd.viewangles.x, UserCmd.viewangles.y, g_iRollAAValue:GetValue( ) );
             else
-                UserCmd.viewangles = EulerAngles( UserCmd.viewangles.x, UserCmd.viewangles.y, -g_iRollAAMovValue:GetValue( ) );
+                UserCmd.viewangles = EulerAngles( UserCmd.viewangles.x, UserCmd.viewangles.y, -g_iRollAAValue:GetValue( ) );
             end;
         end;
-    end;
+    end
 end );
