@@ -382,6 +382,7 @@ end;
 
 callbacks.Register( "Draw", "HoloPanelPosition", function( ) 
     local muzzle_temp = muzzle.Get( );
+    if muzzle_temp == nil then return end;
     muzzle.m_pos = muzzle_temp.m_pos;
     muzzle_pos_x, muzzle_pos_y = client_WorldToScreen( muzzle.m_pos );
 
