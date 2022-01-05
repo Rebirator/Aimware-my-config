@@ -11,7 +11,7 @@ local math_sqrt, bit_band, entities_GetLocalPlayer, gui_GetValue = math.sqrt, bi
 local g_bRollAA         = gui.Checkbox( gui.Reference("Ragebot", "Anti-Aim", "Extra" ), "rollaa", "◆ Enable Roll AA ◆", false );
 g_bRollAA:SetDescription( "Enabling extended desync degree" );
 local g_iRollAAValue    = gui.Slider( gui.Reference("Ragebot", "Anti-Aim", "Extra" ), "rollaalength", "Roll AA Length", 45, 1, 45 );
-g_iRollAAValue:SetDescription( "Length of extended desync degree" );
+g_iRollAAValue:SetDescription( "Length standing of extended desync degree." );
 local g_iRollAAMovValue = gui.Slider( gui.Reference("Ragebot", "Anti-Aim", "Extra" ), "rollaamovlength", "Roll AA Move Length", 0, 0, 45 );
 g_iRollAAMovValue:SetDescription( "The higher the value, the more incorrect the movement." );
 
