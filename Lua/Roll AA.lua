@@ -16,19 +16,19 @@ local g_iRollAAMovValue = gui.Slider( gui.Reference("Ragebot", "Anti-Aim", "Extr
 g_iRollAAMovValue:SetDescription( "The higher the value, the more incorrect the movement." );
 
 callbacks.Register( "CreateMove", "RollAA001", function( UserCmd )
-    if g_bRollAA:GetValue( ) then
-        local local_player = entities.GetLocalPlayer( );
+    local local_player = entities.GetLocalPlayer( );
+    if g_bRollAA:GetValue( ) and bit_band( local_player:GetPropInt( "m_fFlags" ), 1 ) == 1 then
         if math.sqrt( local_player:GetPropFloat( "localdata", "m_vecVelocity[0]" ) ^ 2 + local_player:GetPropFloat( "localdata", "m_vecVelocity[1]" ) ^ 2 ) < 5 then
             if gui_GetValue( "rbot.antiaim.base.rotation" ) > 0 then
                 UserCmd.viewangles = EulerAngles( UserCmd.viewangles.x, UserCmd.viewangles.y, g_iRollAAValue:GetValue( ) );
             else
                 UserCmd.viewangles = EulerAngles( UserCmd.viewangles.x, UserCmd.viewangles.y, -g_iRollAAValue:GetValue( ) );
             end;
-        elseif math.sqrt( local_player:GetPropFloat( "localdata", "m_vecVelocity[0]" ) ^ 2 + local_player:GetPropFloat( "localdata", "m_vecVelocity[1]" ) ^ 2 ) > 5 and g_iRollAAMovValue:GetValue( ) > 0 and bit_band( local_player:GetPropInt( "m_fFlags" ), 1 ) == 1 then
+        elseif g_iRollAAMovValue:GetValue( ) > 0 then
             if gui_GetValue( "rbot.antiaim.base.rotation" ) > 0 then
-                UserCmd.viewangles = EulerAngles( UserCmd.viewangles.x, UserCmd.viewangles.y, g_iRollAAValue:GetValue( ) );
+                UserCmd.viewangles = EulerAngles( UserCmd.viewangles.x, UserCmd.viewangles.y, g_iRollAAMovValue:GetValue( ) );
             else
-                UserCmd.viewangles = EulerAngles( UserCmd.viewangles.x, UserCmd.viewangles.y, -g_iRollAAValue:GetValue( ) );
+                UserCmd.viewangles = EulerAngles( UserCmd.viewangles.x, UserCmd.viewangles.y, -g_iRollAAMovValue:GetValue( ) );
             end;
         end;
     end
