@@ -69,7 +69,7 @@ end
 ffi_handler.m_interface_type          = ffi.typeof( "uintptr_t**" )
 ffi_handler.m_i_client_entity_list    = ffi.cast( ffi_handler.m_interface_type, mem.CreateInterface( "client.dll", "VClientEntityList" )  )
 ffi_handler.GetClientEntity           = ffi_handler.BindArgument( ffi.cast( "EntityList_GetClientEntity_t", ffi_handler.m_i_client_entity_list[ 0 ][ 3 ] ), ffi_handler.m_i_client_entity_list )
-ffi_handler.GetClientEntityFromHandle = ffi_handler.BindArgument( ffi.cast( "EntityList_GetClientEntityFromHandle_t", ffi_handler.m_i_client_entity_list[ 0 ] [4 ] ), ffi_handler.m_i_client_entity_list )
+ffi_handler.GetClientEntityFromHandle = ffi_handler.BindArgument( ffi.cast( "EntityList_GetClientEntityFromHandle_t", ffi_handler.m_i_client_entity_list[ 0 ] [ 4 ] ), ffi_handler.m_i_client_entity_list )
 
 muzzle.m_attachment_index                     = 84
 muzzle.m_muzzle_attachment_index_first_person = 468
@@ -184,8 +184,12 @@ HOLO_PANEL_COLORS_MODE:SetDescription( "Holographic panel color scheme." )
 HOLO_PANEL_ANIMSPEED:SetDescription( "The speed of movement of the panel from the muzzle." )
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
+local sv_maxusrcmdprocessticks      = gui_Reference( "Misc", "General", "Server", "sv_maxusrcmdprocessticks" );
+
+local third_person, first_person;
 local ind_x, ind_y = draw_GetScreenSize( ); ind_x, ind_y = ind_x / 2, ind_y / 2;
 local muzzle_pos_x, muzzle_pos_y;
+local bone_pos_x, bone_pos_y;
 
 local shift_on_shot, fakeduck, shifted_tick, base_angle, left_angle, right_angle = 0;
 
@@ -376,22 +380,28 @@ local function Drawholopanel( x1, y1, x2, y2, clr, sclr, tclr, frclr, fclr, sxcl
     end
 end;
 
+callbacks.Register( "Draw", "HoloPanelPosition", function( ) 
+    local muzzle_temp = muzzle.Get( );
+    muzzle.m_pos = muzzle_temp.m_pos;
+    muzzle_pos_x, muzzle_pos_y = client_WorldToScreen( muzzle.m_pos );
+end );
+
 callbacks.Register( "CreateMove", "HoloPanelCreateMove", function( )
     if WEAPON_CURRENT_GROUP == "global" or WEAPON_CURRENT_GROUP == "knife" then return end;
 
     if HOLO_PANEL_COLORS_MODE:GetValue( ) == 0 then     -- BLUE    --
         color_main          = { 65, 190, 255, 255 };
         color_text          = { 255, 255, 255, 255 };
-        color_text_shadow   = { 10, 10, 10, 255 };
+        color_text_shadow   = { 10, 10, 10, 180 };
         color_text_warning  = { 255, 255, 0, 255 };
         color_text_ok       = { 100, 255, 100, 255 };
-        color_text_bad      = { 255, 120, 120, 255 };
+        color_text_bad      = { 255, 125, 125, 255 };
         color_aa_general    = color_main;
         color_aa_background = { 25, 25, 25, 100 };
     elseif HOLO_PANEL_COLORS_MODE:GetValue( ) == 1 then -- RED     --
         color_main          = { 255, 75, 75, 255 };
         color_text          = { 255, 255, 255, 255 };
-        color_text_shadow   = { 10, 10, 10, 255 };
+        color_text_shadow   = { 10, 10, 10, 180 };
         color_text_warning  = { 255, 255, 0, 255 };
         color_text_ok       = { 100, 255, 100, 255 };
         color_text_bad      = { 255, 150, 150, 255 };
@@ -419,10 +429,10 @@ callbacks.Register( "CreateMove", "HoloPanelCreateMove", function( )
         local r, g, b = HSVToRGB( globals_RealTime( ) * 0.1, 1, 1 );
         color_main          = { r, g, b, 255 };
         color_text          = { 255, 255, 255, 255 };
-        color_text_shadow   = { 10, 10, 10, 255 };
+        color_text_shadow   = { 10, 10, 10, 180 };
         color_text_warning  = { 255, 255, 0, 255 };
         color_text_ok       = { 150, 255, 150, 255 };
-        color_text_bad      = { 255, 150, 150, 255 };
+        color_text_bad      = { 255, 125, 125, 255 };
         color_aa_general    = color_main;
         color_aa_background = { 25, 25, 25, 100 };
     elseif HOLO_PANEL_COLORS_MODE:GetValue( ) == 5 then -- CUSTOM  --
@@ -437,12 +447,39 @@ callbacks.Register( "CreateMove", "HoloPanelCreateMove", function( )
     end;
 
     if gui_GetValue( "rbot.accuracy.weapon." .. WEAPON_CURRENT_GROUP .. ".doublefirefl" ) > 1 then
-        shifted_ticks = ( gui_Reference( "Misc", "General", "Server", "sv_maxusrcmdprocessticks" ):GetValue( ) - gui_GetValue( "rbot.accuracy.weapon." .. WEAPON_CURRENT_GROUP .. ".doublefirefl") - 1 );
+        shifted_ticks = ( sv_maxusrcmdprocessticks:GetValue( ) - gui_GetValue( "rbot.accuracy.weapon." .. WEAPON_CURRENT_GROUP .. ".doublefirefl") - 1 );
     else
-        shifted_ticks = ( gui_Reference( "Misc", "General", "Server", "sv_maxusrcmdprocessticks" ):GetValue( ) - 1 );
+        shifted_ticks = ( sv_maxusrcmdprocessticks:GetValue( ) - 1 );
     end;
+
     if gui_GetValue( "rbot.antiaim.advanced.antialign" ) == 0 then
         shifted_ticks = shifted_ticks - 1;
+    end;
+
+    if HOLO_PANEL_FIRSTPERSON:GetValue( ) and not gui_GetValue( "esp.local.thirdperson" ) then
+        if muzzle_pos_x == nil or muzzle_pos_y == nil then return end;
+
+        local need_x, need_y = muzzle_pos_x - 182, muzzle_pos_y - 108;
+        local diff_x, diff_y = need_x - ind_x, need_y - ind_y;
+        ind_x, ind_y = ind_x + ( diff_x / ( 101 - HOLO_PANEL_ANIMSPEED:GetValue( ) ) ), ind_y + ( diff_y / ( 101 - HOLO_PANEL_ANIMSPEED:GetValue( ) ) );
+        
+        first_person = true;
+    else
+        first_person = false;
+    end;
+
+    if HOLO_PANEL_THIRDPERSON:GetValue( ) and gui_GetValue( "esp.local.thirdperson" ) then
+        local bone_pos = entities_GetLocalPlayer( ):GetBonePosition( 54 );
+        bone_pos_x, bone_pos_y = client_WorldToScreen( bone_pos );
+        if bone_pos_x == nil or bone_pos_y == nil then return end;
+
+        local need_x, need_y = bone_pos_x - 225, bone_pos_y - 100;
+        local diff_x, diff_y = need_x - ind_x, need_y - ind_y;
+        ind_x, ind_y = ind_x + ( diff_x / ( 101 - HOLO_PANEL_ANIMSPEED:GetValue( ) ) ), ind_y + ( diff_y / ( 101 - HOLO_PANEL_ANIMSPEED:GetValue( ) ) );
+
+        third_person = true;
+    else
+        third_person = false;
     end;
 
     shift_on_shot = gui_GetValue( "rbot.antiaim.condition.shiftonshot" );
@@ -456,32 +493,16 @@ end
 callbacks.Register( "Draw", "HoloPanelDraw", function( )
     MenuController( );
 
-    local localplayer = entities_GetLocalPlayer( )
-    if localplayer == nil or not localplayer:IsAlive( ) then return end
     if WEAPON_CURRENT_GROUP == "global" or WEAPON_CURRENT_GROUP == "knife" then return end;
+    if muzzle_pos_x == nil or muzzle_pos_y == nil then return end;
 
-    if HOLO_PANEL_FIRSTPERSON:GetValue( ) and not gui_GetValue( "esp.local.thirdperson" ) then
-        local muzzle_temp = muzzle.Get( );
-        muzzle.m_pos = muzzle_temp.m_pos;
-        muzzle_pos_x, muzzle_pos_y = client_WorldToScreen( muzzle.m_pos );
-        if muzzle_pos_x == nil or muzzle_pos_y == nil then return end;
-
-        local need_x, need_y = muzzle_pos_x - 182, muzzle_pos_y - 108;
-        local diff_x, diff_y = need_x - ind_x, need_y - ind_y;
-        ind_x, ind_y = ind_x + ( diff_x / ( 101 - HOLO_PANEL_ANIMSPEED:GetValue( ) ) ), ind_y + ( diff_y / ( 101 - HOLO_PANEL_ANIMSPEED:GetValue( ) ) );
-        
+    if first_person then
         Drawholopanel( ToInt( ind_x ), ToInt( ind_y ), ToInt( muzzle_pos_x ), ToInt( muzzle_pos_y ), 
         color_main, color_text, color_text_shadow, color_aa_general, color_aa_background, color_text_warning, color_text_ok, color_text_bad );
     end;
 
-    if HOLO_PANEL_THIRDPERSON:GetValue( ) and gui_GetValue( "esp.local.thirdperson" ) then
-        local bone_pos = entities_GetLocalPlayer( ):GetBonePosition( 54 );
-        local bone_pos_x, bone_pos_y = client_WorldToScreen( bone_pos );
+    if third_person then
         if bone_pos_x == nil or bone_pos_y == nil then return end;
-
-        local need_x, need_y = bone_pos_x - 200, bone_pos_y - 100;
-        local diff_x, diff_y = need_x - ind_x, need_y - ind_y;
-        ind_x, ind_y = ind_x + ( diff_x / ( 101 - HOLO_PANEL_ANIMSPEED:GetValue( ) ) ), ind_y + ( diff_y / ( 101 - HOLO_PANEL_ANIMSPEED:GetValue( ) ) );
 
         Drawholopanel( ToInt( ind_x ), ToInt( ind_y ), ToInt( bone_pos_x ), ToInt( bone_pos_y ), 
         color_main, color_text, color_text_shadow, color_aa_general, color_aa_background, color_text_warning, color_text_ok, color_text_bad );
