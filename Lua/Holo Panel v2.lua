@@ -384,6 +384,9 @@ callbacks.Register( "Draw", "HoloPanelPosition", function( )
     local muzzle_temp = muzzle.Get( );
     muzzle.m_pos = muzzle_temp.m_pos;
     muzzle_pos_x, muzzle_pos_y = client_WorldToScreen( muzzle.m_pos );
+
+    local bone_pos = entities_GetLocalPlayer( ):GetBonePosition( 54 );
+    bone_pos_x, bone_pos_y = client_WorldToScreen( bone_pos );
 end );
 
 callbacks.Register( "CreateMove", "HoloPanelCreateMove", function( )
@@ -469,8 +472,6 @@ callbacks.Register( "CreateMove", "HoloPanelCreateMove", function( )
     end;
 
     if HOLO_PANEL_THIRDPERSON:GetValue( ) and gui_GetValue( "esp.local.thirdperson" ) then
-        local bone_pos = entities_GetLocalPlayer( ):GetBonePosition( 54 );
-        bone_pos_x, bone_pos_y = client_WorldToScreen( bone_pos );
         if bone_pos_x == nil or bone_pos_y == nil then return end;
 
         local need_x, need_y = bone_pos_x - 225, bone_pos_y - 100;
