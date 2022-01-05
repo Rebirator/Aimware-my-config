@@ -496,6 +496,7 @@ callbacks.Register( "Draw", "HoloPanelDraw", function( )
     MenuController( );
 
     if WEAPON_CURRENT_GROUP == "global" or WEAPON_CURRENT_GROUP == "knife" then return end;
+    if entities_GetLocalPlayer( ) == nil then return end;
     if muzzle_pos_x == nil or muzzle_pos_y == nil then return end;
 
     if first_person then
